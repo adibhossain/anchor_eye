@@ -6,10 +6,12 @@ import 'pages/main_menu.dart';
 import 'pages/signup.dart';
 import 'pages/add_farm.dart';
 import 'pages/specific_farm.dart';
+import 'pages/verification.dart';
+
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/specific_farm',
+      initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
@@ -18,6 +20,8 @@ void main() {
         '/signup': (context) => SignUp(),
 		'/add_farm': (context) => Add_farm(),
 		'/specific_farm': (context) => SpecificFarm(),
+		'/verification': (context) => Verification(),
+
       }
   ));
 }
