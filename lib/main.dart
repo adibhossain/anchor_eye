@@ -17,7 +17,7 @@ import 'pages/manual2.dart';
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/helpninfo',
+      initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),

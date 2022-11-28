@@ -9,7 +9,28 @@ class _Manual1State extends State<Manual1> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context,'/manual2');
+        },
+        child: Image(
+          image: AssetImage('assets/next.png'),
+        ),
+        backgroundColor: Colors.white,
+      ),
       backgroundColor: Color(0xFFB9E6FA),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF186B9A),
+        centerTitle: true,
+        title: Text(
+          'ব্যবহার বিধি',
+          style: TextStyle(
+            fontSize: 30,
+            color: Color(0xFFB9E6FA),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       body: SafeArea(
         child: Center(
           child: Column(
@@ -18,29 +39,10 @@ class _Manual1State extends State<Manual1> {
             children: <Widget>[
               //SizedBox(height: 60),
               SizedBox(height: 20),
-              Container(
-                child: Text(
-                  'ব্যবহার বিধি',
-                  style: TextStyle(
-                    fontSize: 30,
-                    color: Color(0xFF0A457C),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               // SizedBox(height: 1),
               Image.asset('assets/manual1.JPG'),
               // SizedBox(height: 0),
-              Container(
-                child: Text(
-                  '',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    color: Color(0xFF0A457C),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
+
               // Container(
               //   child: Text(
               //     '',
@@ -51,7 +53,6 @@ class _Manual1State extends State<Manual1> {
               //     ),
               //   ),
               // ),
-              SizedBox(height: 0),
               // Container(
               //   // child: SpinKitRing(
               //   //   color: Color(0xFF0A457C),

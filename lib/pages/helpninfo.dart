@@ -10,6 +10,18 @@ class _helpninfo extends State<helpninfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF186B9A),
+        centerTitle: true,
+        title: Text(
+          'অ্যাংকর আই',
+          style: TextStyle(
+            fontSize: 30.0,
+            color: Color(0xFFB9E6FA),
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: Image(
@@ -24,16 +36,6 @@ class _helpninfo extends State<helpninfo> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               //SizedBox(height: 60),
-              Container(
-                child: Text(
-                  'অ্যাংকর আই',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    color: Color(0xFF0A457C),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
               SizedBox(height: 15),
               Image(
                 image: AssetImage('assets/main_icon.png'),
@@ -50,7 +52,7 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.pushNamed(context, '/manual1');
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
@@ -96,7 +98,7 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
