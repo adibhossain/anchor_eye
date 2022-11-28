@@ -67,7 +67,9 @@ class _LoginState extends State<Login> {
                     foregroundColor: Color(0xFFD2ECF2),
                     backgroundColor: Color(0xFF186B9A),
                   ),
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/main_menu');
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
