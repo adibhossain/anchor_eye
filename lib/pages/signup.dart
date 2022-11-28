@@ -88,7 +88,7 @@ class _SignUpState extends State<SignUp> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/main_menu');
+                    Navigator.pushNamed(context, '/verification');
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),

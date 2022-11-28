@@ -8,22 +8,23 @@ import 'pages/add_farm.dart';
 import 'pages/specific_farm.dart';
 import 'pages/verification.dart';
 import 'pages/yourfishfarms.dart';
+import 'pages/control_panel.dart';
 
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/yourfishfarms',
+      initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
         '/login': (context) => Login(),
         '/main_menu': (context) => MainMenu(),
         '/signup': (context) => SignUp(),
+        '/control_panel': (context) => ControlPanel(),
 		    '/add_farm': (context) => Add_farm(),
 		    '/specific_farm': (context) => SpecificFarm(),
 		    '/verification': (context) => Verification(),
         '/yourfishfarms': (context) => Your_fishfarm(),
-
       }
   ));
 }

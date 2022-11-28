@@ -92,7 +92,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/home')  ; ///EKHANE CHANGE KORTE HOBE
+                    Navigator.pushNamed(context, '/specific_farm');
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,20,0,15),
@@ -117,9 +117,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/home')  ; ///EKHANE CHANGE KORTE HOBE
-                  },
+                  onPressed: () { },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(
