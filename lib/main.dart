@@ -9,11 +9,15 @@ import 'pages/specific_farm.dart';
 import 'pages/verification.dart';
 import 'pages/yourfishfarms.dart';
 import 'pages/control_panel.dart';
+import 'pages/helpninfo.dart';
+import 'pages/manual1.dart';
+import 'pages/manual2.dart';
+
 
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/helpninfo',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
@@ -25,6 +29,13 @@ void main() {
 		    '/specific_farm': (context) => SpecificFarm(),
 		    '/verification': (context) => Verification(),
         '/yourfishfarms': (context) => Your_fishfarm(),
+        '/helpninfo': (context) => helpninfo(),
+        '/manual1': (context) => Manual1(),
+        '/manual2': (context) => manual2(),
+
+
+
+
       }
   ));
 }
