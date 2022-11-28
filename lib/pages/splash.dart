@@ -45,7 +45,7 @@ class _SplashState extends State<Splash> {
               SizedBox(height: 25),
               Container(
                 child: Text(
-                  'অ্যাংকর আই এS',
+                  'অ্যাংকর আই এ',
                   style: TextStyle(
                       fontSize: 40.0,
                       color: Color(0xFF0A457C),
