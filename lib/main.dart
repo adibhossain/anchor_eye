@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'pages/home.dart';
 import 'pages/splash.dart';
+import 'pages/login.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -8,6 +9,7 @@ void main() {
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
+        '/login': (context) => Login(),
       }
   ));
 }
