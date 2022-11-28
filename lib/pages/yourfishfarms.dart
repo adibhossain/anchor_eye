@@ -1,46 +1,88 @@
 import 'package:flutter/material.dart';
 
-class MainMenu extends StatefulWidget {
+class Your_fishfarm extends  StatefulWidget {
+ // const Login({Key? key}) : super(key: key);
   @override
-  _MainMenuState createState() => _MainMenuState();
+  _YourFishFarm createState() => _YourFishFarm();
 }
 
-class _MainMenuState extends State<MainMenu> {
+class _YourFishFarm extends State<Your_fishfarm>{
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
-      backgroundColor: Color(0xFFB9E6FA),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Image(
-          image: AssetImage('assets/gear.png'),
+      backgroundColor: Color(0xFF99CDE3),
+      appBar: AppBar(
+        backgroundColor: Color(0xFF186B9A),
+        centerTitle: true,
+        title: Text(
+          'আপনার খামারসমূহ',
+          style: TextStyle(
+            fontSize: 30.0,
+            color: Color(0xFFD2ECF2),
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        backgroundColor: Colors.white,
       ),
       body: SafeArea(
+
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
+
             children: <Widget>[
-              //SizedBox(height: 60),
-              Container(
-                child: Text(
-                  'অ্যাংকর আই',
-                  style: TextStyle(
-                    fontSize: 40.0,
-                    color: Color(0xFF0A457C),
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
+              Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    Image(
+                      image: AssetImage('assets/home_icon.png'),
+                      height: 50.0,
+                      width: 50.0,
+                    ),
+                    SizedBox(width: 270),
+                    Image(
+                      image: AssetImage('assets/gear.png'),
+                      height: 50.0,
+                      width: 50.0,
+                    ),
+                  ]
+
               ),
-              SizedBox(height: 15),
+              SizedBox(height: 45),
               Image(
                 image: AssetImage('assets/main_icon.png'),
-                height: 110.0,
-                width: 110.0,
+                height: 150.0,
+                width: 150.0,
               ),
-              SizedBox(height: 60),
+              SizedBox(height:45),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(170, 30),
+                    foregroundColor: Color(0xFFD2ECF2),
+                    backgroundColor: Color(0xFF186B9A),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add_farm');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      'খামার যোগ করুন',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                ),
+
+              ),
+
+              SizedBox(height: 30),
               Container(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -50,43 +92,23 @@ class _MainMenuState extends State<MainMenu> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/yourfishfarms');
+                    Navigator.pushNamed(context, '/home')  ; ///EKHANE CHANGE KORTE HOBE
                   },
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(
-                      'খামারসমূহ',
+                      'রুই খামার',
                       style: TextStyle(
-                        fontSize: 30.0,
+                        fontSize: 25.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+
                 ),
+
               ),
-              SizedBox(height: 15),
-              Container(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
-                    minimumSize: const Size(200, 30),
-                    foregroundColor: Color(0xFF0A457C),
-                    backgroundColor: Color(0xFFD2ECF2),
-                  ),
-                  onPressed: () { },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0,10,0,5),
-                    child: Text(
-                      'তথ্য ও সেবা',
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              SizedBox(height: 15),
+              SizedBox(height: 30),
               Container(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -96,19 +118,21 @@ class _MainMenuState extends State<MainMenu> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.pushNamed(context, '/home')  ; ///EKHANE CHANGE KORTE HOBE
                   },
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(
-                      'সাইন আউট',
+                      'পাঙ্গাশ খামার',
                       style: TextStyle(
-                        fontSize: 30.0,
+                        fontSize: 25.0,
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
+
                 ),
+
               ),
             ],
           ),
@@ -116,4 +140,6 @@ class _MainMenuState extends State<MainMenu> {
       ),
     );
   }
+
 }
+
