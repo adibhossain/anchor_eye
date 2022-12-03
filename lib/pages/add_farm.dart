@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class Add_farm extends StatefulWidget {
   const Add_farm({Key? key}) : super(key: key);
@@ -8,6 +9,7 @@ class Add_farm extends StatefulWidget {
 }
 
 class _Add_farmState extends State<Add_farm> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,35 +20,19 @@ class _Add_farmState extends State<Add_farm> {
         title: Text(
           'খামার যোগ করুন',
           style: TextStyle(
-            fontSize: 20.0,
+            fontSize: 30.0,
             color: Color(0xFFD2ECF2),
             fontWeight: FontWeight.bold,
           ),
         ),
       ),
+      key: _scaffoldKey, //this
+      drawer: NavBar(), //this
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage('assets/home_icon.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                    SizedBox(width: 270),
-                    Image(
-                      image: AssetImage('assets/gear.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                ]
-
-              ),
-              SizedBox(height: 30),
               Image(
                 image: AssetImage('assets/main_icon.png'),
                 height: 150.0,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class manual2 extends StatefulWidget {
 
@@ -7,9 +8,11 @@ class manual2 extends StatefulWidget {
 }
 
 class _manual2State extends State<manual2> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
@@ -22,7 +25,8 @@ class _manual2State extends State<manual2> {
           ),
         ),
       ),
-      backgroundColor: Color(0xFFB9E6FA),
+      key: _scaffoldKey, //this
+      drawer: NavBar(), //this
       body: SafeArea(
         child: Center(
           child: Column(

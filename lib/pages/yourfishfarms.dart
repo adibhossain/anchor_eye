@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class Your_fishfarm extends  StatefulWidget {
  // const Login({Key? key}) : super(key: key);
@@ -7,9 +8,9 @@ class Your_fishfarm extends  StatefulWidget {
 }
 
 class _YourFishFarm extends State<Your_fishfarm>{
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       appBar: AppBar(
@@ -24,32 +25,14 @@ class _YourFishFarm extends State<Your_fishfarm>{
           ),
         ),
       ),
+      key: _scaffoldKey, //this
+      drawer: NavBar(), //this
       body: SafeArea(
-
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
-
             children: <Widget>[
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage('assets/home_icon.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                    SizedBox(width: 270),
-                    Image(
-                      image: AssetImage('assets/gear.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                  ]
-
-              ),
-              SizedBox(height: 45),
               Image(
                 image: AssetImage('assets/main_icon.png'),
                 height: 150.0,

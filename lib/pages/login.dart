@@ -12,24 +12,21 @@ class _LoginState extends State<Login> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
-      appBar: AppBar(
-        backgroundColor: Color(0xFF186B9A),
-        centerTitle: true,
-        title: Text(
-          'অ্যাংকর আই',
-          style: TextStyle(
-            fontSize: 30.0,
-            color: Color(0xFFD2ECF2),
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-      ),
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
+              Text(
+                'অ্যাংকর আই',
+                style: TextStyle(
+                  fontSize: 45.0,
+                  color: Color(0xFF186B9A),
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              SizedBox(height: 20),
               Image(
                 image: AssetImage('assets/main_icon.png'),
                 height: 150.0,

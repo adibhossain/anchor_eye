@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class helpninfo extends StatefulWidget {
   @override
@@ -6,6 +7,7 @@ class helpninfo extends StatefulWidget {
 }
 
 class _helpninfo extends State<helpninfo> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -14,7 +16,7 @@ class _helpninfo extends State<helpninfo> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'অ্যাংকর আই',
+          'তথ্য ও সেবা',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFB9E6FA),
@@ -22,13 +24,8 @@ class _helpninfo extends State<helpninfo> {
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {},
-        child: Image(
-          image: AssetImage('assets/gear.png'),
-        ),
-        backgroundColor: Colors.white,
-      ),
+      key: _scaffoldKey, //this
+      drawer: NavBar(), //this
       body: SafeArea(
         child: Center(
           child: Column(

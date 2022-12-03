@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'navbar.dart';
 
 class SpecificFarm extends StatefulWidget {
   const SpecificFarm({Key? key}) : super(key: key);
@@ -7,6 +8,7 @@ class SpecificFarm extends StatefulWidget {
 }
 
 class _SpecificFarmState extends State<SpecificFarm> {
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,38 +25,14 @@ class _SpecificFarmState extends State<SpecificFarm> {
           ),
         ),
       ),
-
+      key: _scaffoldKey, //this
+      drawer: NavBar(), //this
       body: SafeArea(
-
         child: Center(
-
           child: Column(
-
-            mainAxisAlignment: MainAxisAlignment.start,
-
+            mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              SizedBox(height: 15),
-              Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Image(
-                      image: AssetImage('assets/home_icon.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                    SizedBox(width: 270),
-                    Image(
-                      image: AssetImage('assets/gear.png'),
-                      height: 50.0,
-                      width: 50.0,
-                    ),
-                  ]
-
-              ),
-              SizedBox(height: 145),
-
-
               Container(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -63,9 +41,7 @@ class _SpecificFarmState extends State<SpecificFarm> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () {
-
-                  },
+                  onPressed: () {},
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
