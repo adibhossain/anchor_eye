@@ -44,7 +44,9 @@ class _Manual1State extends State<Manual1> {
               //SizedBox(height: 60),
               SizedBox(height: 20),
               // SizedBox(height: 1),
-              Image.asset('assets/manual1.JPG'),
+              Image.asset('assets/m1.JPG'),
+              // height:150,
+              // width:100,
               // SizedBox(height: 0),
 
               // Container(

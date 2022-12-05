@@ -34,8 +34,8 @@ class _manual2State extends State<manual2> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               //SizedBox(height: 60),
-              SizedBox(height: 50),
-              Image.asset('assets/manual2.JPG'),
+              SizedBox(height: 30),
+              Image.asset('assets/m2.JPG'),
               // SizedBox(height: 0),
               Container(
                 child: Text(
