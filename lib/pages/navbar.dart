@@ -54,38 +54,38 @@ class NavBar extends StatelessWidget {
       footerDivider: divider,
       headerBuilder: (context, extended) {
         return SizedBox(
-          height: 100,
+          height: 120,
           child: Padding(
             padding: const EdgeInsets.all(16.0),
-            child: Image.asset('assets/avatar.png'),
+            child: Image.asset('assets/main_icon.png'),
           ),
         );
       },
       items: [
         SidebarXItem(
           icon: Icons.home,
-          label: 'Home',
+          label: 'হোম',
           onTap: () {
             Navigator.pushNamed(context, '/main_menu');
           },
         ),
         SidebarXItem(
-          icon: Icons.person,
-          label: 'Profile',
+          icon: Icons.info,
+          label: 'ব্যবহার বিধি',
           onTap: () {
             //Navigator.pushNamed(context, '');
           },
         ),
         SidebarXItem(
           icon: Icons.settings,
-          label: 'Settings',
+          label: 'সেটিংস',
           onTap: () {
             //Navigator.pushNamed(context, '');
           },
         ),
         SidebarXItem(
           icon: Icons.logout,
-          label: 'Logout',
+          label: 'সাইন আউট',
           onTap: () {
             Navigator.pushNamed(context, '/home');
           },
@@ -97,9 +97,9 @@ class NavBar extends StatelessWidget {
 
 
 const primaryColor = Color(0xFF685BFF);
-const canvasColor = Color(0xFF2E2E48); //this
+const canvasColor = Color(0xFF12425C); //this
 const scaffoldBackgroundColor = Color(0xFF464667);
-const accentCanvasColor = Color(0xFF3E3E61); //this
+const accentCanvasColor = Color(0xFF0277BD); //this
 const white = Colors.white;
 final actionColor = const Color(0xFF5F5FA7).withOpacity(0.6);
 final divider = Divider(color: white.withOpacity(0.3), height: 1);
