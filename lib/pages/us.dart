@@ -13,15 +13,15 @@ class _usState extends State<us> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.pushNamed(context,'/manual2');
-        },
-        child: Image(
-          image: AssetImage('assets/next.png'),
-        ),
-        backgroundColor: Colors.white,
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   onPressed: () {
+      //     Navigator.pushNamed(context,'/manual2');
+      //   },
+      //   child: Image(
+      //     image: AssetImage('assets/next.png'),
+      //   ),
+      //   backgroundColor: Colors.white,
+      // ),
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
