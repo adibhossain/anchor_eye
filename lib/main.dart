@@ -15,12 +15,14 @@ import 'pages/manual2.dart';
 import 'pages/us.dart';
 import 'pages/dashboard_details.dart';
 import 'pages/update_farm.dart';
+import 'pages/suggestion.dart';
+import 'pages/prediction.dart';
 
 
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/test',
+      initialRoute: '/prediction',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
@@ -38,6 +40,8 @@ void main() {
         '/us': (context) => us(),
         '/test': (context) => DashDetail(),
         '/update_farm': (context) => Update_farm(),
+            '/suggestion': (context) => Suggestion(),
+            '/prediction': (context) => Prediction(),
 
 
 
