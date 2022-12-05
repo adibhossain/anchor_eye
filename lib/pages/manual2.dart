@@ -35,7 +35,11 @@ class _manual2State extends State<manual2> {
             children: <Widget>[
               //SizedBox(height: 60),
               SizedBox(height: 30),
-              Image.asset('assets/m2.JPG'),
+              Image(
+                image: AssetImage('assets/m2.JPG'),
+                height: 500.0,
+                width: 500.0,
+              ),
               // SizedBox(height: 0),
               Container(
                 child: Text(
