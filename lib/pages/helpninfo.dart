@@ -97,7 +97,7 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-
+                    Navigator.pushNamed(context, '/contact');
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),

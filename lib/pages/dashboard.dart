@@ -85,7 +85,9 @@ class _DashboardState extends State<Dashboard> {
                   IconButton(
                     icon: Image.asset('assets/future.png'),
                     iconSize: 50,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/prediction');
+                    },
                   ),
                   Text(
                     'পূর্বাভাস',
@@ -102,7 +104,9 @@ class _DashboardState extends State<Dashboard> {
                   IconButton(
                     icon: Image.asset('assets/bulb.png'),
                     iconSize: 50,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/suggestion');
+                    },
                   ),
                   Text(
                     'পরামর্শ',

@@ -43,8 +43,8 @@ void main() {
         '/dashdetail': (context) => DashDetail(),
         '/dashboard': (context) => Dashboard(),
         '/update_farm': (context) => Update_farm(),
-            '/suggestion': (context) => Suggestion(),
-            '/prediction': (context) => Prediction(),
+        '/suggestion': (context) => Suggestion(),
+        '/prediction': (context) => Prediction(),
         '/contact': (context) => contact(),
         '/settings': (context) => settings(),
 

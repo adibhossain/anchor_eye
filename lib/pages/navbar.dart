@@ -80,7 +80,7 @@ class NavBar extends StatelessWidget {
           icon: Icons.settings,
           label: 'সেটিংস',
           onTap: () {
-            //Navigator.pushNamed(context, '');
+            Navigator.pushNamed(context, '/settings');
           },
         ),
         SidebarXItem(
