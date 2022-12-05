@@ -73,7 +73,7 @@ class NavBar extends StatelessWidget {
           icon: Icons.info,
           label: 'ব্যবহার বিধি',
           onTap: () {
-            //Navigator.pushNamed(context, '');
+            Navigator.pushNamed(context, '/manual1');
           },
         ),
         SidebarXItem(

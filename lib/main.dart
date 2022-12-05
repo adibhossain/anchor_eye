@@ -14,6 +14,7 @@ import 'pages/manual1.dart';
 import 'pages/manual2.dart';
 import 'pages/us.dart';
 import 'pages/dashboard_details.dart';
+import 'pages/dashboard.dart';
 import 'pages/update_farm.dart';
 import 'pages/suggestion.dart';
 import 'pages/prediction.dart';
@@ -39,7 +40,8 @@ void main() {
         '/manual1': (context) => Manual1(),
         '/manual2': (context) => manual2(),
         '/us': (context) => us(),
-        '/test': (context) => DashDetail(),
+        '/dashdetail': (context) => DashDetail(),
+        '/dashboard': (context) => Dashboard(),
         '/update_farm': (context) => Update_farm(),
             '/suggestion': (context) => Suggestion(),
             '/prediction': (context) => Prediction(),

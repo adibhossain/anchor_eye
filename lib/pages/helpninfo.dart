@@ -72,7 +72,9 @@ class _helpninfo extends State<helpninfo> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/us');
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
