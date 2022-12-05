@@ -13,14 +13,14 @@ import 'pages/helpninfo.dart';
 import 'pages/manual1.dart';
 import 'pages/manual2.dart';
 import 'pages/us.dart';
-import 'pages/test.dart';
+import 'pages/dashboard_details.dart';
 import 'pages/update_farm.dart';
 
 
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/',
+      initialRoute: '/test',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
@@ -36,7 +36,7 @@ void main() {
         '/manual1': (context) => Manual1(),
         '/manual2': (context) => manual2(),
         '/us': (context) => us(),
-        '/test': (context) => Test(),
+        '/test': (context) => DashDetail(),
         '/update_farm': (context) => Update_farm(),
 
 
