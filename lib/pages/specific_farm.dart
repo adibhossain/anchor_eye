@@ -78,6 +78,31 @@ class _SpecificFarmState extends State<SpecificFarm> {
                   ),
                 ),
               ),
+              SizedBox(height: 30),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 80),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/update_farm');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      'খামার আপডেট',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+
 
 
             ],

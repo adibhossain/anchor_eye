@@ -14,6 +14,7 @@ import 'pages/manual1.dart';
 import 'pages/manual2.dart';
 import 'pages/us.dart';
 import 'pages/test.dart';
+import 'pages/update_farm.dart';
 
 
 
@@ -36,6 +37,7 @@ void main() {
         '/manual2': (context) => manual2(),
         '/us': (context) => us(),
         '/test': (context) => Test(),
+        '/update_farm': (context) => Update_farm(),
 
 
 
