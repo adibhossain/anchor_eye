@@ -43,33 +43,6 @@ class _YourFishFarm extends State<Your_fishfarm>{
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: StadiumBorder(),
-                    minimumSize: const Size(170, 30),
-                    foregroundColor: Color(0xFFD2ECF2),
-                    backgroundColor: Color(0xFF186B9A),
-                  ),
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/add_farm');
-                  },
-                  child: Container(
-                    padding: EdgeInsets.fromLTRB(0,10,0,5),
-                    child: Text(
-                      'খামার যোগ করুন',
-                      style: TextStyle(
-                        fontSize: 30.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ),
-
-                ),
-
-              ),
-
-              SizedBox(height: 30),
-              Container(
-                child: ElevatedButton(
-                  style: ElevatedButton.styleFrom(
-                    shape: StadiumBorder(),
                     minimumSize: const Size(200, 30),
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
@@ -87,9 +60,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
                       ),
                     ),
                   ),
-
                 ),
-
               ),
               SizedBox(height: 30),
               Container(
@@ -111,9 +82,31 @@ class _YourFishFarm extends State<Your_fishfarm>{
                       ),
                     ),
                   ),
-
                 ),
-
+              ),
+              SizedBox(height: 30),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(170, 30),
+                    foregroundColor: Color(0xFFD2ECF2),
+                    backgroundColor: Color(0xFF186B9A),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/add_farm');
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      'খামার যোগ করুন',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ],
           ),
@@ -121,6 +114,5 @@ class _YourFishFarm extends State<Your_fishfarm>{
       ),
     );
   }
-
 }
 
