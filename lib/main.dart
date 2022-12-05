@@ -12,6 +12,7 @@ import 'pages/control_panel.dart';
 import 'pages/helpninfo.dart';
 import 'pages/manual1.dart';
 import 'pages/manual2.dart';
+import 'pages/us.dart';
 import 'pages/test.dart';
 
 
@@ -33,6 +34,7 @@ void main() {
         '/helpninfo': (context) => helpninfo(),
         '/manual1': (context) => Manual1(),
         '/manual2': (context) => manual2(),
+        '/us': (context) => us(),
         '/test': (context) => Test(),
 
 
