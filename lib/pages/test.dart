@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'navbar.dart';
 
 class Test extends StatefulWidget {
   @override
@@ -21,65 +22,161 @@ class _TestState extends State<Test> {
     _SalesData('Apr', 8.1),
     _SalesData('May', 9.1)
   ];
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('Syncfusion Flutter chart'),
+        backgroundColor: Color(0xFFB9E6FA),
+      appBar: AppBar( //this
+        backgroundColor: Color(0xFF186B9A),
+        centerTitle: true,
+        title: Text(
+          'বিস্তারিত রিপোর্ট',
+          style: TextStyle(
+            fontSize: 30.0,
+            color: Color(0xFFD2ECF2),
+            fontWeight: FontWeight.bold,
+          ),
         ),
-        body: Center(
-    child: Card(
-    child: Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        const ListTile(
-          leading: Icon(Icons.album),
-          title: Text('The Enchanted Nightingale'),
-          subtitle: Text('Music by Julie Gable. Lyrics by Sidney Stein.'),
-        ),
-        Row(
-          mainAxisAlignment: MainAxisAlignment.end,
+      ),
+      key: _scaffoldKey, //this
+      drawer: NavBar(),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextButton(
-              child: const Text('BUY TICKETS'),
-              onPressed: () {/* ... */},
+            Text(
+              'পিএইচ (pH)',
+              style: TextStyle(
+                fontSize: 30.0,
+                fontWeight: FontWeight.bold,
+              ),
             ),
-            const SizedBox(width: 8),
-            TextButton(
-              child: const Text('LISTEN'),
-              onPressed: () {/* ... */},
+            SizedBox(height: 10.0),
+            Table(
+              border: TableBorder.all(),
+              columnWidths: const <int, TableColumnWidth>{
+                0: FixedColumnWidth(100),
+                1: FixedColumnWidth(100),
+                2: FixedColumnWidth(100),
+              },
+              defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              children: <TableRow>[
+                TableRow(
+                  decoration: const BoxDecoration(
+                    color: Color(0xFF1871A3),
+                  ),
+                  children: <Widget>[
+                    Container(
+                      //height: 32,
+                      child: Center(child:Text(
+                        'তারিখ',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //color: Color(0xFFD2ECF2),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                    ),
+                    Container(
+                      //height: 32,
+                      child: Center(child:Text(
+                        'বর্তমান',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //color: Color(0xFFD2ECF2),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                    ),
+                    Container(
+                      //height: 32,
+                      child: Center(child:Text(
+                        'আদর্শ',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          //color: Color(0xFFD2ECF2),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      )),
+                    ),
+                  ],
+                )]+
+                data.map((datax){
+                  return TableRow(
+                    children: <Widget>[
+                      Container(
+                        //height: 32,
+                        child: Center(child:Text(
+                          datax.year.toString(),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            //color: Color(0xFFD2ECF2),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                      Container(
+                        //height: 32,
+                        child: Center(child:Text(
+                          datax.sales.toString(),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            //color: Color(0xFFD2ECF2),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                      Container(
+                        //height: 32,
+                        child: Center(child:Text(
+                          ideal[data.indexOf(datax)].sales.toString(),
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            //color: Color(0xFFD2ECF2),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        )),
+                      ),
+                    ],
+                  );
+                }).toList(),
             ),
-            const SizedBox(width: 8),
+            SizedBox(height: 20.0),
+            Container(
+              //margin: EdgeInsets.symmetric(vertical: 0,horizontal: 60),
+              padding: EdgeInsets.symmetric(vertical: 0,horizontal: 55),
+              child: SfCartesianChart(
+                  backgroundColor: Color(0xFFF0E8EA),
+                  primaryXAxis: CategoryAxis(),
+                  primaryYAxis: NumericAxis(
+                    maximum: 14.0,
+                    minimum: 0.0,
+                  ),
+                  // Chart title
+                  title: ChartTitle(text: 'পিএইচ (pH) রিপোর্ট'),
+                  // Enable legend
+                  legend: Legend(isVisible: true),
+                  // Enable tooltip
+                  tooltipBehavior: TooltipBehavior(enable: true),
+                  series: <ChartSeries<_SalesData, String>>[
+                    LineSeries<_SalesData, String>(
+                        dataSource: data,
+                        xValueMapper: (_SalesData sales, _) => sales.year,
+                        yValueMapper: (_SalesData sales, _) => sales.sales,
+                        name: 'প্রাপ্ত তথ্য',
+                        // Enable data label
+                        dataLabelSettings: DataLabelSettings(isVisible: false)),
+                    LineSeries<_SalesData, String>(
+                        dataSource: ideal,
+                        xValueMapper: (_SalesData sales, _) => sales.year,
+                        yValueMapper: (_SalesData sales, _) => sales.sales,
+                        name: 'Ideal Value',
+                        // Enable data label
+                        dataLabelSettings: DataLabelSettings(isVisible: false)),
+                  ]),
+            ),
           ],
         ),
-        SfCartesianChart(
-            primaryXAxis: CategoryAxis(),
-            // Chart title
-            title: ChartTitle(text: 'pH Report'),
-            // Enable legend
-            legend: Legend(isVisible: true),
-            // Enable tooltip
-            tooltipBehavior: TooltipBehavior(enable: true),
-            series: <ChartSeries<_SalesData, String>>[
-              LineSeries<_SalesData, String>(
-                  dataSource: data,
-                  xValueMapper: (_SalesData sales, _) => sales.year,
-                  yValueMapper: (_SalesData sales, _) => sales.sales,
-                  name: 'Received Data',
-                  // Enable data label
-                  dataLabelSettings: DataLabelSettings(isVisible: false)),
-              LineSeries<_SalesData, String>(
-                  dataSource: ideal,
-                  xValueMapper: (_SalesData sales, _) => sales.year,
-                  yValueMapper: (_SalesData sales, _) => sales.sales,
-                  name: 'Ideal Value',
-                  // Enable data label
-                  dataLabelSettings: DataLabelSettings(isVisible: false)),
-            ]),
-      ],
-    ),
-    ),
-    )
     );
   }
 }
