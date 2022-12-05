@@ -17,12 +17,13 @@ import 'pages/dashboard_details.dart';
 import 'pages/update_farm.dart';
 import 'pages/suggestion.dart';
 import 'pages/prediction.dart';
-
+import 'pages/contact.dart';
+import 'pages/settings.dart';
 
 
 void main() {
   runApp(MaterialApp(
-      initialRoute: '/prediction',
+      initialRoute: '/',
       routes: {
         '/': (context) => Splash(),
         '/home': (context) => Home(),
@@ -42,7 +43,8 @@ void main() {
         '/update_farm': (context) => Update_farm(),
             '/suggestion': (context) => Suggestion(),
             '/prediction': (context) => Prediction(),
-
+        '/contact': (context) => contact(),
+        '/settings': (context) => settings(),
 
 
 
