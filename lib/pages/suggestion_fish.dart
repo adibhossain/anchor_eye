@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
-class Prediction extends StatefulWidget {
-  const Prediction({Key? key}) : super(key: key);
+class Suggestion_fish extends StatefulWidget {
+  const Suggestion_fish({Key? key}) : super(key: key);
 
   @override
-  _PredictionState createState() => _PredictionState();
+  _Suggestion_fishState createState() => _Suggestion_fishState();
 }
 
-class _PredictionState extends State<Prediction> {
+class _Suggestion_fishState extends State<Suggestion_fish> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   int i=0;
   @override
@@ -36,13 +36,15 @@ class _PredictionState extends State<Prediction> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'ড্যাশবোর্ড - পূর্বাভাস',
+                'ড্যাশবোর্ড - পরামর্শ',
                 style: TextStyle(
                   fontSize: 30.0,
                   color: Color(0xFF186B9A),
                   fontWeight: FontWeight.bold,
                 ),
               ),
+
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -75,7 +77,7 @@ class _PredictionState extends State<Prediction> {
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 35),
               ),
               Image(
-                image: AssetImage('assets/fortune.png'),
+                image: AssetImage('assets/light.png'),
                 height: 70.0,
                 width: 60.0,
               ),
@@ -92,9 +94,9 @@ class _PredictionState extends State<Prediction> {
                     child: const SizedBox(
                       width: 300,
                       height: 250,
-                      child: Text(' ১) মাছের বৃদ্ধি কমে যেতে পারে \n'
-
-                          ' ২)রুই মাছের এখনকার চেয়ে ৫০ গ্রাম বেশি খাবারের প্রয়োজন হতে পারে \n '
+                      child: Text(' ১) পানির পিএইচ হঠ্যাৎ করে কমে গিয়েছে শতাংশে ২০০ গ্রাম হারে ডলোমাইট দিতেহবে. \n'
+                          'পিএইচ ফ্লাকচুয়েশন এর উপর নির্ভরকরে পর পর ৩ দিন ডলোমাইট দিতে হবে.\n '
+                          ' ২) রোগ প্রতিরোধের জন্য একরপ্রতি ৪৫-৬০ কেজি চুন প্রয়োগ করতে পারেন। \n '
                           ' ৩) বর্তমান শুষ্ক আবহাওয়া ২ সপ্তাহ থাকবে '
                       ),
                     ),
@@ -105,6 +107,8 @@ class _PredictionState extends State<Prediction> {
               const Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 20),
               ),
+
+
 
             ],
           ),

@@ -22,6 +22,7 @@ import 'pages/contact.dart';
 import 'pages/settings.dart';
 
 
+
 void main() {
   runApp(MaterialApp(
       initialRoute: '/',
@@ -47,6 +48,7 @@ void main() {
         '/prediction': (context) => Prediction(),
         '/contact': (context) => contact(),
         '/settings': (context) => settings(),
+
 
 
 

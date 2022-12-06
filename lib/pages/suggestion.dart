@@ -10,6 +10,7 @@ class Suggestion extends StatefulWidget {
 
 class _SuggestionState extends State<Suggestion> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  int i=0;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -43,16 +44,45 @@ class _SuggestionState extends State<Suggestion> {
            ),
           ),
 
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-          ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    'মাছের বৃদ্ধি',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  IconButton(
+                    icon: Image.asset('assets/slide'+i.toString()+'.png'),
+                    iconSize: 40,
+                    onPressed: () {
+                      i++;
+                      i%=2;
+                      setState(() {});
+                    },
+                  ),
+                  Text(
+                    'জলের গুণমান সূচক',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 65, vertical: 35),
+              ),
               Image(
                 image: AssetImage('assets/light.png'),
                 height: 70.0,
                 width: 60.0,
               ),
               const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
+                padding: EdgeInsets.symmetric(horizontal: 65, vertical: 0),
               ),
           Container(
           child: Card(
@@ -74,6 +104,10 @@ class _SuggestionState extends State<Suggestion> {
           ),
         ),
           ),
+              const Padding(
+                padding: EdgeInsets.symmetric(horizontal: 65, vertical: 20),
+              ),
+
 
 
             ],

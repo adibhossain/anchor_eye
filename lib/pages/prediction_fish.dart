@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
-class Prediction extends StatefulWidget {
-  const Prediction({Key? key}) : super(key: key);
+class Prediction_fish extends StatefulWidget {
+  const Prediction_fish({Key? key}) : super(key: key);
 
   @override
-  _PredictionState createState() => _PredictionState();
+  _Prediction_fishState createState() => _Prediction_fishState();
 }
 
-class _PredictionState extends State<Prediction> {
+class _Prediction_fishState extends State<Prediction_fish> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   int i=0;
   @override
