@@ -18,7 +18,7 @@ class _ManualState extends State<Manual> {
         onPressed: () {
           //Navigator.pushNamed(context,'/manual2');
           i++; i%=2;
-          debugPrint(i.toString());
+          //debugPrint(i.toString());
           setState(() {});
         },
         child: Image(
