@@ -51,7 +51,7 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/manual1', arguments: {
+                    Navigator.pushNamed(context, '/manual', arguments: {
                       'bangla': args['bangla'],
                     });
                   },

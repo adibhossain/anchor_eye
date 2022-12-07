@@ -2,24 +2,30 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class Prediction extends StatefulWidget {
-  const Prediction({Key? key}) : super(key: key);
-
   @override
   _PredictionState createState() => _PredictionState();
 }
 
 class _PredictionState extends State<Prediction> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
-  int i=0;
+  Map args = {};
+  List<String> msg=[];
+  int i=2;
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
+    msg=[(args['bangla']?'১) যেহেতু শীতের মাস তাই পানির তাপমাত্রা আরও কমবে।\n২) পিএইচ আরও বাড়লে পানি মাছ চাষের অনুপযোগী হবে।\n৩) বর্তমান শুষ্ক আবহাওয়া ২ সপ্তাহ থাকবে।'
+          :'1) As it is winter, water temperature will reduce more.\n2) If pH increases more, the water will be unsuitable for fish farming.\n3) Current dry weather will stay for two more weeks.'),
+         (args['bangla']?'১) মাছের বৃদ্ধি কমে যেতে পারে।\n২) রুই মাছের এখনকার চেয়ে ৫০ গ্রাম বেশি খাবারের প্রয়োজন হতে পারে।\n'
+          :'1) Fish growth may reduce.\n2) Rui fish will 50gm more food than current amount.')];
+    i=(i==2?args['i']:i);
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'রুই খামার',
+          args['bangla']?'রুই খামার':'Rui Farm',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -36,7 +42,7 @@ class _PredictionState extends State<Prediction> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                'ড্যাশবোর্ড - পূর্বাভাস',
+                args['bangla']?'ড্যাশবোর্ড - পূর্বাভাস':'Dashboard - Prediction',
                 style: TextStyle(
                   fontSize: 30.0,
                   color: Color(0xFF186B9A),
@@ -47,7 +53,7 @@ class _PredictionState extends State<Prediction> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'মাছের বৃদ্ধি',
+                    args['bangla']?'মাছের বৃদ্ধি':'Fish Growth',
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -63,7 +69,7 @@ class _PredictionState extends State<Prediction> {
                     },
                   ),
                   Text(
-                    'জলের গুণমান সূচক',
+                    args['bangla']?'জলের গুণমান সূচক':'Water Quality Index',
                     style: TextStyle(
                       fontSize: 20.0,
                       fontWeight: FontWeight.bold,
@@ -87,16 +93,12 @@ class _PredictionState extends State<Prediction> {
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {
-                      debugPrint('Card tapped.');
+                      //debugPrint('Card tapped.');
                     },
-                    child: const SizedBox(
+                    child: SizedBox(
                       width: 300,
                       height: 250,
-                      child: Text(' ১) মাছের বৃদ্ধি কমে যেতে পারে \n'
-
-                          ' ২)রুই মাছের এখনকার চেয়ে ৫০ গ্রাম বেশি খাবারের প্রয়োজন হতে পারে \n '
-                          ' ৩) বর্তমান শুষ্ক আবহাওয়া ২ সপ্তাহ থাকবে '
-                      ),
+                      child: Text(msg[i]),
                     ),
 
                   ),

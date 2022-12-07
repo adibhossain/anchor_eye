@@ -10,8 +10,7 @@ import 'pages/verification.dart';
 import 'pages/yourfishfarms.dart';
 import 'pages/control_panel.dart';
 import 'pages/helpninfo.dart';
-import 'pages/manual1.dart';
-import 'pages/manual2.dart';
+import 'pages/manual.dart';
 import 'pages/us.dart';
 import 'pages/dashboard_details.dart';
 import 'pages/dashboard.dart';
@@ -38,8 +37,7 @@ void main() {
 		    '/verification': (context) => Verification(),
         '/yourfishfarms': (context) => Your_fishfarm(),
         '/helpninfo': (context) => helpninfo(),
-        '/manual1': (context) => Manual1(),
-        '/manual2': (context) => manual2(),
+        '/manual': (context) => Manual(),
         '/us': (context) => us(),
         '/dashdetail': (context) => DashDetail(),
         '/dashboard': (context) => Dashboard(),

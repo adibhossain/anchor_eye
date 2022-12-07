@@ -92,6 +92,7 @@ class _DashboardState extends State<Dashboard> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/prediction', arguments: {
                         'bangla': args['bangla'],
+                        'i': i,
                       });
                     },
                   ),
@@ -113,6 +114,7 @@ class _DashboardState extends State<Dashboard> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/suggestion', arguments: {
                         'bangla': args['bangla'],
+                        'i': i,
                       });
                     },
                   ),

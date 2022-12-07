@@ -77,7 +77,7 @@ class NavBar extends StatelessWidget {
           icon: Icons.info,
           label: bangla?'ব্যবহার বিধি':'User Manual',
           onTap: () {
-            Navigator.pushNamed(context, '/manual1', arguments: {
+            Navigator.pushNamed(context, '/manual', arguments: {
               'bangla': bangla,
             });
           },
