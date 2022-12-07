@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class Add_farm extends StatefulWidget {
-  const Add_farm({Key? key}) : super(key: key);
-
   @override
   _Add_farmState createState() => _Add_farmState();
 }
 
 class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       appBar: AppBar(
           backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'খামার যোগ করুন',
+          args['bangla']?'খামার যোগ করুন':'Add Farm',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -27,73 +27,73 @@ class _Add_farmState extends State<Add_farm> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'খামারের নাম',
+                    hintText: args['bangla']?'খামারের নাম':'Farm Name',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'মাছের ধরন',
+                    hintText: args['bangla']?'মাছের ধরন':'Fish Species',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'মাছের পরিমাণ',
+                    hintText: args['bangla']?'মাছের পরিমাণ':'Amount of fish',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'মাছ ছাড়ার তারিখ',
+                    hintText: args['bangla']?'মাছ ছাড়ার তারিখ':'Date of releasing fish',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'খাবারের পরিমাণ',
+                    hintText: args['bangla']?'খাবারের পরিমাণ':'Amount of food',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'প্রয়োগকৃত সার',
+                    hintText: args['bangla']?'প্রয়োগকৃত সার':'Used Fertilizers',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
@@ -109,12 +109,14 @@ class _Add_farmState extends State<Add_farm> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/yourfishfarms');
+                    Navigator.pushNamed(context, '/yourfishfarms', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'যোগ করুন',
+                      args['bangla']?'যোগ করুন':'Add',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

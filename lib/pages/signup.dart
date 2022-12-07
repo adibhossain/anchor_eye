@@ -6,8 +6,10 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(
@@ -17,7 +19,7 @@ class _SignUpState extends State<SignUp> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'অ্যাংকর আই',
+                args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                 style: TextStyle(
                   fontSize: 45.0,
                   color: Color(0xFF186B9A),
@@ -31,45 +33,45 @@ class _SignUpState extends State<SignUp> {
                 width: 150.0,
               ),
               SizedBox(height: 20),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'নাম',
+                    hintText: args['bangla']?'নাম':'Name',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'মোবাইল',
+                    hintText: args['bangla']?'মোবাইল':'Phone No.',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'পাসওয়ার্ড',
+                    hintText: args['bangla']?'পাসওয়ার্ড':'Password',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'পাসওয়ার্ড নিশ্চিত করুন',
+                    hintText: args['bangla']?'পাসওয়ার্ড নিশ্চিত করুন':'Conform Password',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
@@ -85,12 +87,14 @@ class _SignUpState extends State<SignUp> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/verification');
+                    Navigator.pushNamed(context, '/verification', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'সাইনআপ',
+                      args['bangla']?'সাইনআপ':'Sign Up',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

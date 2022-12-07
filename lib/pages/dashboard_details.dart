@@ -8,6 +8,7 @@ class DashDetail extends StatefulWidget {
 }
 
 class _DashDetailState extends State<DashDetail> {
+  Map args = {};
   List<_SalesData> data = [
     _SalesData('Jan', 6.9),
     _SalesData('Feb', 8.9),
@@ -39,13 +40,14 @@ class _DashDetailState extends State<DashDetail> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
         backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar( //this
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'বিস্তারিত রিপোর্ট',
+          args['bangla']?'বিস্তারিত রিপোর্ট':'Detailed Report',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -54,7 +56,7 @@ class _DashDetailState extends State<DashDetail> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(),
+      drawer: NavBar(bangla: true),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
@@ -69,7 +71,7 @@ class _DashDetailState extends State<DashDetail> {
                     minimum: 0.0,
                   ),
                   // Chart title
-                  title: ChartTitle(text: 'পিএইচ (pH) রিপোর্ট'),
+                  title: ChartTitle(text: args['bangla']?'পিএইচ (pH) রিপোর্ট':'pH Report'),
                   // Enable legend
                   legend: Legend(isVisible: true),
                   // Enable tooltip
@@ -79,20 +81,20 @@ class _DashDetailState extends State<DashDetail> {
                         dataSource: data,
                         xValueMapper: (_SalesData sales, _) => sales.year,
                         yValueMapper: (_SalesData sales, _) => sales.sales,
-                        name: 'বর্তমান',
+                        name: args['bangla']?'বর্তমান':'Current',
                         // Enable data label
                         dataLabelSettings: DataLabelSettings(isVisible: false)),
                     LineSeries<_SalesData, String>(
                         dataSource: ideal,
                         xValueMapper: (_SalesData sales, _) => sales.year,
                         yValueMapper: (_SalesData sales, _) => sales.sales,
-                        name: 'আদর্শ',
+                        name: args['bangla']?'আদর্শ':'Ideal',
                         // Enable data label
                         dataLabelSettings: DataLabelSettings(isVisible: false)),
                   ]),
             ),
             Text(
-              'পিএইচ (pH) ট্যাবুলার ডেটা',
+              args['bangla']?'পিএইচ (pH) ট্যাবুলার ডেটা':'pH Tabular Data',
               style: TextStyle(
                 fontSize: 25.0,
                 fontWeight: FontWeight.bold,
@@ -121,7 +123,7 @@ class _DashDetailState extends State<DashDetail> {
                           Container(
                             //height: 32,
                             child: Center(child:Text(
-                              'তারিখ',
+                              args['bangla']?'তারিখ':'Date',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 //color: Color(0xFFD2ECF2),
@@ -132,7 +134,7 @@ class _DashDetailState extends State<DashDetail> {
                           Container(
                             //height: 32,
                             child: Center(child:Text(
-                              'বর্তমান',
+                              args['bangla']?'বর্তমান':'Current',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 //color: Color(0xFFD2ECF2),
@@ -143,7 +145,7 @@ class _DashDetailState extends State<DashDetail> {
                           Container(
                             //height: 32,
                             child: Center(child:Text(
-                              'আদর্শ',
+                              args['bangla']?'আদর্শ':'Ideal',
                               style: TextStyle(
                                 fontSize: 20.0,
                                 //color: Color(0xFFD2ECF2),

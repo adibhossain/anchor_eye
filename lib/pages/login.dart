@@ -8,8 +8,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(
@@ -19,7 +21,7 @@ class _LoginState extends State<Login> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'অ্যাংকর আই',
+                args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                 style: TextStyle(
                   fontSize: 45.0,
                   color: Color(0xFF186B9A),
@@ -33,23 +35,23 @@ class _LoginState extends State<Login> {
                 width: 150.0,
               ),
               SizedBox(height: 60),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'ইউজারনেম',
+                    hintText: args['bangla']?'ইউজারনেম':'Username',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'পাসওয়ার্ড',
+                    hintText: args['bangla']?'পাসওয়ার্ড':'Password',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
@@ -65,12 +67,14 @@ class _LoginState extends State<Login> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/main_menu');
+                    Navigator.pushNamed(context, '/main_menu', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'লগ ইন',
+                      args['bangla']?'লগ ইন':'Log In',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

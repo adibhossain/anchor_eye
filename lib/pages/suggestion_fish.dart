@@ -28,7 +28,7 @@ class _Suggestion_fishState extends State<Suggestion_fish> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: true), //this
       body: SafeArea(
         child: Center(
 

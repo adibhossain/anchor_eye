@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class SpecificFarm extends StatefulWidget {
-  const SpecificFarm({Key? key}) : super(key: key);
   @override
   _SpecificFarmState createState() => _SpecificFarmState();
 }
 
 class _SpecificFarmState extends State<SpecificFarm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'রুই খামার',
+          args['bangla']?'রুই খামার':'Rui Farm',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -26,7 +27,7 @@ class _SpecificFarmState extends State<SpecificFarm> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -42,12 +43,14 @@ class _SpecificFarmState extends State<SpecificFarm> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/dashboard');
+                    Navigator.pushNamed(context, '/dashboard', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'ড্যাশবোর্ড',
+                      args['bangla']?'ড্যাশবোর্ড':'Dashboard',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -66,12 +69,14 @@ class _SpecificFarmState extends State<SpecificFarm> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/control_panel');
+                    Navigator.pushNamed(context, '/control_panel', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'কন্ট্রল প্যানেল',
+                      args['bangla']?'কন্ট্রল প্যানেল':'Control Panel',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -90,12 +95,14 @@ class _SpecificFarmState extends State<SpecificFarm> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/update_farm');
+                    Navigator.pushNamed(context, '/update_farm', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'খামার আপডেট',
+                      args['bangla']?'খামার আপডেট':'Update Farm',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -104,9 +111,6 @@ class _SpecificFarmState extends State<SpecificFarm> {
                   ),
                 ),
               ),
-
-
-
             ],
           ),
         ),

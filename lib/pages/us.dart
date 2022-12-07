@@ -2,32 +2,23 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class us extends StatefulWidget {
-  const us({Key? key}) : super(key: key);
-
   @override
   _usState createState() => _usState();
 }
 
 class _usState extends State<us> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     Navigator.pushNamed(context,'/manual2');
-      //   },
-      //   child: Image(
-      //     image: AssetImage('assets/next.png'),
-      //   ),
-      //   backgroundColor: Colors.white,
-      // ),
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'আমাদের সম্পর্কে জানুন',
+          args['bangla']?'আমাদের সম্পর্কে জানুন':'About Us',
           style: TextStyle(
             fontSize: 25,
             color: Color(0xFFB9E6FA),
@@ -36,7 +27,7 @@ class _usState extends State<us> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -46,7 +37,7 @@ class _usState extends State<us> {
               //SizedBox(height: 60),
               SizedBox(height: 20),
               // SizedBox(height: 1),
-              Image.asset('assets/us.JPG'),
+              Image.asset('assets/us'+(args['bangla']?1:0).toString()+'.JPG'),
               // height:150,
               // width:100,
               // SizedBox(height: 0),

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 
 class Verification extends StatefulWidget {
-  const Verification({Key? key}) : super(key: key);
-
   @override
   _VerificationState createState() => _VerificationState();
 }
 
 class _VerificationState extends State<Verification> {
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(
@@ -19,7 +19,7 @@ class _VerificationState extends State<Verification> {
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Text(
-                'অ্যাংকর আই',
+                args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                 style: TextStyle(
                   fontSize: 45.0,
                   color: Color(0xFF186B9A),
@@ -33,13 +33,12 @@ class _VerificationState extends State<Verification> {
                 width: 150.0,
               ),
               SizedBox(height: 60),
-
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'যাচাইকরণ কোড',
+                    hintText: args['bangla']?'যাচাইকরণ কোড':'Verification Code',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
@@ -55,12 +54,14 @@ class _VerificationState extends State<Verification> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/main_menu');
+                    Navigator.pushNamed(context, '/main_menu', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'যাচাই',
+                      args['bangla']?'যাচাই':'Verify',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

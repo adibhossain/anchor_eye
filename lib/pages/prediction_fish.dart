@@ -28,7 +28,7 @@ class _Prediction_fishState extends State<Prediction_fish> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: true), //this
       body: SafeArea(
         child: Center(
 

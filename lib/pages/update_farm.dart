@@ -2,23 +2,23 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class Update_farm extends StatefulWidget {
-  const Update_farm({Key? key}) : super(key: key);
-
   @override
   _Update_farmState createState() => _Update_farmState();
 }
 
 class _Update_farmState extends State<Update_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'খামার আপডেট করুন',
+          args['bangla']?'খামার আপডেট করুন':'Update Farm',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -27,51 +27,51 @@ class _Update_farmState extends State<Update_farm> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'মাছ ধরার পরিমাণ',
+                    hintText: args['bangla']?'মাছ ধরার পরিমাণ':'No. of fishes caught',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'ধরা মাছের ওজন ',
+                    hintText: args['bangla']?'ধরা মাছের ওজন':'Weight of caught fishes',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'খাবারের পরিমাণ ',
+                    hintText: args['bangla']?'খাবারের পরিমাণ':'Amount of food',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
                 ),
               ),
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                 child: TextField(
                   decoration: InputDecoration(
                     border: OutlineInputBorder(),
-                    hintText: 'প্রয়োগকৃত সার',
+                    hintText: args['bangla']?'প্রয়োগকৃত সার':'Used Fertilizer',
                     filled: true,
                     fillColor: Color(0xFFD2ECF2),
                   ),
@@ -87,12 +87,14 @@ class _Update_farmState extends State<Update_farm> {
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/specific_farm');
+                    Navigator.pushNamed(context, '/specific_farm', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'আপডেট করুন',
+                      args['bangla']?'আপডেট করুন':'Update',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -103,7 +105,6 @@ class _Update_farmState extends State<Update_farm> {
               ),
             ],
           ),
-
         ),
       ),
     );

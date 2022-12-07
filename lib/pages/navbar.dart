@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class NavBar extends StatelessWidget {
+  NavBar({super.key,required this.bangla});
+  bool bangla;
   @override
   Widget build(BuildContext context) {
     return SidebarX(
@@ -64,30 +66,38 @@ class NavBar extends StatelessWidget {
       items: [
         SidebarXItem(
           icon: Icons.home,
-          label: 'হোম',
+          label: bangla?'হোম':'Home',
           onTap: () {
-            Navigator.pushNamed(context, '/main_menu');
+            Navigator.pushNamed(context, '/main_menu', arguments: {
+              'bangla': bangla,
+            });
           },
         ),
         SidebarXItem(
           icon: Icons.info,
-          label: 'ব্যবহার বিধি',
+          label: bangla?'ব্যবহার বিধি':'User Manual',
           onTap: () {
-            Navigator.pushNamed(context, '/manual1');
+            Navigator.pushNamed(context, '/manual1', arguments: {
+              'bangla': bangla,
+            });
           },
         ),
         SidebarXItem(
           icon: Icons.settings,
-          label: 'সেটিংস',
+          label: bangla?'সেটিংস':'Settings',
           onTap: () {
-            Navigator.pushNamed(context, '/settings');
+            Navigator.pushNamed(context, '/settings', arguments: {
+              'bangla': bangla,
+            });
           },
         ),
         SidebarXItem(
           icon: Icons.logout,
-          label: 'সাইন আউট',
+          label: bangla?'সাইন আউট':'Sign Out',
           onTap: () {
-            Navigator.pushNamed(context, '/home');
+            Navigator.pushNamed(context, '/home', arguments: {
+              'bangla': bangla,
+            });
           },
         ),
       ],

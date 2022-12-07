@@ -6,8 +6,10 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(
@@ -19,7 +21,7 @@ class _HomeState extends State<Home> {
               //SizedBox(height: 60),
               Container(
                 child: Text(
-                  'অ্যাংকর আই',
+                  args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                   style: TextStyle(
                     fontSize: 50.0,
                     color: Color(0xFF0A457C),
@@ -43,12 +45,14 @@ class _HomeState extends State<Home> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/login');
+                    Navigator.pushNamed(context, '/login', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                        'লগ ইন',
+                      args['bangla']?'লগ ইন':'Log In',
                         style: TextStyle(
                           fontSize: 40.0,
                           fontWeight: FontWeight.bold,
@@ -67,12 +71,14 @@ class _HomeState extends State<Home> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/signup');
+                    Navigator.pushNamed(context, '/signup', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'সাইন আপ',
+                      args['bangla']?'সাইন আপ':'Sign Up',
                       style: TextStyle(
                         fontSize: 40.0,
                         fontWeight: FontWeight.bold,

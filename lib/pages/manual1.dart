@@ -34,7 +34,7 @@ class _Manual1State extends State<Manual1> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: true), //this
       body: SafeArea(
         child: Center(
           child: Column(

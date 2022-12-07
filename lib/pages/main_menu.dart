@@ -8,15 +8,17 @@ class MainMenu extends StatefulWidget {
 
 class _MainMenuState extends State<MainMenu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar( //this
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'অ্যাংকর আই',
+          args['bangla']?'অ্যাংকর আই':'Anchor Eye',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -25,7 +27,7 @@ class _MainMenuState extends State<MainMenu> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -47,12 +49,14 @@ class _MainMenuState extends State<MainMenu> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/yourfishfarms');
+                    Navigator.pushNamed(context, '/yourfishfarms', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'খামারসমূহ',
+                      args['bangla']?'খামারসমূহ':'Your Farms',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -71,12 +75,14 @@ class _MainMenuState extends State<MainMenu> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/helpninfo');
+                    Navigator.pushNamed(context, '/helpninfo', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'তথ্য ও সেবা',
+                      args['bangla']?'তথ্য ও সেবা':'Help & Info',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -95,12 +101,14 @@ class _MainMenuState extends State<MainMenu> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home');
+                    Navigator.pushReplacementNamed(context, '/home', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'সাইন আউট',
+                      args['bangla']?'সাইন আউট':'Sign Out',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

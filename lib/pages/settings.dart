@@ -8,17 +8,17 @@ class settings extends StatefulWidget {
 
 class _settingsState extends State<settings> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
-  bool _hasBeenPressed = false;
-
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'সেটিংস',
+          args['bangla']?'সেটিংস':'Settings',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -27,18 +27,16 @@ class _settingsState extends State<settings> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
               Image.asset('assets/sett.JPG'),
               SizedBox(height:5),
               Container(
-
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     shape: StadiumBorder(),
@@ -47,11 +45,8 @@ class _settingsState extends State<settings> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    foregroundColor: Color(0xFF0A458B);
-                    setState() {
-                      _hasBeenPressed = !_hasBeenPressed;
-                      // backgroundColor: Color(0xFFD2ECF2),
-                    };
+                    args['bangla'] = !args['bangla'];
+                    setState(() {});
                   },
 
                   child: Container(
@@ -76,11 +71,8 @@ class _settingsState extends State<settings> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    foregroundColor: Color(0xFF0A458B);
-                    setState() {
-                      _hasBeenPressed = !_hasBeenPressed;
-                      // backgroundColor: Color(0xFFD2ECF2),
-                    };
+                    args['bangla'] = !args['bangla'];
+                    setState(() {});
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),

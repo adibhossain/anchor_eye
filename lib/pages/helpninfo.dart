@@ -8,15 +8,17 @@ class helpninfo extends StatefulWidget {
 
 class _helpninfo extends State<helpninfo> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'তথ্য ও সেবা',
+          args['bangla']?'তথ্য ও সেবা':'Help & Info',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFB9E6FA),
@@ -25,7 +27,7 @@ class _helpninfo extends State<helpninfo> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -49,12 +51,14 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/manual1');
+                    Navigator.pushNamed(context, '/manual1', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'ব্যবহার বিধি',
+                      args['bangla']?'ব্যবহার বিধি':'User Manual',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -73,12 +77,14 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/us');
+                    Navigator.pushNamed(context, '/us', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'আমাদের সম্পর্কে জানুন',
+                      args['bangla']?'আমাদের সম্পর্কে জানুন':'About Us',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,
@@ -97,12 +103,14 @@ class _helpninfo extends State<helpninfo> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/contact');
+                    Navigator.pushNamed(context, '/contact', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'যোগাযোগ করুন',
+                      args['bangla']?'যোগাযোগ করুন':'Contact Us',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

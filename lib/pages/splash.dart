@@ -10,7 +10,9 @@ class _SplashState extends State<Splash> {
 
   void loadHome() async {
     Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/home');
+      Navigator.pushReplacementNamed(context, '/home', arguments: {
+        'bangla': true,
+      });
     });
   }
 

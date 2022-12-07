@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:getwidget/getwidget.dart';
 import 'navbar.dart';
 
 class contact extends StatefulWidget {
@@ -9,24 +8,17 @@ class contact extends StatefulWidget {
 
 class _contactState extends State<contact> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
-      // floatingActionButton: FloatingActionButton(
-      //   onPressed: () {
-      //     // Navigator.pushNamed(context,'/manual2');
-      //   },
-      //   child: Image(
-      //     image: AssetImage('assets/next.png'),
-      //   ),
-      //   backgroundColor: Colors.white,
-      // ),
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'যোগাযোগ করুন',
+          args['bangla']?'যোগাযোগ করুন':'Contact Us',
           style: TextStyle(
             fontSize: 27,
             color: Color(0xFFB9E6FA),
@@ -35,7 +27,7 @@ class _contactState extends State<contact> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -45,12 +37,33 @@ class _contactState extends State<contact> {
               //SizedBox(height: 60),
               SizedBox(height: 50),
               // SizedBox(height: 1),
-              Image.asset('assets/contact.JPG'),
+              SizedBox(
+                width: 300,
+                child: Text(
+                  args['bangla']?'ইমেইল: anchoreye_bdasia@gmail.com':'Email: anchoreye_bdasia@gmail.com',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 10),
+              SizedBox(
+                width: 300,
+                child: Text(
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Phone: 01703061533',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
               SizedBox(height: 30),
               // children:
               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
-                    SizedBox(width: 3),
+                    //SizedBox(width: 3),
                 IconButton(
                   icon: Image.asset('assets/fb.png'),
                   iconSize: 100,
@@ -69,7 +82,7 @@ class _contactState extends State<contact> {
                   onPressed: () {},
                 ),
 
-                    SizedBox(width: 1),
+                    //SizedBox(width: 1),
 
                   ]
               ),

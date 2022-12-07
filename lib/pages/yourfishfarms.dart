@@ -2,22 +2,23 @@ import 'package:flutter/material.dart';
 import 'navbar.dart';
 
 class Your_fishfarm extends  StatefulWidget {
- // const Login({Key? key}) : super(key: key);
   @override
   _YourFishFarm createState() => _YourFishFarm();
 }
 
 class _YourFishFarm extends State<Your_fishfarm>{
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  Map args = {};
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       appBar: AppBar(
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          'আপনার খামারসমূহ',
+          args['bangla']?'আপনার খামারসমূহ':'Your Farms',
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -26,7 +27,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
           child: Column(
@@ -48,12 +49,14 @@ class _YourFishFarm extends State<Your_fishfarm>{
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/specific_farm');
+                    Navigator.pushNamed(context, '/specific_farm', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(
-                      'রুই খামার',
+                      args['bangla']?'রুই খামার':'Rui Farm',
                       style: TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold,
@@ -75,7 +78,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(
-                      'পাঙ্গাশ খামার',
+                      args['bangla']?'পাঙ্গাশ খামার':'Pangash Farm',
                       style: TextStyle(
                         fontSize: 25.0,
                         fontWeight: FontWeight.bold,
@@ -94,12 +97,14 @@ class _YourFishFarm extends State<Your_fishfarm>{
                     backgroundColor: Color(0xFF186B9A),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/add_farm');
+                    Navigator.pushNamed(context, '/add_farm', arguments: {
+                      'bangla': args['bangla'],
+                    });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      'খামার যোগ করুন',
+                      args['bangla']?'খামার যোগ করুন':'Add Farm',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

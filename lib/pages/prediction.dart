@@ -28,7 +28,7 @@ class _PredictionState extends State<Prediction> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(), //this
+      drawer: NavBar(bangla: true), //this
       body: SafeArea(
         child: Center(
 
