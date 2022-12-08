@@ -82,50 +82,52 @@ class _DashboardState extends State<Dashboard> {
           ),
           SizedBox(height: 0),
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Column(
-                children: [
-                  IconButton(
-                    icon: Image.asset('assets/future.png'),
-                    iconSize: 50,
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/prediction', arguments: {
-                        'bangla': args['bangla'],
-                        'i': i,
-                      });
-                    },
+              ElevatedButton.icon(
+                icon: Image.asset('assets/future.png'),
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  minimumSize: const Size(80,55),
+                  foregroundColor: Color(0xFFD2ECF2),
+                  backgroundColor: Color(0xFF186B9A),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/prediction', arguments: {
+                    'bangla': args['bangla'],
+                    'i': i,
+                  });
+                },
+                label: Text(
+                  args['bangla']?'পূর্বাভাস':'Prediction',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    args['bangla']?'পূর্বাভাস':'Prediction',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                ),
               ),
-              SizedBox(width: 180),
-              Column(
-                children: [
-                  IconButton(
-                    icon: Image.asset('assets/bulb.png'),
-                    iconSize: 50,
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/suggestion', arguments: {
-                        'bangla': args['bangla'],
-                        'i': i,
-                      });
-                    },
+              //SizedBox(width: 100),
+              ElevatedButton.icon(
+                icon: Image.asset('assets/bulb.png'),
+                style: ElevatedButton.styleFrom(
+                  shape: StadiumBorder(),
+                  minimumSize: const Size(80, 30),
+                  foregroundColor: Color(0xFFD2ECF2),
+                  backgroundColor: Color(0xFF186B9A),
+                ),
+                onPressed: () {
+                  Navigator.pushNamed(context, '/suggestion', arguments: {
+                    'bangla': args['bangla'],
+                    'i': i,
+                  });
+                },
+                label: Text(
+                  args['bangla']?'পরামর্শ':'Suggestion',
+                  style: TextStyle(
+                    fontSize: 15.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                  Text(
-                    args['bangla']?'পরামর্শ':'Suggestion',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
+                ),
               ),
             ],
           ),

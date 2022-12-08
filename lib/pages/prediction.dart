@@ -37,7 +37,6 @@ class _PredictionState extends State<Prediction> {
       drawer: NavBar(bangla: true), //this
       body: SafeArea(
         child: Center(
-
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
@@ -90,6 +89,7 @@ class _PredictionState extends State<Prediction> {
               ),
               Container(
                 child: Card(
+                  color: Color(0xFFD7F1F6),
                   child: InkWell(
                     splashColor: Colors.blue.withAlpha(30),
                     onTap: () {

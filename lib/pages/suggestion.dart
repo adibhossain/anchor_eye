@@ -92,6 +92,7 @@ class _SuggestionState extends State<Suggestion> {
               ),
           Container(
           child: Card(
+            color: Color(0xFFD7F1F6),
           child: InkWell(
               splashColor: Colors.blue.withAlpha(30),
           onTap: () {
