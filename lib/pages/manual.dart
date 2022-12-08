@@ -43,39 +43,41 @@ class _ManualState extends State<Manual> {
       drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              //SizedBox(height: 60),
-              SizedBox(height: 20),
-              // SizedBox(height: 1),
-              Image(
-                image: AssetImage('assets/m'+(args['bangla']?1:0).toString()+i.toString()+'.JPG'),
-                height: 570.0,
-                width: 570.0,
-              ),
-              // height:150,
-              // width:100,
-              // SizedBox(height: 0),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                //SizedBox(height: 60),
+                SizedBox(height: 20),
+                // SizedBox(height: 1),
+                Image(
+                  image: AssetImage('assets/m'+(args['bangla']?1:0).toString()+i.toString()+'.JPG'),
+                  height: 570.0,
+                  width: 570.0,
+                ),
+                // height:150,
+                // width:100,
+                // SizedBox(height: 0),
 
-              // Container(
-              //   child: Text(
-              //     '',
-              //     style: TextStyle(
-              //       fontSize: 25.0,
-              //       color: Color(0xFF0A457C),
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   // child: SpinKitRing(
-              //   //   color: Color(0xFF0A457C),
-              //   //   size: 50.0,
-              //   // ),
-              // ),
-            ],
+                // Container(
+                //   child: Text(
+                //     '',
+                //     style: TextStyle(
+                //       fontSize: 25.0,
+                //       color: Color(0xFF0A457C),
+                //       fontWeight: FontWeight.bold,
+                //     ),
+                //   ),
+                // ),
+                // Container(
+                //   // child: SpinKitRing(
+                //   //   color: Color(0xFF0A457C),
+                //   //   size: 50.0,
+                //   // ),
+                // ),
+              ],
+            ),
           ),
         ),
       ),

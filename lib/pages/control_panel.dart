@@ -23,7 +23,7 @@ class _ControlPanelState extends State<ControlPanel> {
                     iconSize: 20,
                     onPressed: () {},
                   ),
-                  SizedBox(width: 305),
+                  SizedBox(width: 230),
                   IconButton(
                     icon: Image.asset('assets/help.png'),
                     iconSize: 20,
