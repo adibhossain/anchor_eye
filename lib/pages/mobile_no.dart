@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
+class Mobile_No extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _Mobile_NoState createState() => _Mobile_NoState();
 }
 
-class _LoginState extends State<Login> {
+class _Mobile_NoState extends State<Mobile_No> {
   Map args = {};
   @override
   Widget build(BuildContext context) {
@@ -41,18 +39,7 @@ class _LoginState extends State<Login> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'ইউজারনেম':'Username',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'পাসওয়ার্ড':'Password',
+                      hintText: args['bangla']?'মোবাইল':'Mobile No.',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
@@ -68,14 +55,14 @@ class _LoginState extends State<Login> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/main_menu', arguments: {
+                      Navigator.pushNamed(context, '/verification_forgot_pass', arguments: {
                         'bangla': args['bangla'],
                       });
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
                       child: Text(
-                        args['bangla']?'লগ ইন':'Log In',
+                        args['bangla']?'যাচাইকরণ কোড পাঠান':'Send Verification Code',
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,
@@ -84,21 +71,6 @@ class _LoginState extends State<Login> {
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
-                TextButton(
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/mobile_no', arguments: {
-                        'bangla': args['bangla'],
-                      });
-                    },
-                    child: Text(
-                      args['bangla']?'পাসওয়ার্ড ভুলে গেছেন?':'Forgot Password?',
-                      style: TextStyle(
-                        fontSize: 20.0,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                )
               ],
             ),
           ),

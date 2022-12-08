@@ -86,8 +86,32 @@ class _settingsState extends State<settings> {
                   ),
                 ),
               ),
-
-
+              SizedBox(height: 30),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 80),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/reset_pass', arguments: {
+                      'bangla': args['bangla'],
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      args['bangla']?'পাসওয়ার্ড পরিবর্তন করুন':'Change Password',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ],
           ),
         ),

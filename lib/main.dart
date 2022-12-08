@@ -19,8 +19,11 @@ import 'pages/suggestion.dart';
 import 'pages/prediction.dart';
 import 'pages/contact.dart';
 import 'pages/settings.dart';
-
-
+import 'pages/mobile_no.dart';
+import 'pages/verification_forgot_pass.dart';
+import 'pages/reset_pass.dart';
+import 'pages/new_pass.dart';
+import 'pages/forgot_pass.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -46,10 +49,11 @@ void main() {
         '/prediction': (context) => Prediction(),
         '/contact': (context) => contact(),
         '/settings': (context) => settings(),
-
-
-
-
+        '/mobile_no': (context) => Mobile_No(),
+        '/verification_forgot_pass': (context) => Verification_Forgot_Pass(),
+        '/reset_pass': (context) => Reset_Pass(),
+        '/new_pass': (context) => New_Pass(),
+        '/forgot_pass': (context) => Forgot_Pass(),
       }
   ));
 }
