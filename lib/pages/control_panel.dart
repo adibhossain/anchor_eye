@@ -6,12 +6,15 @@ class ControlPanel extends StatefulWidget {
 }
 
 class _ControlPanelState extends State<ControlPanel> {
+  Map args = {};
+  bool hints=false;
   @override
   Widget build(BuildContext context) {
+    args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       body: SafeArea(
-        child: Center(
+        child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
@@ -27,7 +30,14 @@ class _ControlPanelState extends State<ControlPanel> {
                   IconButton(
                     icon: Image.asset('assets/help.png'),
                     iconSize: 20,
-                    onPressed: () {},
+                    onPressed: () {
+                      hints=true;
+                      setState(() {});
+                      Future.delayed(Duration(seconds: 5), () {
+                        hints=false;
+                        setState(() {});
+                      });
+                    },
                   ),
                 ],
               ),
@@ -39,15 +49,39 @@ class _ControlPanelState extends State<ControlPanel> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: <Widget>[
-                  Image(
-                    image: AssetImage('assets/battery-icon.png'),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Image(
+                        image: AssetImage('assets/battery-icon.png'),
+                      ),
+                      Text(
+                        args['bangla']?'৯৫%':'95%',
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: Image.asset('assets/power-off.png'),
-                    iconSize: 50,
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                        icon: Image.asset('assets/power-off.png'),
+                        iconSize: 40,
+                        onPressed: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                      hints?Text(
+                        args['bangla']?'সিস্টেম থামান':'Stop System',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ):SizedBox.shrink(),
+                    ],
                   ),
                   IconButton(
                     icon: Image.asset('assets/full-screen-icon.png'),
@@ -56,58 +90,141 @@ class _ControlPanelState extends State<ControlPanel> {
                   ),
                 ],
               ),
-              SizedBox(height: 25),
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  IconButton(
-                    icon: Image.asset('assets/rotate-left.png'),
-                    iconSize: 20,
-                    onPressed: () {},
+                  Column(
+                    children: [
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: Image.asset('assets/rotate-left.png'),
+                                iconSize: 20,
+                                onPressed: () {},
+                              ),
+                              hints?Text(
+                                args['bangla']?'ঘড়ির কাঁটার\nবিপরীতে':'Anti-clockwise',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ):SizedBox.shrink(),
+                            ],
+                          ),
+                          SizedBox(width: 15),
+                          Column(
+                            children: [
+                              IconButton(
+                                icon: Image.asset('assets/rotate-right.png'),
+                                iconSize: 20,
+                                onPressed: () {},
+                              ),
+                              hints?Text(
+                                args['bangla']?'ঘড়ির কাঁটার\nদিকে':'Clockwise',
+                                style: TextStyle(
+                                  fontSize: 15.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ):SizedBox.shrink(),
+                            ],
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 5),
+                      hints?Text(
+                        args['bangla']?'ক্যামেরা ঘোরান':'Rotate Camera',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ):SizedBox.shrink(),
+                    ],
                   ),
-                  IconButton(
-                    icon: Image.asset('assets/rotate-right.png'),
-                    iconSize: 20,
-                    onPressed: () {},
-                  ),
-                  SizedBox(width: 140),
-                  IconButton(
-                    icon: Image.asset('assets/rod.png'),
-                    iconSize: 70,
-                    onPressed: () {},
+                  SizedBox(width: 80),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        args['bangla']?'উপর':'Up',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      IconButton(
+                        icon: Image.asset('assets/rod.png'),
+                        iconSize: 70,
+                        onPressed: () {},
+                      ),
+                      Text(
+                        args['bangla']?'নিচে':'Down',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 5),
+                      hints?Text(
+                        args['bangla']?'ক্যামেরা গভীরতা':'Camera Depth',
+                        style: TextStyle(
+                          fontSize: 15.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ):SizedBox.shrink(),
+                    ],
                   ),
                 ],
               ),
-              SizedBox(height: 25),
-              IconButton(
-                icon: Image.asset('assets/up.png'),
-                iconSize: 50,
-                onPressed: () {},
-              ),
+              SizedBox(height: 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  IconButton(
-                    icon: Image.asset('assets/left.png'),
-                    iconSize: 50,
-                    onPressed: () {},
+                children: [
+                  Column(
+                    children: [
+                      IconButton(
+                        icon: Image.asset('assets/up.png'),
+                        iconSize: 40,
+                        onPressed: () {},
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
+                          IconButton(
+                            icon: Image.asset('assets/left.png'),
+                            iconSize: 40,
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: Image.asset('assets/stop.png'),
+                            iconSize: 40,
+                            onPressed: () {},
+                          ),
+                          IconButton(
+                            icon: Image.asset('assets/right.png'),
+                            iconSize: 40,
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                      IconButton(
+                        icon: Image.asset('assets/down.png'),
+                        iconSize: 40,
+                        onPressed: () {},
+                      ),
+                    ],
                   ),
-                  IconButton(
-                    icon: Image.asset('assets/stop.png'),
-                    iconSize: 50,
-                    onPressed: () {},
-                  ),
-                  IconButton(
-                    icon: Image.asset('assets/right.png'),
-                    iconSize: 50,
-                    onPressed: () {},
-                  ),
+                  SizedBox(width: 10),
+                  hints?Text(
+                    args['bangla']?'রোবোটিক বডি মুভমেন্ট':'Robotic Body Movement',
+                    style: TextStyle(
+                      fontSize: 15.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ):SizedBox.shrink(),
                 ],
-              ),
-              IconButton(
-                icon: Image.asset('assets/down.png'),
-                iconSize: 50,
-                onPressed: () {},
               ),
             ],
           ),
