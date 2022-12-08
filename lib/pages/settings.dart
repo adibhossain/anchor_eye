@@ -44,8 +44,8 @@ class _settingsState extends State<settings> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () {
-                    args['bangla'] = !args['bangla'];
+                  onPressed: args['bangla']? null : () {
+                    args['bangla'] = true;
                     setState(() {});
                   },
 
@@ -70,8 +70,8 @@ class _settingsState extends State<settings> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () {
-                    args['bangla'] = !args['bangla'];
+                  onPressed: !args['bangla']? null : () {
+                    args['bangla'] = false;
                     setState(() {});
                   },
                   child: Container(

@@ -56,7 +56,7 @@ class _DashDetailState extends State<DashDetail> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(bangla: true),
+      drawer: NavBar(bangla: args['bangla']),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[

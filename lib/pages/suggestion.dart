@@ -34,7 +34,7 @@ class _SuggestionState extends State<Suggestion> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(bangla: true), //this
+      drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
 
