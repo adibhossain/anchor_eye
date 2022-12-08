@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class NavBar extends StatelessWidget {
-  NavBar({super.key,required this.bangla});
+  NavBar({super.key,this.bangla=true, this.index=4});
   bool bangla;
+  int index;
   @override
   Widget build(BuildContext context) {
     return SidebarX(
-      controller: SidebarXController(selectedIndex: 0, extended: true),
+      controller: SidebarXController(selectedIndex: index, extended: true),
       theme: SidebarXTheme(
         margin: const EdgeInsets.all(10),
         decoration: BoxDecoration(

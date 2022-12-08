@@ -27,7 +27,7 @@ class _MainMenuState extends State<MainMenu> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(bangla: args['bangla']), //this
+      drawer: NavBar(bangla: args['bangla'],index: 0), //this
       body: SafeArea(
         child: Center(
           child: Column(
