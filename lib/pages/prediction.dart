@@ -25,7 +25,7 @@ class _PredictionState extends State<Prediction> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          args['bangla']?'রুই খামার':'Rui Farm',
+          args['farm_name'],
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),

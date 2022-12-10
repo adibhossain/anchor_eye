@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          args['bangla']?'রুই খামার - ড্যাশবোর্ড':'Rui Farm - Dashboard',
+          args['farm_name']+(args['bangla']?' - ড্যাশবোর্ড':' - Dashboard'),
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -80,52 +80,55 @@ class _DashboardState extends State<Dashboard> {
                         child: Column(
                           children: [
                             SizedBox(height: 10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              children: [
-                                SizedBox(width: 10),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      args['bangla']?'খামারের নাম: ':'Farm Name: ',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xFF0A457C),
-                                        fontWeight: FontWeight.bold,
+                            SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  SizedBox(width: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        args['bangla']?'খামারের নাম: ':'Farm Name: ',
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      args['bangla']?'রুই খামার': 'Rui Farm',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xFF0A457C),
+                                      Text(
+                                        args['farm_name'],
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(width: 40),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                      args['bangla']?'মাছের ধরন:':'Fish Species: ',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xFF0A457C),
-                                        fontWeight: FontWeight.bold,
+                                    ],
+                                  ),
+                                  SizedBox(width: 40),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        args['bangla']?'মাছের ধরন:':'Fish Species: ',
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                          fontWeight: FontWeight.bold,
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      args['bangla']?'রুই':'Rui',
-                                      style: TextStyle(
-                                        fontSize: 15.0,
-                                        color: Color(0xFF0A457C),
+                                      Text(
+                                        args['species'],
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                ),
-                              ],
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                             SizedBox(height: 10),
                             Row(
@@ -350,6 +353,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.pushNamed(context, '/prediction', arguments: {
                         'bangla': args['bangla'],
                         'i': i,
+                        'farm_name': args['farm_name'],
                       });
                     },
                     label: Text(
@@ -377,6 +381,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.pushNamed(context, '/suggestion', arguments: {
                         'bangla': args['bangla'],
                         'i': i,
+                        'farm_name': args['farm_name'],
                       });
                     },
                     label: Text(

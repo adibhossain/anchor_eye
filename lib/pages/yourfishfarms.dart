@@ -51,6 +51,8 @@ class _YourFishFarm extends State<Your_fishfarm>{
                   onPressed: () {
                     Navigator.pushNamed(context, '/specific_farm', arguments: {
                       'bangla': args['bangla'],
+                      'farm_name': args['bangla']?'রুই খামার':'Rui Farm',
+                      'species': args['bangla']?'রুই':'Rui',
                     });
                   },
                   child: Container(
@@ -74,7 +76,13 @@ class _YourFishFarm extends State<Your_fishfarm>{
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () { },
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/specific_farm', arguments: {
+                      'bangla': args['bangla'],
+                      'farm_name': args['bangla']?'পাঙ্গাশ খামার':'Pangash Farm',
+                      'species': args['bangla']?'পাঙ্গাশ':'Pangash',
+                    });
+                  },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,20,0,15),
                     child: Text(

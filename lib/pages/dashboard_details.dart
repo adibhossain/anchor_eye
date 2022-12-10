@@ -268,7 +268,7 @@ class _DashDetailState extends State<DashDetail> {
                               label: Expanded(
                                 child: Text(
                                   !prediction?
-                                  (args['bangla']?'প্রাপ্ত':'Current'):
+                                  (args['bangla']?'প্রাপ্ত':'Received'):
                                   (args['bangla']?'পূর্বাভাস':'Predicted'),
                                   style: TextStyle(
                                     fontSize: 20.0,
