@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class Verification_Forgot_Pass extends StatefulWidget {
+class Pass_Barrier extends StatefulWidget {
   @override
-  _Verification_Forgot_PassState createState() => _Verification_Forgot_PassState();
+  _Pass_BarrierState createState() => _Pass_BarrierState();
 }
 
-class _Verification_Forgot_PassState extends State<Verification_Forgot_Pass> {
+class _Pass_BarrierState extends State<Pass_Barrier> {
   Map args = {};
   @override
   Widget build(BuildContext context) {
@@ -39,7 +39,7 @@ class _Verification_Forgot_PassState extends State<Verification_Forgot_Pass> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'যাচাইকরণ কোড':'Verification Code',
+                      hintText: args['bangla']?'বর্তমান পাসওয়ার্ড':'Current Password',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
@@ -55,14 +55,16 @@ class _Verification_Forgot_PassState extends State<Verification_Forgot_Pass> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/forgot_pass', arguments: {
+                      Navigator.pushNamed(context, args['goto'], arguments: {
                         'bangla': args['bangla'],
+                        'goto': args['gototo'],
+                        'gototo': args['gotototo'],
                       });
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
                       child: Text(
-                        args['bangla']?'যাচাই':'Verify',
+                        args['bangla']?'জমা দিন':'Submit',
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,

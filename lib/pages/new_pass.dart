@@ -66,7 +66,7 @@ class _New_PassState extends State<New_Pass> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () {
-                      Navigator.pushReplacementNamed(context, '/settings', arguments: {
+                      Navigator.pushReplacementNamed(context, args['goto'], arguments: {
                         'bangla': args['bangla'],
                       });
                     },

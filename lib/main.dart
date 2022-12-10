@@ -20,10 +20,8 @@ import 'pages/prediction.dart';
 import 'pages/contact.dart';
 import 'pages/settings.dart';
 import 'pages/mobile_no.dart';
-import 'pages/verification_forgot_pass.dart';
-import 'pages/reset_pass.dart';
+import 'pages/pass_barrier.dart';
 import 'pages/new_pass.dart';
-import 'pages/forgot_pass.dart';
 import 'pages/fertilizers.dart';
 import 'pages/caught_fishes.dart';
 import 'pages/fed_fishes.dart';
@@ -54,10 +52,8 @@ void main() {
         '/contact': (context) => contact(),
         '/settings': (context) => settings(),
         '/mobile_no': (context) => Mobile_No(),
-        '/verification_forgot_pass': (context) => Verification_Forgot_Pass(),
-        '/reset_pass': (context) => Reset_Pass(),
+        '/pass_barrier': (context) => Pass_Barrier(),
         '/new_pass': (context) => New_Pass(),
-        '/forgot_pass': (context) => Forgot_Pass(),
         '/fertilizers': (context) => Fertilizers(),
         '/caught_fishes': (context) => Caught_Fishes(),
         '/fed_fishes': (context) => Fed_Fishes(),

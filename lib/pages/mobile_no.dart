@@ -55,8 +55,10 @@ class _Mobile_NoState extends State<Mobile_No> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/verification_forgot_pass', arguments: {
+                      Navigator.pushNamed(context, '/verification', arguments: {
                         'bangla': args['bangla'],
+                        'goto': args['gototo'],
+                        'gototo': args['gotototo'],
                       });
                     },
                     child: Container(

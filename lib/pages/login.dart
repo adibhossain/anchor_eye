@@ -89,6 +89,9 @@ class _LoginState extends State<Login> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/mobile_no', arguments: {
                         'bangla': args['bangla'],
+                        'goto': '/verification',
+                        'gototo': '/new_pass',
+                        'gotototo': '/login',
                       });
                     },
                     child: Text(

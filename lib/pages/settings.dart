@@ -86,7 +86,13 @@ class _settingsState extends State<settings> {
                   ),
                 ),
               ),
-              SizedBox(height: 30),
+              const Divider(
+                height: 50,
+                thickness: 1,
+                indent: 60,
+                endIndent: 60,
+                color: Color(0xFF0A457C),
+              ),
               Container(
                 child: ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -96,14 +102,45 @@ class _settingsState extends State<settings> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/reset_pass', arguments: {
+                    Navigator.pushNamed(context, '/pass_barrier', arguments: {
                       'bangla': args['bangla'],
+                      'goto': '/new_pass',
+                      'gototo': '/settings',
                     });
                   },
                   child: Container(
                     padding: EdgeInsets.fromLTRB(0,10,0,5),
                     child: Text(
-                      args['bangla']?'পাসওয়ার্ড পরিবর্তন করুন':'Change Password',
+                      args['bangla']?'পাসওয়ার্ড পরিবর্তন':'Change Password',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 80),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/pass_barrier', arguments: {
+                      'bangla': args['bangla'],
+                      'goto': '/mobile_no',
+                      'gototo': '/verification',
+                      'gotototo': '/settings',
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      args['bangla']?'ফোন নম্বর পরিবর্তন':'Change Phone No.',
                       style: TextStyle(
                         fontSize: 30.0,
                         fontWeight: FontWeight.bold,

@@ -55,8 +55,9 @@ class _VerificationState extends State<Verification> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/main_menu', arguments: {
+                      Navigator.pushNamed(context, args['goto'], arguments: {
                         'bangla': args['bangla'],
+                        'goto': args['gototo'],
                       });
                     },
                     child: Container(

@@ -90,6 +90,7 @@ class _SignUpState extends State<SignUp> {
                     onPressed: () {
                       Navigator.pushNamed(context, '/verification', arguments: {
                         'bangla': args['bangla'],
+                        'goto': '/main_menu',
                       });
                     },
                     child: Container(
