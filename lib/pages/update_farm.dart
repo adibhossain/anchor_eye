@@ -30,82 +30,97 @@ class _Update_farmState extends State<Update_farm> {
       drawer: NavBar(bangla: args['bangla']), //this
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'মাছ ধরার পরিমাণ':'No. of fishes caught',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            //crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                args['bangla']?'আপনি কি করেছিলেন?':'What did you do?',
+                style: TextStyle(
+                  fontSize: 30.0,
+                  color: Color(0xFF186B9A),
+                  fontWeight: FontWeight.bold,
                 ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'ধরা মাছের ওজন':'Weight of caught fishes',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
+              ),
+              SizedBox(height: 20),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 30),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
                   ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'খাবারের পরিমাণ':'Amount of food',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'প্রয়োগকৃত সার':'Used Fertilizer',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 25),
-                Container(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      minimumSize: const Size(170, 30),
-                      foregroundColor: Color(0xFFD2ECF2),
-                      backgroundColor: Color(0xFF186B9A),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/specific_farm', arguments: {
-                        'bangla': args['bangla'],
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
-                        args['bangla']?'আপডেট করুন':'Update',
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/caught_fishes', arguments: {
+                      'bangla': args['bangla'],
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      args['bangla']?'মাছ ধরেছি':'Caught Fishes',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
+              ),
+              SizedBox(height: 15),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 30),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/fed_fishes', arguments: {
+                      'bangla': args['bangla'],
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      args['bangla']?'দৈনিক খাবারের\nপরিমাণ পরিবর্তন':'Changed Daily Feed Amount',
+                      style: TextStyle(
+                        fontSize: 25.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(height: 15),
+              Container(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    minimumSize: const Size(200, 30),
+                    foregroundColor: Color(0xFF0A457C),
+                    backgroundColor: Color(0xFFD2ECF2),
+                  ),
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/used_fertilizer', arguments: {
+                      'bangla': args['bangla'],
+                    });
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,10,0,5),
+                    child: Text(
+                      args['bangla']?'সার ব্যবহার করেছি':'Used Fertilizers',
+                      style: TextStyle(
+                        fontSize: 30.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),

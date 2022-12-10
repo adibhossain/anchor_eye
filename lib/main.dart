@@ -24,6 +24,10 @@ import 'pages/verification_forgot_pass.dart';
 import 'pages/reset_pass.dart';
 import 'pages/new_pass.dart';
 import 'pages/forgot_pass.dart';
+import 'pages/fertilizers.dart';
+import 'pages/caught_fishes.dart';
+import 'pages/fed_fishes.dart';
+import 'pages/used_fertilizer.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -54,6 +58,10 @@ void main() {
         '/reset_pass': (context) => Reset_Pass(),
         '/new_pass': (context) => New_Pass(),
         '/forgot_pass': (context) => Forgot_Pass(),
+        '/fertilizers': (context) => Fertilizers(),
+        '/caught_fishes': (context) => Caught_Fishes(),
+        '/fed_fishes': (context) => Fed_Fishes(),
+        '/used_fertilizer': (context) => Used_Fertilizer(),
       }
   ));
 }

@@ -58,7 +58,7 @@ class _SuggestionState extends State<Suggestion> {
                     args['bangla']?'মাছের বৃদ্ধি':'Fish Growth',
                     style: TextStyle(
                       fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: i==1?FontWeight.bold:FontWeight.normal,
                     ),
                   ),
                   IconButton(
@@ -74,7 +74,7 @@ class _SuggestionState extends State<Suggestion> {
                     args['bangla']?'জলের গুণমান সূচক':'Water Quality Index',
                     style: TextStyle(
                       fontSize: 20.0,
-                      fontWeight: FontWeight.bold,
+                      fontWeight: i==0?FontWeight.bold:FontWeight.normal,
                     ),
                   ),
                 ],
