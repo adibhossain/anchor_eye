@@ -40,7 +40,7 @@ class _ManualState extends State<Manual> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(bangla: args['bangla'], index: 1), //this
+      drawer: NavBar(bangla: args['bangla'], index: 2), //this
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(

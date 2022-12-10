@@ -27,7 +27,7 @@ class _settingsState extends State<settings> {
         ),
       ),
       key: _scaffoldKey, //this
-      drawer: NavBar(bangla: args['bangla'], index: 2), //this
+      drawer: NavBar(bangla: args['bangla'], index: 3), //this
       body: SafeArea(
         child: Center(
           child: Column(

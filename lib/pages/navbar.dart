@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
 
 class NavBar extends StatelessWidget {
-  NavBar({super.key,this.bangla=true, this.index=4});
+  NavBar({super.key,this.bangla=true, this.index=5});
   bool bangla;
   int index;
   @override
@@ -70,6 +70,15 @@ class NavBar extends StatelessWidget {
           label: bangla?'হোম':'Home',
           onTap: () {
             Navigator.pushNamed(context, '/main_menu', arguments: {
+              'bangla': bangla,
+            });
+          },
+        ),
+        SidebarXItem(
+          icon: Icons.person,
+          label: bangla?'প্রোফাইল':'Profile',
+          onTap: () {
+            Navigator.pushNamed(context, '/profile', arguments: {
               'bangla': bangla,
             });
           },
