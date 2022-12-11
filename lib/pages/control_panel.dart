@@ -54,11 +54,13 @@ class _ControlPanelState extends State<ControlPanel> {
                     children: [
                       Image(
                         image: AssetImage('assets/battery-icon.png'),
+                        height: 50,
+                        width: 50,
                       ),
                       Text(
                         args['bangla']?'৯৫%':'95%',
                         style: TextStyle(
-                          fontSize: 20.0,
+                          fontSize: 15.0,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -86,7 +88,11 @@ class _ControlPanelState extends State<ControlPanel> {
                   IconButton(
                     icon: Image.asset('assets/full-screen-icon.png'),
                     iconSize: 20,
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.pushNamed(context, '/control_panel_full', arguments: {
+                        'bangla': args['bangla'],
+                      });
+                    },
                   ),
                 ],
               ),

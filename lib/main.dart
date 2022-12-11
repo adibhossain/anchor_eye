@@ -28,6 +28,7 @@ import 'pages/fed_fishes.dart';
 import 'pages/used_fertilizer.dart';
 import 'pages/profile.dart';
 import 'pages/credits.dart';
+import 'pages/control_panel_full.dart';
 
 void main() {
   runApp(MaterialApp(
@@ -62,6 +63,7 @@ void main() {
         '/used_fertilizer': (context) => Used_Fertilizer(),
         '/profile': (context) => Profile(),
         '/credits': (context) => Credits(),
+        '/control_panel_full': (context) => Control_Panel_Full(),
       }
   ));
 }

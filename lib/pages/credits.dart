@@ -30,287 +30,288 @@ class _CreditsState extends State<Credits> {
       drawer: NavBar(bangla: args['bangla'],index: 0), //this
       body: SafeArea(
         child: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            //crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              SizedBox(height: 30),
-              Text(
-                args['bangla']?'আমাদের সুপারভাইজার':'Our Supervisors',
-                style: TextStyle(
-                  fontSize: 30.0,
-                  color: Color(0xFF0A457C),
-                  fontWeight: FontWeight.bold,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              //crossAxisAlignment: CrossAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  args['bangla']?'আমাদের সুপারভাইজার':'Our Supervisors',
+                  style: TextStyle(
+                    fontSize: 30.0,
+                    color: Color(0xFF0A457C),
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/mahbub_sir.png'),
-                        radius: 40,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Dr. Md. Mahbubur',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage('assets/mahbub_sir.png'),
+                          radius: 40,
                         ),
-                      ),
-                      Text(
-                        'Rahman',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(height: 10),
+                        Text(
+                          'Dr. Md. Mahbubur',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Professor,',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Rahman',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Department of Computer',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Professor,',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Engineering (CSE),',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Department of Computer',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Military Institute of',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Science & Engineering (CSE),',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Technology',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Military Institute of',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/nazrul_sir.png'),
-                        radius: 40,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Lt Col Muhammad',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Science & Technology',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Nazrul Islam, PhD',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Associate Professor,',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      Text(
-                        'Department of Computer',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                        ),
-                      ),
-                      Text(
-                        'Science & Engineering (CSE),',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                        ),
-                      ),
-                      Text(
-                        'Military Institute of',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                        ),
-                      ),
-                      Text(
-                        'Science & Technology',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/jahan_miss.png'),
-                    radius: 40,
-                  ),
-                  SizedBox(height: 10),
-                  Text(
-                    'Dr. Hosney Jahan',
-                    style: TextStyle(
-                      fontSize: 15.0,
-                      fontWeight: FontWeight.bold,
+                      ],
                     ),
-                  ),
-                  Text(
-                    'Assistant Professor,',
-                    style: TextStyle(
-                      fontSize: 12.0,
-                      fontWeight: FontWeight.bold,
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage('assets/nazrul_sir.png'),
+                          radius: 40,
+                        ),
+                        SizedBox(height: 10),
+                        Text(
+                          'Lt Col Muhammad',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Nazrul Islam, PhD',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Associate Professor,',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          'Department of Computer',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        Text(
+                          'Science & Engineering (CSE),',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        Text(
+                          'Military Institute of',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        Text(
+                          'Science & Technology',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
                     ),
-                  ),
-                  Text(
-                    'Department of Computer',
-                    style: TextStyle(
-                      fontSize: 12.0,
+                  ],
+                ),
+                SizedBox(height: 20),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircleAvatar(
+                      backgroundImage: AssetImage('assets/jahan_miss.png'),
+                      radius: 40,
                     ),
-                  ),
-                  Text(
-                    'Science & Engineering (CSE),',
-                    style: TextStyle(
-                      fontSize: 12.0,
+                    SizedBox(height: 10),
+                    Text(
+                      'Dr. Hosney Jahan',
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Military Institute of',
-                    style: TextStyle(
-                      fontSize: 12.0,
+                    Text(
+                      'Assistant Professor,',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Science & Technology',
-                    style: TextStyle(
-                      fontSize: 12.0,
+                    Text(
+                      'Department of Computer',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/nafiz_sir.png'),
-                        radius: 40,
+                    Text(
+                      'Science & Engineering (CSE),',
+                      style: TextStyle(
+                        fontSize: 12.0,
                       ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Nafiz Imtiaz Khan',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                    ),
+                    Text(
+                      'Military Institute of',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                    Text(
+                      'Science & Technology',
+                      style: TextStyle(
+                        fontSize: 12.0,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 20),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage('assets/nafiz_sir.png'),
+                          radius: 40,
                         ),
-                      ),
-                      Text(
-                        'Lecturer,',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
+                        SizedBox(height: 10),
+                        Text(
+                          'Nafiz Imtiaz Khan',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Department of Computer',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Lecturer,',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Engineering (CSE),',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Department of Computer',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Military Institute of',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Science & Engineering (CSE),',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Technology',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Military Institute of',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundImage: AssetImage('assets/medha_miss.png'),
-                        radius: 40,
-                      ),
-                      SizedBox(height: 10),
-                      Text(
-                        'Tasneem Mubashshira',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          'Science & Technology',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Lecturer,',
-                        style: TextStyle(
-                          fontSize: 12.0,
-                          fontWeight: FontWeight.bold,
+                      ],
+                    ),
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CircleAvatar(
+                          backgroundImage: AssetImage('assets/medha_miss.png'),
+                          radius: 40,
                         ),
-                      ),
-                      Text(
-                        'Department of Computer',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        SizedBox(height: 10),
+                        Text(
+                          'Tasneem Mubashshira',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Engineering (CSE),',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Lecturer,',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Military Institute of',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Department of Computer',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Science & Technology',
-                        style: TextStyle(
-                          fontSize: 12.0,
+                        Text(
+                          'Science & Engineering (CSE),',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ],
+                        Text(
+                          'Military Institute of',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                        Text(
+                          'Science & Technology',
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
