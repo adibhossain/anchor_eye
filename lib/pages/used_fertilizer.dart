@@ -41,7 +41,7 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'প্রয়োগকৃত সারের সংখ্যা':'Used Number of Fertilizers',
+                      hintText: args['bangla']?'প্রয়োগকৃত সারের ধরণের সংখ্যা':'Used Number of Fertilizer Types',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),

@@ -305,52 +305,6 @@ class _DashDetailState extends State<DashDetail> {
                           showCheckboxColumn: false,
                       ),
                     ),
-                    Container(
-                      padding: EdgeInsets.symmetric(vertical: 5,horizontal: 0),
-                      color: Color(0xFFF0E8EA),
-                      width: 305,
-                      child: Center(
-                        child: Column(
-                          children: [
-                            Text(
-                              (args['bangla']?'গড়: ':'Mean: ')+mean.toStringAsFixed(3),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF0A457C),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              (args['bangla']?'মধ্যমা: ':'Median: ')+mean.toStringAsFixed(3),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF0A457C),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              (args['bangla']?'প্রচুরক: ':'Mode: ')+mean.toStringAsFixed(3),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF0A457C),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            SizedBox(height: 5),
-                            Text(
-                              (args['bangla']?'আদর্শ চ্যুতি: ':'Standard Deviation: ')+mean.toStringAsFixed(3),
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                color: Color(0xFF0A457C),
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ]
                 ),
               ),

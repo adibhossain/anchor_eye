@@ -41,7 +41,7 @@ class _LoginState extends State<Login> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'ইউজারনেম':'Username',
+                      hintText: args['bangla']?'মোবাইল নম্বর':'Phone No.',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),

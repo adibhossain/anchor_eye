@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'navbar.dart';
 
 class Add_farm extends StatefulWidget {
@@ -9,6 +10,7 @@ class Add_farm extends StatefulWidget {
 class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
+  var fertilizer_cnt=0;
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -98,6 +100,63 @@ class _Add_farmState extends State<Add_farm> {
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
+                  child: TextField(
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: args['bangla']?'প্রয়োগকৃত সারের ধরণের সংখ্যা':'Used Number of Fertilizer Types',
+                      filled: true,
+                      fillColor: Color(0xFFD2ECF2),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
+                    onSubmitted: (val){
+                      fertilizer_cnt = int.parse(val);
+                      setState(() {});
+                      //debugPrint(int.parse(val).toString());
+                    },
+                  ),
+                ),
+                SizedBox(
+                  height: fertilizer_cnt<=3?(fertilizer_cnt*70):210,
+                  child: ListView.builder(
+                    itemCount: fertilizer_cnt,
+                    itemBuilder: (BuildContext ctxt, int index) {
+                      return  Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: 185,
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: args['bangla']?'সারের নাম':'Fertilizer Name',
+                                filled: true,
+                                fillColor: Color(0xFFD2ECF2),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            width: 185,
+                            padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+                            child: TextField(
+                              decoration: InputDecoration(
+                                border: OutlineInputBorder(),
+                                hintText: args['bangla']?'পরিমাণ(গ্রাম)':'Amount(gm)',
+                                filled: true,
+                                fillColor: Color(0xFFD2ECF2),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                 ),
                 SizedBox(height: 25),
