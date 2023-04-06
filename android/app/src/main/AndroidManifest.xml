@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="cpm.idpa3.anchor_eye">
+    package="com.idpa3.anchor_eye">
    <application
         android:label="anchor_eye"
         android:name="${applicationName}"

@@ -9,6 +9,8 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   Map args = {};
+
+  //final _LoginKey = GlobalKey<LoginState>();
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -17,10 +19,13 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
+
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               //crossAxisAlignment: CrossAxisAlignment.center,
+
               children: <Widget>[
+                //key: _LoginKey,
                 Text(
                   args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                   style: TextStyle(
@@ -46,10 +51,17 @@ class _LoginState extends State<Login> {
                       fillColor: Color(0xFFD2ECF2),
                     ),
                   ),
+                  //validator: (value){
+                    //if(value!.isEmpty){
+                      //return 'Enter Phone Number';
+                    //}
+                    //return null;
+                  //}
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                   child: TextField(
+                    obscureText: true,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'পাসওয়ার্ড':'Password',
@@ -57,6 +69,12 @@ class _LoginState extends State<Login> {
                       fillColor: Color(0xFFD2ECF2),
                     ),
                   ),
+                    //validator: (value){
+                      //if(value!.isEmpty){
+                        //return 'Enter Password';
+                      //}
+                      //return null;
+                    //}
                 ),
                 SizedBox(height: 40),
                 Container(
@@ -72,6 +90,7 @@ class _LoginState extends State<Login> {
                         'bangla': args['bangla'],
                       });
                     },
+
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
                       child: Text(

@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "36226846682",
+    "project_id": "anchoreye-d6961",
+    "storage_bucket": "anchoreye-d6961.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:36226846682:android:da6820401f556a305b7ae3",
+        "android_client_info": {
+          "package_name": "com.idpa3.anchor_eye"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "36226846682-4sabfijhigfh128v4i4u70diftf46tvh.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCg0_J_rF_d1tOy8rHECcGwwmh42UuJhW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "36226846682-4sabfijhigfh128v4i4u70diftf46tvh.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
