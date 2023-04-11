@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class SignUp extends StatefulWidget {
   @override
@@ -7,6 +9,9 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   Map args = {};
+  final auth = FirebaseAuth.instance;
+  final _formKey = GlobalKey<FormState>();
+  final phoneController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -34,75 +39,95 @@ class _SignUpState extends State<SignUp> {
                   width: 150.0,
                 ),
                 SizedBox(height: 20),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'নাম':'Name',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'মোবাইল':'Phone No.',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'পাসওয়ার্ড':'Password',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'পাসওয়ার্ড নিশ্চিত করুন':'Conform Password',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                Container(
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      shape: StadiumBorder(),
-                      minimumSize: const Size(170, 30),
-                      foregroundColor: Color(0xFFD2ECF2),
-                      backgroundColor: Color(0xFF186B9A),
-                    ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/verification', arguments: {
-                        'bangla': args['bangla'],
-                        'goto': '/main_menu',
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
-                        args['bangla']?'সাইনআপ':'Sign Up',
-                        style: TextStyle(
-                          fontSize: 30.0,
-                          fontWeight: FontWeight.bold,
+                Form(
+                  key: _formKey,
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
+                        child: TextFormField(
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: args['bangla']?'নাম':'Name',
+                            filled: true,
+                            fillColor: Color(0xFFD2ECF2),
+                          ),
                         ),
                       ),
-                    ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
+                        child: TextFormField(
+                          controller: phoneController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: args['bangla']?'মোবাইল':'Phone No.',
+                            filled: true,
+                            fillColor: Color(0xFFD2ECF2),
+                          ),
+                          //keyboardType: TextInputType.number,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
+                        child: TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: args['bangla']?'পাসওয়ার্ড':'Password',
+                            filled: true,
+                            fillColor: Color(0xFFD2ECF2),
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
+                        child: TextFormField(
+                          obscureText: true,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: args['bangla']?'পাসওয়ার্ড নিশ্চিত করুন':'Conform Password',
+                            filled: true,
+                            fillColor: Color(0xFFD2ECF2),
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 10),
+                      Container(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: StadiumBorder(),
+                            minimumSize: const Size(170, 30),
+                            foregroundColor: Color(0xFFD2ECF2),
+                            backgroundColor: Color(0xFF186B9A),
+                          ),
+                          onPressed: () {
+                            auth.verifyPhoneNumber(
+                              phoneNumber: phoneController.text,
+                              verificationCompleted: (_){},
+                              verificationFailed: (e){print(e);},
+                              codeSent: (String verificationId, int? token){
+                                Navigator.pushNamed(context, '/verification', arguments: {
+                                  'bangla': args['bangla'],
+                                  'verificationId': verificationId,
+                                  'goto': '/main_menu',
+                                });
+                              },
+                              codeAutoRetrievalTimeout: (e){print(e);},
+                            );
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(0,10,0,5),
+                            child: Text(
+                              args['bangla']?'সাইনআপ':'Sign Up',
+                              style: TextStyle(
+                                fontSize: 30.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ],

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../services/auth.dart';
 import 'navbar.dart';
 
 class MainMenu extends StatefulWidget {
@@ -9,6 +10,7 @@ class MainMenu extends StatefulWidget {
 class _MainMenuState extends State<MainMenu> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -100,8 +102,9 @@ class _MainMenuState extends State<MainMenu> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: () {
-                    Navigator.pushReplacementNamed(context, '/home', arguments: {
+                  onPressed: () async{
+                    await _auth.signOut();
+                    Navigator.pushReplacementNamed(context, '/', arguments: {
                       'bangla': args['bangla'],
                     });
                   },

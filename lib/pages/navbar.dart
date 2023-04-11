@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:sidebarx/sidebarx.dart';
+import '../services/auth.dart';
 
 class NavBar extends StatelessWidget {
   NavBar({super.key,this.bangla=true, this.index=5});
   bool bangla;
   int index;
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return SidebarX(
@@ -104,8 +106,9 @@ class NavBar extends StatelessWidget {
         SidebarXItem(
           icon: Icons.logout,
           label: bangla?'সাইন আউট':'Sign Out',
-          onTap: () {
-            Navigator.pushNamed(context, '/home', arguments: {
+          onTap: () async{
+            await _auth.signOut();
+            Navigator.pushReplacementNamed(context, '/', arguments: {
               'bangla': bangla,
             });
           },

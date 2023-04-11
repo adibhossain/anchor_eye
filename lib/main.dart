@@ -30,45 +30,59 @@ import 'pages/used_fertilizer.dart';
 import 'pages/profile.dart';
 import 'pages/credits.dart';
 import 'pages/control_panel_full.dart';
+import 'models/user.dart';
+import 'services/auth.dart';
+import 'package:provider/provider.dart';
 
 void main() async{
 
       WidgetsFlutterBinding.ensureInitialized();
       await Firebase.initializeApp();
-  runApp(MaterialApp(
-      initialRoute: '/',
-      routes: {
-        '/': (context) => Splash(),
-        '/home': (context) => Home(),
-        '/login': (context) => Login(),
-        '/main_menu': (context) => MainMenu(),
-        '/signup': (context) => SignUp(),
-        '/control_panel': (context) => ControlPanel(),
-		    '/add_farm': (context) => Add_farm(),
-		    '/specific_farm': (context) => SpecificFarm(),
-		    '/verification': (context) => Verification(),
-        '/yourfishfarms': (context) => Your_fishfarm(),
-        '/helpninfo': (context) => helpninfo(),
-        '/manual': (context) => Manual(),
-        '/us': (context) => us(),
-        '/dashdetail': (context) => DashDetail(),
-        '/dashboard': (context) => Dashboard(),
-        '/update_farm': (context) => Update_farm(),
-        '/suggestion': (context) => Suggestion(),
-        '/prediction': (context) => Prediction(),
-        '/contact': (context) => contact(),
-        '/settings': (context) => settings(),
-        '/mobile_no': (context) => Mobile_No(),
-        '/pass_barrier': (context) => Pass_Barrier(),
-        '/new_pass': (context) => New_Pass(),
-        '/fertilizers': (context) => Fertilizers(),
-        '/caught_fishes': (context) => Caught_Fishes(),
-        '/fed_fishes': (context) => Fed_Fishes(),
-        '/used_fertilizer': (context) => Used_Fertilizer(),
-        '/profile': (context) => Profile(),
-        '/credits': (context) => Credits(),
-        '/control_panel_full': (context) => Control_Panel_Full(),
-      }
-  ));
+  runApp(MyApp());
 }
 
+class MyApp extends StatelessWidget {
+      // This widget is the root of your application.
+      @override
+      Widget build(BuildContext context) {
+            return StreamProvider<Farmer?>.value(
+                  value: AuthService().user,
+                  initialData: null,
+                  child: MaterialApp(
+                      initialRoute: '/',
+                      routes: {
+                            '/': (context) => Splash(),
+                            '/home': (context) => Home(),
+                            '/login': (context) => Login(),
+                            '/main_menu': (context) => MainMenu(),
+                            '/signup': (context) => SignUp(),
+                            '/control_panel': (context) => ControlPanel(),
+                            '/add_farm': (context) => Add_farm(),
+                            '/specific_farm': (context) => SpecificFarm(),
+                            '/verification': (context) => Verification(),
+                            '/yourfishfarms': (context) => Your_fishfarm(),
+                            '/helpninfo': (context) => helpninfo(),
+                            '/manual': (context) => Manual(),
+                            '/us': (context) => us(),
+                            '/dashdetail': (context) => DashDetail(),
+                            '/dashboard': (context) => Dashboard(),
+                            '/update_farm': (context) => Update_farm(),
+                            '/suggestion': (context) => Suggestion(),
+                            '/prediction': (context) => Prediction(),
+                            '/contact': (context) => contact(),
+                            '/settings': (context) => settings(),
+                            '/mobile_no': (context) => Mobile_No(),
+                            '/pass_barrier': (context) => Pass_Barrier(),
+                            '/new_pass': (context) => New_Pass(),
+                            '/fertilizers': (context) => Fertilizers(),
+                            '/caught_fishes': (context) => Caught_Fishes(),
+                            '/fed_fishes': (context) => Fed_Fishes(),
+                            '/used_fertilizer': (context) => Used_Fertilizer(),
+                            '/profile': (context) => Profile(),
+                            '/credits': (context) => Credits(),
+                            '/control_panel_full': (context) => Control_Panel_Full(),
+                      }
+                  )
+            );
+      }
+}

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import '../models/user.dart';
+import 'package:provider/provider.dart';
 
 class Splash extends StatefulWidget {
+  Farmer? user = null;
   @override
   _SplashState createState() => _SplashState();
 }
@@ -10,9 +13,16 @@ class _SplashState extends State<Splash> {
 
   void loadHome() async {
     Future.delayed(Duration(seconds: 5), () {
-      Navigator.pushReplacementNamed(context, '/home', arguments: {
-        'bangla': true,
-      });
+      if(widget.user==null){
+        Navigator.pushReplacementNamed(context, '/home', arguments: {
+          'bangla': true,
+        });
+      }
+      else{
+        Navigator.pushReplacementNamed(context, '/main_menu', arguments: {
+          'bangla': true,
+        });
+      }
     });
   }
 
@@ -24,6 +34,7 @@ class _SplashState extends State<Splash> {
 
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(

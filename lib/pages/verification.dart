@@ -1,4 +1,6 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class Verification extends StatefulWidget {
   @override
@@ -7,6 +9,8 @@ class Verification extends StatefulWidget {
 
 class _VerificationState extends State<Verification> {
   Map args = {};
+  final verifycodeController = TextEditingController();
+  final auth = FirebaseAuth.instance;
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -37,12 +41,17 @@ class _VerificationState extends State<Verification> {
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                   child: TextField(
+                    controller: verifycodeController,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'যাচাইকরণ কোড':'Verification Code',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                   ),
                 ),
                 SizedBox(height: 40),
@@ -54,11 +63,21 @@ class _VerificationState extends State<Verification> {
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, args['goto'], arguments: {
-                        'bangla': args['bangla'],
-                        'goto': args['gototo'],
-                      });
+                    onPressed: () async{
+                      final credential = PhoneAuthProvider.credential(
+                          verificationId: args['verificationId'],
+                          smsCode: verifycodeController.text,
+                      );
+                      try{
+                        await auth.signInWithCredential(credential);
+                        Navigator.pushReplacementNamed(context, '/main_menu', arguments: {
+                          'bangla': args['bangla'],
+                        });
+                      }
+                      catch(e){
+                        print(e);
+                      }
+
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
