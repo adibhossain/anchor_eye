@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import '../services/auth.dart';
 import 'navbar.dart';
 
 class MainMenu extends StatefulWidget {
+  Farmer? user = null;
   @override
   _MainMenuState createState() => _MainMenuState();
 }
@@ -13,6 +16,8 @@ class _MainMenuState extends State<MainMenu> {
   final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
+    widget.user?.setOtherData();
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),

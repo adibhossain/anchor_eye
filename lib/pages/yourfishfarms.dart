@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import 'navbar.dart';
 
 class Your_fishfarm extends  StatefulWidget {
+  Farmer? user = null;
   @override
   _YourFishFarm createState() => _YourFishFarm();
 }
@@ -11,6 +14,8 @@ class _YourFishFarm extends State<Your_fishfarm>{
   Map args = {};
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
+    //print(widget.user?.name);
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import 'navbar.dart';
 
 class Profile extends StatefulWidget {
+  Farmer? user = null;
   @override
   _ProfileState createState() => _ProfileState();
 }
@@ -11,6 +14,7 @@ class _ProfileState extends State<Profile> {
   Map args = {};
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
@@ -42,7 +46,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 60),
               Container(
                 child: Text(
-                  (args['bangla']?'নাম: ':'Name: ')+'মৎস্যবিষয়ক_রাশিদ',
+                  (args['bangla']?'নাম: ':'Name: ')+(widget.user==null?'মৎস্যবিষয়ক_রাশিদ':widget.user!.name),
                   style: TextStyle(
                     fontSize: 25.0,
                     color: Color(0xFF0A457C),
@@ -53,7 +57,7 @@ class _ProfileState extends State<Profile> {
               SizedBox(height: 15),
               Container(
                 child: Text(
-                  (args['bangla']?'মোবাইল নম্বর: ':'Mobile No: ')+'০১৭৬৫২৭৯০২৬',
+                  (args['bangla']?'মোবাইল নম্বর: ':'Mobile No: ')+(widget.user==null?'০১৭৬৫২৭৯০২৬':widget.user!.phone),
                   style: TextStyle(
                     fontSize: 25.0,
                     color: Color(0xFF0A457C),

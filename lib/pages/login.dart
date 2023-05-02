@@ -1,3 +1,8 @@
+import 'package:bcrypt/bcrypt.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admin/firebase_admin.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import '../services/auth.dart';
 
@@ -12,6 +17,8 @@ class _LoginState extends State<Login> {
   Map args = {};
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
+  final phoneController = TextEditingController();
+  final passController = TextEditingController();
   //final _LoginKey = GlobalKey<LoginState>();
   @override
   Widget build(BuildContext context) {
@@ -50,6 +57,7 @@ class _LoginState extends State<Login> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
+                          controller: phoneController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: args['bangla']?'মোবাইল নম্বর':'Phone No.',
@@ -68,6 +76,7 @@ class _LoginState extends State<Login> {
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
                           obscureText: true,
+                          controller: passController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: args['bangla']?'পাসওয়ার্ড':'Password',
@@ -92,16 +101,46 @@ class _LoginState extends State<Login> {
                             backgroundColor: Color(0xFF186B9A),
                           ),
                           onPressed: () async{
-                            dynamic result = await _auth.signInAnon();
-                            if(result == null){
-                              print('error signing in');
-                            } else {
-                              print('signed in');
-                              print(result);
-                              Navigator.pushReplacementNamed(context, '/main_menu', arguments: {
-                                'bangla': args['bangla'],
-                              });
-                            }
+                            print(phoneController.text);
+                            await FirebaseFirestore.instance.collection('users').doc(phoneController.text).get().then((documentSnapshot) async {
+                              if (documentSnapshot.exists){
+                                bool ok = false;
+                                String hashedpass =  documentSnapshot.get('pass');
+                                print(hashedpass);
+                                ok = BCrypt.checkpw(passController.text, hashedpass);
+                                print('here');
+                                if(ok) {
+                                  String old_uid = await documentSnapshot.get('uid');
+                                  FirebaseAuth.instance.verifyPhoneNumber(
+                                    phoneNumber: phoneController.text,
+                                    verificationCompleted: (_){},
+                                    verificationFailed: (e){print(e);},
+                                    codeSent: (String verificationId, int? token){
+                                      Navigator.pushNamed(context, '/verification', arguments: {
+                                        'bangla': args['bangla'],
+                                        'verificationId': verificationId,
+                                        'phone': phoneController.text,
+                                        'pass': passController.text,
+                                        'old_uid': old_uid,
+                                        'from': 'login',
+                                        'goto': '/main_menu',
+                                      });
+                                    },
+                                    codeAutoRetrievalTimeout: (e){print(e);},
+                                  );
+                                  ////done here, rest templates for later
+                                }
+                                else {
+                                  print(passController.text);
+                                  print('password not matched');
+                                }
+                              }
+                              else{
+                                print('Please register first');
+                              }
+                            }).catchError((error){
+                              print('Error retrieving document: $error');
+                            });
                           },
 
                           child: Container(

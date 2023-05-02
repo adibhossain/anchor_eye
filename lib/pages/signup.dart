@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -12,6 +13,9 @@ class _SignUpState extends State<SignUp> {
   final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
   final phoneController = TextEditingController();
+  final nameController = TextEditingController();
+  final passController = TextEditingController();
+  final confirmpassController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -46,6 +50,7 @@ class _SignUpState extends State<SignUp> {
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
+                          controller: nameController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: args['bangla']?'নাম':'Name',
@@ -71,6 +76,7 @@ class _SignUpState extends State<SignUp> {
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
                           obscureText: true,
+                          controller: passController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
                             hintText: args['bangla']?'পাসওয়ার্ড':'Password',
@@ -83,9 +89,10 @@ class _SignUpState extends State<SignUp> {
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
                           obscureText: true,
+                          controller: confirmpassController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: args['bangla']?'পাসওয়ার্ড নিশ্চিত করুন':'Conform Password',
+                            hintText: args['bangla']?'পাসওয়ার্ড নিশ্চিত করুন':'Confirm Password',
                             filled: true,
                             fillColor: Color(0xFFD2ECF2),
                           ),
@@ -100,20 +107,39 @@ class _SignUpState extends State<SignUp> {
                             foregroundColor: Color(0xFFD2ECF2),
                             backgroundColor: Color(0xFF186B9A),
                           ),
-                          onPressed: () {
-                            auth.verifyPhoneNumber(
-                              phoneNumber: phoneController.text,
-                              verificationCompleted: (_){},
-                              verificationFailed: (e){print(e);},
-                              codeSent: (String verificationId, int? token){
-                                Navigator.pushNamed(context, '/verification', arguments: {
-                                  'bangla': args['bangla'],
-                                  'verificationId': verificationId,
-                                  'goto': '/main_menu',
-                                });
-                              },
-                              codeAutoRetrievalTimeout: (e){print(e);},
-                            );
+                          onPressed: () async {
+                            if(passController.text != confirmpassController.text) return;
+                            final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
+                            await userCollection.doc(phoneController.text).get().then((documentSnapshot) {
+                              if (documentSnapshot.exists){
+                                print('Already registered');
+                                return;
+                              }
+                              else{
+                                print('User not registered.');
+                                auth.verifyPhoneNumber(
+                                  phoneNumber: phoneController.text,
+                                  verificationCompleted: (_){},
+                                  verificationFailed: (e){print(e);},
+                                  codeSent: (String verificationId, int? token){
+                                    Navigator.pushNamed(context, '/verification', arguments: {
+                                      'bangla': args['bangla'],
+                                      'verificationId': verificationId,
+                                      'phone': phoneController.text,
+                                      'name': nameController.text,
+                                      'pass': passController.text,
+                                      'confirmpass': confirmpassController.text,
+                                      'from': 'signup',
+                                      'goto': '/main_menu',
+                                    });
+                                  },
+                                  codeAutoRetrievalTimeout: (e){print(e);},
+                                );
+                              }
+                            }).catchError((error){
+                              print('Error retrieving document: $error');
+                              return;
+                            });
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0,10,0,5),

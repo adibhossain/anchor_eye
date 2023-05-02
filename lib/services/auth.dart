@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 import '../models/user.dart';
-//import 'package:brew_crew/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class AuthService {
@@ -8,7 +9,9 @@ class AuthService {
 
   // create user obj based on firebase user
   Farmer? _userFromFirebaseUser(User? user) {
-    return user != null ? Farmer(uid: user.uid) : null;
+    Farmer? farmer = (user != null ? Farmer(uid: user.uid) : null);
+    farmer?.setOtherData();
+    return farmer;
   }
 
   // auth change user stream
