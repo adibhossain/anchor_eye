@@ -23,6 +23,7 @@ class _YourFishFarm extends State<Your_fishfarm>{
         .collection('specific_farms')
         .get().then((docsnap){
       farmlist = docsnap.docs;
+      //print(farmlist);
     });
   }
 

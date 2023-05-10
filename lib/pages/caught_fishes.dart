@@ -1,7 +1,12 @@
+import 'dart:ui';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import 'navbar.dart';
 
 class Caught_Fishes extends StatefulWidget {
+  Farmer? user = null;
   @override
   _Caught_FishesState createState() => _Caught_FishesState();
 }
@@ -9,8 +14,11 @@ class Caught_Fishes extends StatefulWidget {
 class _Caught_FishesState extends State<Caught_Fishes> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
+  final no_of_caught_fishes = TextEditingController();
+  final avg_w_of_caught_fishes = TextEditingController();
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
@@ -36,7 +44,8 @@ class _Caught_FishesState extends State<Caught_Fishes> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: no_of_caught_fishes,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'মাছ ধরার পরিমাণ':'No. of fishes caught',
@@ -47,7 +56,8 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: avg_w_of_caught_fishes,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'ধরা মাছের গড় ওজন(গ্রাম)':'Average weight of caught fishes(gm)',
@@ -65,9 +75,28 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
-                    onPressed: () {
-                      Navigator.pushNamed(context, '/update_farm', arguments: {
+                    onPressed: () async{
+                      var cur_feed;
+                      var farm = await FirebaseFirestore.instance.collection('farms')
+                          .doc(widget.user?.phone)
+                          .collection('specific_farms')
+                          .doc(args['id']);
+                      var daily_info = await farm.collection('daily_info');
+                      await daily_info.get().then((docsnap){
+                        cur_feed = docsnap.docs.last.get('current_fish_feed');
+                      });
+                      await daily_info.doc(args['entry_date']).set({
+                        'current_fish_feed': cur_feed,
+                        'no_of_caught_fishes': no_of_caught_fishes.text,
+                        'avg_w_of_caught_fishes': avg_w_of_caught_fishes.text,
+                      });
+                      var farm_data;
+                      await farm.get().then((farmsnap){
+                        farm_data = farmsnap;
+                      });
+                      Navigator.pushNamed(context, '/specific_farm', arguments: {
                         'bangla': args['bangla'],
+                        'farm_data': farm_data,
                       });
                     },
                     child: Container(

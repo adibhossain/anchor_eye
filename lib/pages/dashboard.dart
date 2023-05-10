@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'navbar.dart';
 
@@ -13,6 +14,31 @@ class _DashboardState extends State<Dashboard> {
   bool seemore=false;
   List<List<String>> water = [];
   List<Map<String,valcmp>> val = [];
+  List<_UpdateData> data = [];
+
+  Future loadData() async {
+    var daily_info;
+    await args['farm_data'].reference.collection('daily_info').get().then((docsnap){
+      daily_info = docsnap.docs;
+    });
+    //print(daily_info);
+    for(var snap in daily_info){
+      data.add(_UpdateData(snap.id,
+          snap.get('no_of_caught_fishes'),
+          snap.get('avg_w_of_caught_fishes'),
+          snap.get('current_fish_feed'),
+          <_FertilizerData>[
+            _FertilizerData('Phosphate',15),
+            _FertilizerData('Ammonia',20),
+            _FertilizerData('Nitrite',10),
+            _FertilizerData('Nitrogen',5),
+            _FertilizerData('CaCO3',25),
+          ]
+      ));
+    }
+    return data;
+  }
+
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -175,7 +201,10 @@ class _DashboardState extends State<Dashboard> {
                               ],
                             ),
                             TextButton(
-                                onPressed: (){
+                                onPressed: () async {
+                                  if(!seemore && data.length==0){
+                                    await loadData();
+                                  }
                                   seemore = !seemore;
                                   setState(() {});
                                 },
@@ -276,7 +305,7 @@ class _DashboardState extends State<Dashboard> {
                                     ),
                                   ),
                                 ],
-                                source: MyData(args,context),
+                                source: MyData(args,context,data),
                                 columnSpacing: 20,
                                 horizontalMargin: 10,
                                 rowsPerPage: 2,
@@ -506,39 +535,19 @@ class _FertilizerData {
 class _UpdateData {
   _UpdateData(this.date, this.caught_fishes, this.avg_weight, this.cur_daily_feed, this.used_fertilizers);
   final String date;
-  final double caught_fishes;
-  final double avg_weight;
-  final double cur_daily_feed;
+  final String caught_fishes;
+  final String avg_weight;
+  final String cur_daily_feed;
   final List<_FertilizerData> used_fertilizers;
 }
 
 class MyData extends DataTableSource {
-  MyData(Map this.args, BuildContext this.context);
+  MyData(Map this.args, BuildContext this.context, List<_UpdateData> this.data);
+
   BuildContext context;
   Map args={};
-  // Generate some made-up data
-  List<_UpdateData> data = [
-    _UpdateData('09/12/2022', 0, 0, 5, <_FertilizerData>[
-      _FertilizerData('Phosphate',15),
-      _FertilizerData('Ammonia',20),
-      _FertilizerData('Nitrite',10),
-      _FertilizerData('Nitrogen',5),
-      _FertilizerData('CaCO3',25),
-    ]
-    ),
-    _UpdateData('19/12/2022', 0, 0, 8, <_FertilizerData>[
-      _FertilizerData('Phosphate',5),
-      _FertilizerData('Ammonia',25),
-    ]
-    ),
-    _UpdateData('29/12/2022', 0, 0, 8, <_FertilizerData>[
-      _FertilizerData('Ammonia',15),
-      _FertilizerData('Nitrogen',20),
-      _FertilizerData('Phosphate',10),
-    ]
-    ),
-    _UpdateData('09/01/2023', 16, 10, 3, <_FertilizerData>[]),
-  ];
+  List<_UpdateData> data = [];
+
   @override
   bool get isRowCountApproximate => false;
   @override

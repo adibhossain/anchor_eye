@@ -19,6 +19,7 @@ class _Add_farmState extends State<Add_farm> {
   final fish_type = TextEditingController();
   final initial_fish_population = TextEditingController();
   final fish_release_date = TextEditingController();
+  final current_fish_feed = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   Future<void> _selectDate(BuildContext context) async {
@@ -140,10 +141,11 @@ class _Add_farmState extends State<Add_farm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: current_fish_feed,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'খাবারের পরিমাণ':'Amount of food',
+                      hintText: args['bangla']?'খাবারের পরিমাণ(গ্রাম)':'Amount of food(gm)',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
@@ -227,14 +229,20 @@ class _Add_farmState extends State<Add_farm> {
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () async {
-                      await FirebaseFirestore.instance
+                      final farm_ref = await FirebaseFirestore.instance
                           .collection('farms')
                           .doc(widget.user?.phone)
                           .collection('specific_farms')
-                          .doc(farm_name.text).set({
+                          .doc(farm_name.text);
+                      await farm_ref.set({
                         'fish_type': fish_type.text,
                         'initial_fish_population': initial_fish_population.text,
                         'fish_release_date': ("${selectedDate.toLocal()}".split(' ')[0]),
+                      });
+                      await farm_ref.collection('daily_info').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
+                        'current_fish_feed': current_fish_feed.text,
+                        'no_of_caught_fishes': '0',
+                        'avg_w_of_caught_fishes': '0',
                       });
                       Navigator.pushNamed(context, '/yourfishfarms', arguments: {
                         'bangla': args['bangla'],
