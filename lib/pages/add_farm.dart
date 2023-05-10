@@ -1,8 +1,12 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import 'navbar.dart';
 
 class Add_farm extends StatefulWidget {
+  Farmer? user = null;
   @override
   _Add_farmState createState() => _Add_farmState();
 }
@@ -11,8 +15,28 @@ class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
   var fertilizer_cnt=0;
+  final farm_name = TextEditingController();
+  final fish_type = TextEditingController();
+  final initial_fish_population = TextEditingController();
+  final fish_release_date = TextEditingController();
+
+  DateTime selectedDate = DateTime.now();
+  Future<void> _selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate) {
+      setState(() {
+        selectedDate = picked;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
@@ -38,7 +62,8 @@ class _Add_farmState extends State<Add_farm> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: farm_name,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'খামারের নাম':'Farm Name',
@@ -49,7 +74,8 @@ class _Add_farmState extends State<Add_farm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: fish_type,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'মাছের ধরন':'Fish Species',
@@ -60,7 +86,8 @@ class _Add_farmState extends State<Add_farm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: initial_fish_population,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'মাছের পরিমাণ':'Amount of fish',
@@ -71,13 +98,44 @@ class _Add_farmState extends State<Add_farm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
-                      hintText: args['bangla']?'মাছ ছাড়ার তারিখ':'Date of releasing fish',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      TextFormField(
+                        controller: fish_release_date,
+                        enabled: false,
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(),
+                          hintText: ("${selectedDate.toLocal()}".split(' ')[0]),
+                          filled: true,
+                          fillColor: Color(0xFFD2ECF2),
+                        ),
+                      ),
+                      SizedBox(height: 3),
+                      Container(
+                        child: ElevatedButton(
+                          style: ElevatedButton.styleFrom(
+                            shape: RoundedRectangleBorder(),
+                            minimumSize: const Size(250, 30),
+                            foregroundColor: Color(0xFFD2ECF2),
+                            backgroundColor: Color(0xFF186B9A),
+                          ),
+                          onPressed: () {
+                            _selectDate(context);
+                          },
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(0,10,0,5),
+                            child: Text(
+                              args['bangla']?'মাছ ছাড়ার তারিখ':'Date of releasing fish',
+                              style: TextStyle(
+                                fontSize: 18.0,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 Padding(
@@ -168,7 +226,16 @@ class _Add_farmState extends State<Add_farm> {
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
-                    onPressed: () {
+                    onPressed: () async {
+                      await FirebaseFirestore.instance
+                          .collection('farms')
+                          .doc(widget.user?.phone)
+                          .collection('specific_farms')
+                          .doc(farm_name.text).set({
+                        'fish_type': fish_type.text,
+                        'initial_fish_population': initial_fish_population.text,
+                        'fish_release_date': ("${selectedDate.toLocal()}".split(' ')[0]),
+                      });
                       Navigator.pushNamed(context, '/yourfishfarms', arguments: {
                         'bangla': args['bangla'],
                       });

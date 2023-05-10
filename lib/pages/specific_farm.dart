@@ -18,7 +18,7 @@ class _SpecificFarmState extends State<SpecificFarm> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          args['farm_name'],
+          args['farm_data'].id,
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -45,8 +45,7 @@ class _SpecificFarmState extends State<SpecificFarm> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/dashboard', arguments: {
                       'bangla': args['bangla'],
-                      'farm_name': args['farm_name'],
-                      'species': args['species'],
+                      'farm_data': args['farm_data'],
                     });
                   },
                   child: Container(

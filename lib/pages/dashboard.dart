@@ -40,7 +40,7 @@ class _DashboardState extends State<Dashboard> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          args['farm_name']+(args['bangla']?' - ড্যাশবোর্ড':' - Dashboard'),
+          (args['bangla']?'ড্যাশবোর্ড':'Dashboard'),
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
@@ -98,7 +98,7 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ),
                                       Text(
-                                        args['farm_name'],
+                                        args['farm_data'].id,
                                         style: TextStyle(
                                           fontSize: 15.0,
                                           color: Color(0xFF0A457C),
@@ -119,7 +119,7 @@ class _DashboardState extends State<Dashboard> {
                                         ),
                                       ),
                                       Text(
-                                        args['species'],
+                                        args['farm_data'].get('fish_type'),
                                         style: TextStyle(
                                           fontSize: 15.0,
                                           color: Color(0xFF0A457C),
@@ -144,7 +144,7 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                 ),
                                 Text(
-                                  args['bangla']?'৫০০': '500',
+                                  args['farm_data'].get('initial_fish_population'),
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     color: Color(0xFF0A457C),
@@ -166,7 +166,7 @@ class _DashboardState extends State<Dashboard> {
                                   ),
                                 ),
                                 Text(
-                                  args['bangla']?'০৯/১২/২০২২': '09/12/2022',
+                                  args['farm_data'].get('fish_release_date'),
                                   style: TextStyle(
                                     fontSize: 15.0,
                                     color: Color(0xFF0A457C),
