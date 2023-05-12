@@ -4,6 +4,7 @@ class Farmer {
 
   final String uid;
   String phone='',name='';
+  bool bangla=true;
 
   Farmer({ required this.uid });
   void setOtherData() async {
@@ -14,6 +15,7 @@ class Farmer {
     });
     await userCollection.doc(phone).get().then((documentSnapshot) {
       name = documentSnapshot.get('name');
+      bangla = documentSnapshot.get('bangla');
     });
   }
 }

@@ -19,6 +19,7 @@ class _MainMenuState extends State<MainMenu> {
     widget.user = Provider.of<Farmer?>(context);
     widget.user?.setOtherData();
     args = ModalRoute.of(context)?.settings.arguments as Map;
+    args['bangla'] = widget.user?.bangla;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar( //this

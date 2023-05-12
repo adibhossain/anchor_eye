@@ -1,7 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import '../models/user.dart';
 import 'navbar.dart';
 
 class settings extends StatefulWidget {
+  Farmer? user = null;
   @override
   _settingsState createState() => _settingsState();
 }
@@ -11,6 +15,7 @@ class _settingsState extends State<settings> {
   Map args = {};
   @override
   Widget build(BuildContext context) {
+    widget.user = Provider.of<Farmer?>(context);
     args = ModalRoute.of(context)?.settings.arguments as Map;
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
@@ -44,8 +49,11 @@ class _settingsState extends State<settings> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: args['bangla']? null : () {
+                  onPressed: args['bangla']? null : () async {
                     args['bangla'] = true;
+                    await FirebaseFirestore.instance.collection('users').doc(widget.user?.phone).update({
+                      'bangla':true,
+                    });
                     setState(() {});
                   },
 
@@ -70,8 +78,11 @@ class _settingsState extends State<settings> {
                     foregroundColor: Color(0xFF0A457C),
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
-                  onPressed: !args['bangla']? null : () {
+                  onPressed: !args['bangla']? null : () async{
                     args['bangla'] = false;
+                    await FirebaseFirestore.instance.collection('users').doc(widget.user?.phone).update({
+                      'bangla':false,
+                    });
                     setState(() {});
                   },
                   child: Container(
