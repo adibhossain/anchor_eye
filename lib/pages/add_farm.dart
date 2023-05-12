@@ -15,6 +15,8 @@ class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
   var fertilizer_cnt=0;
+  List<TextEditingController> fertilizer_name = [];
+  List<TextEditingController> fertilizer_amount = [];
   final farm_name = TextEditingController();
   final fish_type = TextEditingController();
   final initial_fish_population = TextEditingController();
@@ -156,17 +158,6 @@ class _Add_farmState extends State<Add_farm> {
                   child: TextField(
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
-                      hintText: args['bangla']?'প্রয়োগকৃত সার':'Used Fertilizers',
-                      filled: true,
-                      fillColor: Color(0xFFD2ECF2),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(),
                       hintText: args['bangla']?'প্রয়োগকৃত সারের ধরণের সংখ্যা':'Used Number of Fertilizer Types',
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
@@ -176,7 +167,14 @@ class _Add_farmState extends State<Add_farm> {
                       FilteringTextInputFormatter.digitsOnly
                     ],
                     onSubmitted: (val){
+                      if(int.parse(val)>10) return;
                       fertilizer_cnt = int.parse(val);
+                      fertilizer_name.clear();
+                      fertilizer_amount.clear();
+                      for(var i=0;i<fertilizer_cnt;i++){
+                        fertilizer_name.add(TextEditingController());
+                        fertilizer_amount.add(TextEditingController());
+                      }
                       setState(() {});
                       //debugPrint(int.parse(val).toString());
                     },
@@ -193,7 +191,8 @@ class _Add_farmState extends State<Add_farm> {
                           Container(
                             width: 185,
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                            child: TextField(
+                            child: TextFormField(
+                              controller: fertilizer_name[index],
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 hintText: args['bangla']?'সারের নাম':'Fertilizer Name',
@@ -205,7 +204,8 @@ class _Add_farmState extends State<Add_farm> {
                           Container(
                             width: 185,
                             padding: EdgeInsets.symmetric(horizontal: 5, vertical: 5),
-                            child: TextField(
+                            child: TextFormField(
+                              controller: fertilizer_amount[index],
                               decoration: InputDecoration(
                                 border: OutlineInputBorder(),
                                 hintText: args['bangla']?'পরিমাণ(গ্রাম)':'Amount(gm)',
@@ -244,6 +244,13 @@ class _Add_farmState extends State<Add_farm> {
                         'no_of_caught_fishes': '0',
                         'avg_w_of_caught_fishes': '0',
                       });
+                      final fertilizer_ref = await farm_ref.collection('daily_info/${selectedDate.toLocal().toString().split(' ')[0]}/used_fertilizers');
+                      for(var i=0;i<fertilizer_cnt;i++){
+                        await fertilizer_ref.doc(fertilizer_name[i].text).set({
+                          fertilizer_name[i].text:fertilizer_amount[i].text
+                        });
+                        //print(fertilizer_name[i].text+" fertilizer of amount "+fertilizer_amount[i].text);
+                      }
                       Navigator.pushNamed(context, '/yourfishfarms', arguments: {
                         'bangla': args['bangla'],
                       });

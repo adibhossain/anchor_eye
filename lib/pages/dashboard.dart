@@ -1,3 +1,4 @@
+import 'package:anchor_eye/pages/used_fertilizer.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'navbar.dart';
@@ -23,17 +24,22 @@ class _DashboardState extends State<Dashboard> {
     });
     //print(daily_info);
     for(var snap in daily_info){
+      List<_FertilizerData> fertilizers = [];
+      var used_fertilizers;
+      await args['farm_data'].reference.collection('daily_info').doc(snap.id).collection('used_fertilizers').get().then((innerdocsnap){
+        used_fertilizers = innerdocsnap.docs;
+      });
+      var i=0;
+      for(var innersnap in used_fertilizers){
+        var amount = await double.parse(innersnap.get(innersnap.id));
+        fertilizers.add(_FertilizerData(innersnap.id,amount));
+        i++;
+      }
       data.add(_UpdateData(snap.id,
           snap.get('no_of_caught_fishes'),
           snap.get('avg_w_of_caught_fishes'),
           snap.get('current_fish_feed'),
-          <_FertilizerData>[
-            _FertilizerData('Phosphate',15),
-            _FertilizerData('Ammonia',20),
-            _FertilizerData('Nitrite',10),
-            _FertilizerData('Nitrogen',5),
-            _FertilizerData('CaCO3',25),
-          ]
+          fertilizers
       ));
     }
     return data;
