@@ -388,7 +388,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.pushNamed(context, '/prediction', arguments: {
                         'bangla': args['bangla'],
                         'i': i,
-                        'farm_name': args['farm_name'],
+                        'farm_data': args['farm_data'],
                       });
                     },
                     label: Text(
@@ -416,7 +416,7 @@ class _DashboardState extends State<Dashboard> {
                       Navigator.pushNamed(context, '/suggestion', arguments: {
                         'bangla': args['bangla'],
                         'i': i,
-                        'farm_name': args['farm_name'],
+                        'farm_data': args['farm_data'],
                       });
                     },
                     label: Text(

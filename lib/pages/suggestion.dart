@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'navbar.dart';
 
 class Suggestion extends StatefulWidget {
@@ -25,7 +26,7 @@ class _SuggestionState extends State<Suggestion> {
         backgroundColor: Color(0xFF186B9A),
         centerTitle: true,
         title: Text(
-          args['farm_name'],
+          args['farm_data'].id,
           style: TextStyle(
             fontSize: 30.0,
             color: Color(0xFFD2ECF2),
