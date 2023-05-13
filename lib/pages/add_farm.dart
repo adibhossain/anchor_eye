@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class Add_farm extends StatefulWidget {
 
 class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  bool loading = false;
   Map args = {};
   var fertilizer_cnt=0;
   List<TextEditingController> fertilizer_name = [];
@@ -225,10 +227,14 @@ class _Add_farmState extends State<Add_farm> {
                     style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
                       minimumSize: const Size(170, 30),
+                      maximumSize: const Size(172, 50),
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () async {
+                      if(loading) return;
+                      loading=true;
+                      setState(() {});
                       final farm_ref = await FirebaseFirestore.instance
                           .collection('farms')
                           .doc(widget.user?.phone)
@@ -251,14 +257,21 @@ class _Add_farmState extends State<Add_farm> {
                         });
                         //print(fertilizer_name[i].text+" fertilizer of amount "+fertilizer_amount[i].text);
                       }
+                      loading=false;
+                      setState(() {});
                       Navigator.pushNamed(context, '/yourfishfarms', arguments: {
                         'bangla': args['bangla'],
                       });
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
+                      child: loading?SpinKitRing(
+                        color: Color(0xFFD2ECF2),
+                        size: 30.0,
+                      )
+                          :Text(
                         args['bangla']?'যোগ করুন':'Add',
+                        textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 30.0,
                           fontWeight: FontWeight.bold,

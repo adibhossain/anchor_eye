@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -9,6 +10,7 @@ class SignUp extends StatefulWidget {
 }
 
 class _SignUpState extends State<SignUp> {
+  bool loading = false;
   Map args = {};
   final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -104,20 +106,24 @@ class _SignUpState extends State<SignUp> {
                           style: ElevatedButton.styleFrom(
                             shape: StadiumBorder(),
                             minimumSize: const Size(170, 30),
+                            maximumSize: const Size(210, 50),
                             foregroundColor: Color(0xFFD2ECF2),
                             backgroundColor: Color(0xFF186B9A),
                           ),
                           onPressed: () async {
+                            if(loading) return;
+                            loading=true;
+                            setState(() {});
                             if(passController.text != confirmpassController.text) return;
                             final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-                            await userCollection.doc(phoneController.text).get().then((documentSnapshot) {
+                            await userCollection.doc(phoneController.text).get().then((documentSnapshot) async {
                               if (documentSnapshot.exists){
                                 print('Already registered');
                                 return;
                               }
                               else{
                                 print('User not registered.');
-                                auth.verifyPhoneNumber(
+                                await auth.verifyPhoneNumber(
                                   phoneNumber: phoneController.text,
                                   verificationCompleted: (_){},
                                   verificationFailed: (e){print(e);},
@@ -140,10 +146,16 @@ class _SignUpState extends State<SignUp> {
                               print('Error retrieving document: $error');
                               return;
                             });
+                            loading=false;
+                            setState(() {});
                           },
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0,10,0,5),
-                            child: Text(
+                            child: loading?SpinKitRing(
+                              color: Color(0xFFD2ECF2),
+                              size: 30.0,
+                            )
+                                :Text(
                               args['bangla']?'সাইনআপ':'Sign Up',
                               style: TextStyle(
                                 fontSize: 30.0,

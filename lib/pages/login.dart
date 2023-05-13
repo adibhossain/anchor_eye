@@ -1,5 +1,6 @@
 import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,6 +15,7 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  bool loading = false;
   Map args = {};
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
@@ -97,10 +99,14 @@ class _LoginState extends State<Login> {
                           style: ElevatedButton.styleFrom(
                             shape: StadiumBorder(),
                             minimumSize: const Size(170, 30),
+                            maximumSize: const Size(210, 50),
                             foregroundColor: Color(0xFFD2ECF2),
                             backgroundColor: Color(0xFF186B9A),
                           ),
                           onPressed: () async{
+                            if(loading) return;
+                            loading=true;
+                            setState(() {});
                             print(phoneController.text);
                             await FirebaseFirestore.instance.collection('users').doc(phoneController.text).get().then((documentSnapshot) async {
                               if (documentSnapshot.exists){
@@ -111,7 +117,7 @@ class _LoginState extends State<Login> {
                                 print('here');
                                 if(ok) {
                                   String old_uid = await documentSnapshot.get('uid');
-                                  FirebaseAuth.instance.verifyPhoneNumber(
+                                  await FirebaseAuth.instance.verifyPhoneNumber(
                                     phoneNumber: phoneController.text,
                                     verificationCompleted: (_){},
                                     verificationFailed: (e){print(e);},
@@ -141,11 +147,17 @@ class _LoginState extends State<Login> {
                             }).catchError((error){
                               print('Error retrieving document: $error');
                             });
+                            loading=false;
+                            setState(() {});
                           },
 
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0,10,0,5),
-                            child: Text(
+                            child: loading?SpinKitRing(
+                              color: Color(0xFFD2ECF2),
+                              size: 30.0,
+                            )
+                                :Text(
                               args['bangla']?'লগ ইন':'Log In',
                               style: TextStyle(
                                 fontSize: 30.0,

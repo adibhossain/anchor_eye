@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ class Used_Fertilizer extends StatefulWidget {
 
 class _Used_FertilizerState extends State<Used_Fertilizer> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  bool loading = false;
   Map args = {};
   var fertilizer_cnt=0;
   List<TextEditingController> fertilizer_name = [];
@@ -115,10 +117,14 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                     style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
                       minimumSize: const Size(170, 30),
+                      maximumSize: const Size(230, 50),
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () async {
+                      if(loading) return;
+                      loading = true;
+                      setState(() {});
                       var no_of_caught_fishes;
                       var avg_w_of_caught_fishes;
                       var cur_feed;
@@ -156,6 +162,8 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                       await farm.get().then((farmsnap){
                         farm_data = farmsnap;
                       });
+                      loading=false;
+                      setState(() {});
                       Navigator.pushNamed(context, '/specific_farm', arguments: {
                         'bangla': args['bangla'],
                         'farm_data': farm_data,
@@ -163,7 +171,11 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
+                      child: loading?SpinKitRing(
+                        color: Color(0xFFD2ECF2),
+                        size: 30.0,
+                      )
+                          :Text(
                         args['bangla']?'আপডেট করুন':'Update',
                         style: TextStyle(
                           fontSize: 30.0,

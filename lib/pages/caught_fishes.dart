@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../models/user.dart';
@@ -13,6 +14,7 @@ class Caught_Fishes extends StatefulWidget {
 
 class _Caught_FishesState extends State<Caught_Fishes> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
+  bool loading = false;
   Map args = {};
   final no_of_caught_fishes = TextEditingController();
   final avg_w_of_caught_fishes = TextEditingController();
@@ -72,10 +74,14 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                     style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
                       minimumSize: const Size(170, 30),
+                      maximumSize: const Size(230, 50),
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () async{
+                      if(loading) return;
+                      loading=true;
+                      setState(() {});
                       var cur_feed;
                       var farm = await FirebaseFirestore.instance.collection('farms')
                           .doc(widget.user?.phone)
@@ -94,6 +100,8 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                       await farm.get().then((farmsnap){
                         farm_data = farmsnap;
                       });
+                      loading=false;
+                      setState(() {});
                       Navigator.pushNamed(context, '/specific_farm', arguments: {
                         'bangla': args['bangla'],
                         'farm_data': farm_data,
@@ -101,7 +109,11 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
+                      child: loading?SpinKitRing(
+                        color: Color(0xFFD2ECF2),
+                        size: 30.0,
+                      )
+                          :Text(
                         args['bangla']?'আপডেট করুন':'Update',
                         style: TextStyle(
                           fontSize: 30.0,

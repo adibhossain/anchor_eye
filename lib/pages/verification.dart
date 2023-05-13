@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,6 +11,7 @@ class Verification extends StatefulWidget {
 }
 
 class _VerificationState extends State<Verification> {
+  bool loading = false;
   Map args = {};
   final verifycodeController = TextEditingController();
   final auth = FirebaseAuth.instance;
@@ -62,10 +64,14 @@ class _VerificationState extends State<Verification> {
                     style: ElevatedButton.styleFrom(
                       shape: StadiumBorder(),
                       minimumSize: const Size(170, 30),
+                      maximumSize: const Size(200, 50),
                       foregroundColor: Color(0xFFD2ECF2),
                       backgroundColor: Color(0xFF186B9A),
                     ),
                     onPressed: () async{
+                      if(loading) return;
+                      loading = true;
+                      setState(() {});
                       final credential = PhoneAuthProvider.credential(
                           verificationId: args['verificationId'],
                           smsCode: verifycodeController.text,
@@ -91,17 +97,25 @@ class _VerificationState extends State<Verification> {
                         else {
                           //error
                         }
+                        loading=false;
+                        setState(() {});
                         Navigator.pushReplacementNamed(context, '/main_menu', arguments: {
                           'bangla': args['bangla'],
                         });
                       }
                       catch(e){
+                        loading=false;
+                        setState(() {});
                         print('here = $e');
                       }
                     },
                     child: Container(
                       padding: EdgeInsets.fromLTRB(0,10,0,5),
-                      child: Text(
+                      child: loading?SpinKitRing(
+                        color: Color(0xFFD2ECF2),
+                        size: 30.0,
+                      )
+                          :Text(
                         args['bangla']?'যাচাই':'Verify',
                         style: TextStyle(
                           fontSize: 30.0,
