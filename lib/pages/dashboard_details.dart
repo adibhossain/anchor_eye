@@ -16,21 +16,35 @@ class _DashDetailState extends State<DashDetail> {
   var dropDownseason = '';
   var prediction = false;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); // this
-  bool loading = true;
+  bool loading = true,filtering=false;
 
   List<_SalesData> Data = [];
-  List<_SalesData> Ideal = [];
+  List<_SalesData> Data2 = [];
   List<_SalesData> Upper = [];
   List<_SalesData> Lower = [];
   var mn = 0.0;
   var mx = 0.0;
-  // _SalesData('19/06/2022', 5.8);
+
+  var params;
 
   Future loadData() async{
-    if(!loading) return;
+    if(!loading){
+      if(filtering){
+        filtering=false;
+        Data2.clear();
+        for(var snap in params){
+          var month = await snap.get('month');
+          var season = await snap.get('season');
+          if(dropDownmonth!='' && dropDownmonth!=month) continue;
+          if(dropDownseason!='' && dropDownseason!=season) continue;
+          var val2 = await snap.get(args['param']);
+          Data2.add(_SalesData(snap.id, double.parse(val2)));
+        }
+      }
+      return;
+    }
     mn = args['lower'][args['param']];
     mx = args['upper'][args['param']];
-    var params;
      await args['farm_data'].reference.collection('params').get().then((docsnap){
       params = docsnap.docs;
     });
@@ -40,9 +54,9 @@ class _DashDetailState extends State<DashDetail> {
       mn=min(mn,val);
       mx=max(mx,val);
       Data.add(_SalesData(snap.id, val));
-      Ideal.add(_SalesData(snap.id, (args['lower'][args['param']]!+args['upper'][args['param']]!)/2.0)); //
-      Lower.add(_SalesData(snap.id, args['lower'][args['param']]!)); //
-      Upper.add(_SalesData(snap.id, args['upper'][args['param']]!)); //
+      Data2.add(_SalesData(snap.id, val));
+      Lower.add(_SalesData(snap.id, args['lower'][args['param']]!));
+      Upper.add(_SalesData(snap.id, args['upper'][args['param']]!));
     }
     loading = false;
     return;
@@ -76,7 +90,7 @@ class _DashDetailState extends State<DashDetail> {
         body: FutureBuilder(
           future: loadData(),
           builder: (context, snapshot){
-            if(!loading || snapshot.connectionState == ConnectionState.done){
+            if((!loading && !filtering) || snapshot.connectionState == ConnectionState.done){
               return Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -205,9 +219,11 @@ class _DashDetailState extends State<DashDetail> {
                                               ),
                                               onChanged: (String? value) {
                                                 // This is called when the user selects an item.
-                                                setState(() {
-                                                  dropDownmonth = value!;
-                                                });
+                                                dropDownmonth = value!;
+                                                filtering=true;
+                                                setState(() {});
+                                                //print(dropDownmonth);
+                                                //print(dropDownseason);
                                               },
                                               items: months.map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(
@@ -251,9 +267,11 @@ class _DashDetailState extends State<DashDetail> {
                                               ),
                                               onChanged: (String? value) {
                                                 // This is called when the user selects an item.
-                                                setState(() {
-                                                  dropDownseason = value!;
-                                                });
+                                                dropDownseason = value!;
+                                                filtering=true;
+                                                setState(() {});
+                                                //print(dropDownmonth=='');
+                                                //print(dropDownseason=='');
                                               },
                                               items: seasons.map<DropdownMenuItem<String>>((String value) {
                                                 return DropdownMenuItem<String>(
@@ -313,7 +331,7 @@ class _DashDetailState extends State<DashDetail> {
                                     ),
                                   ),
                                 ],
-                                source: MyData(Data,Ideal),
+                                source: MyData(Data2,Lower,Upper),
                                 columnSpacing: 20,
                                 horizontalMargin: 10,
                                 rowsPerPage: 3,
@@ -349,9 +367,10 @@ class _SalesData {
 }
 
 class MyData extends DataTableSource {
-  MyData(this.data,this.ideal);
+  MyData(this.data,this.lower,this.upper);
   List<_SalesData> data = [];
-  List<_SalesData> ideal = [];
+  List<_SalesData> lower = [];
+  List<_SalesData> upper = [];
   @override
   bool get isRowCountApproximate => false;
   @override
@@ -384,7 +403,7 @@ class MyData extends DataTableSource {
         ),
         DataCell(
             Text(
-              ideal[index].sales.toString(),
+              ((lower[index].sales+upper[index].sales)/2.0).toString(),
               style: TextStyle(
                 fontSize: 20.0,
                 //color: Color(0xFFD2ECF2),
