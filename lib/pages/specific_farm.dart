@@ -72,6 +72,7 @@ class _SpecificFarmState extends State<SpecificFarm> {
                   onPressed: () {
                     Navigator.pushNamed(context, '/control_panel', arguments: {
                       'bangla': args['bangla'],
+                      'farm_data': args['farm_data'],
                     });
                   },
                   child: Container(

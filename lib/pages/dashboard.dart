@@ -66,6 +66,7 @@ class _DashboardState extends State<Dashboard> {
     }
     await args['farm_data'].reference.collection('params').get().then((docsnap) async {
       if(docsnap.docs.length==0){
+        print("no param found");
         param_ase = false;
         return;
       }

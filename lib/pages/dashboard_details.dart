@@ -102,8 +102,8 @@ class _DashDetailState extends State<DashDetail> {
                         backgroundColor: Color(0xFFF0E8EA),
                         primaryXAxis: CategoryAxis(),
                         primaryYAxis: NumericAxis(
-                          maximum: mx+5,
-                          minimum: mn-5<0?0:mn-5,
+                          maximum: mx+1,
+                          minimum: mn-1<0?0:mn-1,
                         ),
                         // Chart title
                         title: ChartTitle(

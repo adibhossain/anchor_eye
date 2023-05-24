@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert' as convert;
 
 class ControlPanel extends StatefulWidget {
   @override
@@ -72,8 +75,35 @@ class _ControlPanelState extends State<ControlPanel> {
                       IconButton(
                         icon: Image.asset('assets/power-off.png'),
                         iconSize: 40,
-                        onPressed: () {
-                          Navigator.pop(context);
+                        onPressed: () async{
+                          DateTime selectedDate = DateTime.now();
+                          print('hello from flutter');
+
+                          var url = Uri.parse('http://192.168.43.139:5000/api/hello?p1=1&p2=2');
+
+                          try{
+                            var response = await http.get(url);
+                            print('Response body: ${response.body}');
+                            var jsonResponse = convert.jsonDecode(response.body);
+                            await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
+                              'DO':'8.0',
+                              'nitrate':'180',
+                              'fish_length':'7.5',
+                              'fish_weight':'2.1',
+                              'month':'May',
+                              'season':'Summer',
+                              'pH':jsonResponse['ph'],
+                              'temperature':jsonResponse['temp'],
+                              'turbidity':jsonResponse['turb'],
+                              'n':jsonResponse['n'],
+                            });
+                          }catch(e){
+                            print(e);
+                          }
+                          //print('Response status: ${response.statusCode}');
+
+                          //print('The sum of ${jsonResponse['a']} and ${jsonResponse['b']} is ${jsonResponse['sum']}.');
+                          //Navigator.pop(context);
                         },
                       ),
                       hints?Text(
@@ -193,7 +223,20 @@ class _ControlPanelState extends State<ControlPanel> {
                       IconButton(
                         icon: Image.asset('assets/up.png'),
                         iconSize: 40,
-                        onPressed: () {},
+                        onPressed: () async{
+                          print('wanna control u');
+
+                          var url = Uri.parse('http://192.168.43.139:5000/api/control?p1=1&p2=2');
+
+                          try{
+                            var response = await http.get(url);
+                            print('Response body: ${response.body}');
+                            //var jsonResponse = convert.jsonDecode(response.body);
+
+                          }catch(e){
+                            print(e);
+                          }
+                        },
                       ),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -206,7 +249,20 @@ class _ControlPanelState extends State<ControlPanel> {
                           IconButton(
                             icon: Image.asset('assets/stop.png'),
                             iconSize: 40,
-                            onPressed: () {},
+                            onPressed: () async{
+                              print('wanna control u');
+
+                              var url = Uri.parse('http://192.168.43.139:5000/api/control?p1=0&p2=2');
+
+                              try{
+                                var response = await http.get(url);
+                                print('Response body: ${response.body}');
+                                //var jsonResponse = convert.jsonDecode(response.body);
+
+                              }catch(e){
+                                print(e);
+                              }
+                            },
                           ),
                           IconButton(
                             icon: Image.asset('assets/right.png'),
