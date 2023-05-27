@@ -11,6 +11,7 @@ class ControlPanel extends StatefulWidget {
 class _ControlPanelState extends State<ControlPanel> {
   Map args = {};
   bool hints=false;
+  final pi_ip = 'http://169.254.5.152';
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -79,7 +80,7 @@ class _ControlPanelState extends State<ControlPanel> {
                           DateTime selectedDate = DateTime.now();
                           print('hello from flutter');
 
-                          var url = Uri.parse('http://192.168.43.139:5000/api/hello?p1=1&p2=2');
+                          var url = Uri.parse(pi_ip+':5000/api/hello?p1=5');
 
                           try{
                             var response = await http.get(url);
@@ -126,85 +127,33 @@ class _ControlPanelState extends State<ControlPanel> {
                   ),
                 ],
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Column(
                     children: [
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              IconButton(
-                                icon: Image.asset('assets/rotate-left.png'),
-                                iconSize: 20,
-                                onPressed: () {},
-                              ),
-                              hints?Text(
-                                args['bangla']?'ঘড়ির কাঁটার\nবিপরীতে':'Anti-clockwise',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ):SizedBox.shrink(),
-                            ],
-                          ),
-                          SizedBox(width: 15),
-                          Column(
-                            children: [
-                              IconButton(
-                                icon: Image.asset('assets/rotate-right.png'),
-                                iconSize: 20,
-                                onPressed: () {},
-                              ),
-                              hints?Text(
-                                args['bangla']?'ঘড়ির কাঁটার\nদিকে':'Clockwise',
-                                style: TextStyle(
-                                  fontSize: 15.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ):SizedBox.shrink(),
-                            ],
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 5),
-                      hints?Text(
-                        args['bangla']?'ক্যামেরা ঘোরান':'Rotate Camera',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ):SizedBox.shrink(),
-                    ],
-                  ),
-                  SizedBox(width: 80),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        args['bangla']?'উপর':'Up',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
                       IconButton(
-                        icon: Image.asset('assets/rod.png'),
-                        iconSize: 70,
-                        onPressed: () {},
-                      ),
-                      Text(
-                        args['bangla']?'নিচে':'Down',
-                        style: TextStyle(
-                          fontSize: 15.0,
-                          fontWeight: FontWeight.bold,
-                        ),
+                        icon: Image.asset('assets/sample.png'),
+                        iconSize: 40,
+                        onPressed: () async{
+                          print('wanna sample u');
+
+                          var url = Uri.parse(pi_ip+':5000/api/control?p1=s');
+
+                          try{
+                            var response = await http.get(url);
+                            print('Response body: ${response.body}');
+                            //var jsonResponse = convert.jsonDecode(response.body);
+
+                          }catch(e){
+                            print(e);
+                          }
+                        },
                       ),
                       SizedBox(height: 5),
                       hints?Text(
-                        args['bangla']?'ক্যামেরা গভীরতা':'Camera Depth',
+                        args['bangla']?'নমুনা নিন':'Take Sample',
                         style: TextStyle(
                           fontSize: 15.0,
                           fontWeight: FontWeight.bold,
@@ -214,7 +163,7 @@ class _ControlPanelState extends State<ControlPanel> {
                   ),
                 ],
               ),
-              SizedBox(height: 5),
+              SizedBox(height: 25),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -226,7 +175,7 @@ class _ControlPanelState extends State<ControlPanel> {
                         onPressed: () async{
                           print('wanna control u');
 
-                          var url = Uri.parse('http://192.168.43.139:5000/api/control?p1=1&p2=2');
+                          var url = Uri.parse(pi_ip+':5000/api/control?p1=1');
 
                           try{
                             var response = await http.get(url);
@@ -244,7 +193,20 @@ class _ControlPanelState extends State<ControlPanel> {
                           IconButton(
                             icon: Image.asset('assets/left.png'),
                             iconSize: 40,
-                            onPressed: () {},
+                            onPressed: () async{
+                              print('wanna control u');
+
+                              var url = Uri.parse(pi_ip+':5000/api/control?p1=2');
+
+                              try{
+                                var response = await http.get(url);
+                                print('Response body: ${response.body}');
+                                //var jsonResponse = convert.jso  nDecode(response.body);
+
+                              }catch(e){
+                                print(e);
+                              }
+                            },
                           ),
                           IconButton(
                             icon: Image.asset('assets/stop.png'),
@@ -252,7 +214,7 @@ class _ControlPanelState extends State<ControlPanel> {
                             onPressed: () async{
                               print('wanna control u');
 
-                              var url = Uri.parse('http://192.168.43.139:5000/api/control?p1=0&p2=2');
+                              var url = Uri.parse(pi_ip+':5000/api/control?p1=0');
 
                               try{
                                 var response = await http.get(url);
@@ -267,14 +229,40 @@ class _ControlPanelState extends State<ControlPanel> {
                           IconButton(
                             icon: Image.asset('assets/right.png'),
                             iconSize: 40,
-                            onPressed: () {},
+                            onPressed: () async{
+                              print('wanna control u');
+
+                              var url = Uri.parse(pi_ip+':5000/api/control?p1=3');
+
+                              try{
+                                var response = await http.get(url);
+                                print('Response body: ${response.body}');
+                                //var jsonResponse = convert.jsonDecode(response.body);
+
+                              }catch(e){
+                                print(e);
+                              }
+                            },
                           ),
                         ],
                       ),
                       IconButton(
                         icon: Image.asset('assets/down.png'),
                         iconSize: 40,
-                        onPressed: () {},
+                        onPressed: () async{
+                          print('wanna control u');
+
+                          var url = Uri.parse(pi_ip+':5000/api/control?p1=4');
+
+                          try{
+                            var response = await http.get(url);
+                            print('Response body: ${response.body}');
+                            //var jsonResponse = convert.jsonDecode(response.body);
+
+                          }catch(e){
+                            print(e);
+                          }
+                        },
                       ),
                     ],
                   ),
