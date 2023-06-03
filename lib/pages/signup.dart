@@ -11,6 +11,7 @@ class SignUp extends StatefulWidget {
 
 class _SignUpState extends State<SignUp> {
   bool loading = false;
+  String error_msg='';
   Map args = {};
   final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
@@ -63,15 +64,36 @@ class _SignUpState extends State<SignUp> {
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                        child: TextFormField(
-                          controller: phoneController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: args['bangla']?'মোবাইল':'Phone No.',
-                            filled: true,
-                            fillColor: Color(0xFFD2ECF2),
-                          ),
-                          //keyboardType: TextInputType.number,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 65,
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: args['bangla']?'+৮৮০':'+880',
+                                  filled: true,
+                                  fillColor: Color(0xFFD2ECF2),
+                                ),
+                                //keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            Container(
+                              width: 118,
+                              child: TextFormField(
+                                controller: phoneController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: args['bangla']?'মোবাইল':'Phone No.',
+                                  filled: true,
+                                  fillColor: Color(0xFFD2ECF2),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          ],
                         ),
                       ),
                       Padding(
@@ -114,24 +136,44 @@ class _SignUpState extends State<SignUp> {
                             if(loading) return;
                             loading=true;
                             setState(() {});
-                            if(passController.text != confirmpassController.text) return;
+                            if(nameController.text=='' || phoneController.text=='' || passController.text=='' || confirmpassController.text==''){
+                              error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
+                            if(phoneController.text.length!=10){
+                              error_msg=(args['bangla']?'দশ সংখ্যার ফোন নম্বর লিখুন':'Please enter 10 digit phone no.');
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
+                            var phoneno='+880'+phoneController.text;
+                            if(passController.text != confirmpassController.text){
+                              error_msg=(args['bangla']?"পাসওয়ার্ড মিলছে না":"Passwords do not match");
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
                             final CollectionReference userCollection = FirebaseFirestore.instance.collection('users');
-                            await userCollection.doc(phoneController.text).get().then((documentSnapshot) async {
+                            await userCollection.doc(phoneno).get().then((documentSnapshot) async {
                               if (documentSnapshot.exists){
-                                print('Already registered');
+                                //print('Already registered');
+                                error_msg=(args['bangla']?'এই ফোন নম্বর ইতিমধ্যে নিবন্ধিত আছে':'This phone number is already registered');
                                 return;
                               }
                               else{
                                 print('User not registered.');
+                                error_msg='';
                                 await auth.verifyPhoneNumber(
-                                  phoneNumber: phoneController.text,
+                                  phoneNumber: phoneno,
                                   verificationCompleted: (_){},
                                   verificationFailed: (e){print(e);},
                                   codeSent: (String verificationId, int? token){
                                     Navigator.pushNamed(context, '/verification', arguments: {
                                       'bangla': args['bangla'],
                                       'verificationId': verificationId,
-                                      'phone': phoneController.text,
+                                      'phone': phoneno,
                                       'name': nameController.text,
                                       'pass': passController.text,
                                       'confirmpass': confirmpassController.text,
@@ -165,6 +207,17 @@ class _SignUpState extends State<SignUp> {
                           ),
                         ),
                       ),
+                      SizedBox(height: 15),
+                      error_msg!=''?Text(
+                        error_msg,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                        //textAlign: TextAlign.justify,
+                        softWrap: true,
+                      ):SizedBox.shrink(),
                     ],
                   ),
                 ),

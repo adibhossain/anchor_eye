@@ -12,6 +12,7 @@ class Verification extends StatefulWidget {
 
 class _VerificationState extends State<Verification> {
   bool loading = false;
+  String error_msg='';
   Map args = {};
   final verifycodeController = TextEditingController();
   final auth = FirebaseAuth.instance;
@@ -72,6 +73,12 @@ class _VerificationState extends State<Verification> {
                       if(loading) return;
                       loading = true;
                       setState(() {});
+                      if(verifycodeController.text==''){
+                        error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                        loading=false;
+                        setState(() {});
+                        return;
+                      }
                       final credential = PhoneAuthProvider.credential(
                           verificationId: args['verificationId'],
                           smsCode: verifycodeController.text,
@@ -81,9 +88,9 @@ class _VerificationState extends State<Verification> {
                         User? user = result.user;
                         if(user!=null && args['from']=='signup') {
                           final DatabaseService databaseservice = DatabaseService(uid: user.uid);
-                          print('hi');
+                          //print('hi');
                           await databaseservice.updateUserData(args['name'], args['phone'], args['pass']);
-                          print('hi2');
+                          //print('hi2');
                         }
                         else if(user!=null && args['from']=='login'){
                           await FirebaseFirestore.instance.collection('uid_phone_pairs').doc(args['old_uid']).delete();
@@ -104,6 +111,7 @@ class _VerificationState extends State<Verification> {
                         });
                       }
                       catch(e){
+                        error_msg=(args['bangla']?'ভুল কোড':'Invalid code');
                         loading=false;
                         setState(() {});
                         print('here = $e');
@@ -125,6 +133,17 @@ class _VerificationState extends State<Verification> {
                     ),
                   ),
                 ),
+                SizedBox(height: 15),
+                error_msg!=''?Text(
+                  error_msg,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                  //textAlign: TextAlign.justify,
+                  softWrap: true,
+                ):SizedBox.shrink(),
               ],
             ),
           ),

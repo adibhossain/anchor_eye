@@ -16,6 +16,7 @@ class Caught_Fishes extends StatefulWidget {
 class _Caught_FishesState extends State<Caught_Fishes> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   bool loading = false;
+  String error_msg='';
   Map args = {};
   final no_of_caught_fishes = TextEditingController();
   final avg_w_of_caught_fishes = TextEditingController();
@@ -91,6 +92,12 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                       if(loading) return;
                       loading=true;
                       setState(() {});
+                      if(no_of_caught_fishes.text=='' || avg_w_of_caught_fishes.text==''){
+                        error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                        loading=false;
+                        setState(() {});
+                        return;
+                      }
                       var cur_feed;
                       var farm = await FirebaseFirestore.instance.collection('farms')
                           .doc(widget.user?.phone)
@@ -132,6 +139,17 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                     ),
                   ),
                 ),
+                SizedBox(height: 15),
+                error_msg!=''?Text(
+                  error_msg,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                  //textAlign: TextAlign.justify,
+                  softWrap: true,
+                ):SizedBox.shrink(),
               ],
             ),
           ),

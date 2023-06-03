@@ -15,6 +15,7 @@ class Used_Fertilizer extends StatefulWidget {
 class _Used_FertilizerState extends State<Used_Fertilizer> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   bool loading = false;
+  String error_msg='';
   Map args = {};
   var fertilizer_cnt=0;
   List<TextEditingController> fertilizer_name = [];
@@ -129,6 +130,15 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                       if(loading) return;
                       loading = true;
                       setState(() {});
+                      bool fillup=false;
+                      if(fertilizer_cnt==0) fillup=true;
+                      for(var i=0;i<fertilizer_cnt;i++) if(fertilizer_name[i].text=='' || fertilizer_amount[i].text=='') fillup=true;
+                      if(fillup){
+                        error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                        loading=false;
+                        setState(() {});
+                        return;
+                      }
                       var no_of_caught_fishes;
                       var avg_w_of_caught_fishes;
                       var cur_feed;
@@ -189,6 +199,17 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                     ),
                   ),
                 ),
+                SizedBox(height: 15),
+                error_msg!=''?Text(
+                  error_msg,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                  //textAlign: TextAlign.justify,
+                  softWrap: true,
+                ):SizedBox.shrink(),
               ],
             ),
           ),

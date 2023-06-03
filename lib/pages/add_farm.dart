@@ -15,6 +15,7 @@ class Add_farm extends StatefulWidget {
 class _Add_farmState extends State<Add_farm> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   bool loading = false;
+  String error_msg='';
   Map args = {};
   var fertilizer_cnt=0;
   List<TextEditingController> fertilizer_name = [];
@@ -247,6 +248,15 @@ class _Add_farmState extends State<Add_farm> {
                       if(loading) return;
                       loading=true;
                       setState(() {});
+                      bool fillup=false;
+                      if(farm_name.text=='' || fish_type.text=='' || initial_fish_population.text=='' || current_fish_feed.text=='') fillup=true;
+                      for(var i=0;i<fertilizer_cnt;i++) if(fertilizer_name[i].text=='' || fertilizer_amount[i].text=='') fillup=true;
+                      if(fillup){
+                        error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                        loading=false;
+                        setState(() {});
+                        return;
+                      }
                       final farm_ref = await FirebaseFirestore.instance
                           .collection('farms')
                           .doc(widget.user?.phone)
@@ -292,6 +302,17 @@ class _Add_farmState extends State<Add_farm> {
                     ),
                   ),
                 ),
+                SizedBox(height: 15),
+                error_msg!=''?Text(
+                  error_msg,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red,
+                  ),
+                  //textAlign: TextAlign.justify,
+                  softWrap: true,
+                ):SizedBox.shrink(),
               ],
             ),
           ),

@@ -16,6 +16,7 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
   bool loading = false;
+  String error_msg='';
   Map args = {};
   final _formKey = GlobalKey<FormState>();
   final AuthService _auth = AuthService();
@@ -58,14 +59,36 @@ class _LoginState extends State<Login> {
                     children: [
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
-                        child: TextFormField(
-                          controller: phoneController,
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            hintText: args['bangla']?'মোবাইল নম্বর':'Phone No.',
-                            filled: true,
-                            fillColor: Color(0xFFD2ECF2),
-                          ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 65,
+                              child: TextFormField(
+                                enabled: false,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: args['bangla']?'+৮৮০':'+880',
+                                  filled: true,
+                                  fillColor: Color(0xFFD2ECF2),
+                                ),
+                                //keyboardType: TextInputType.number,
+                              ),
+                            ),
+                            Container(
+                              width: 118,
+                              child: TextFormField(
+                                controller: phoneController,
+                                decoration: InputDecoration(
+                                  border: OutlineInputBorder(),
+                                  hintText: args['bangla']?'মোবাইল':'Phone No.',
+                                  filled: true,
+                                  fillColor: Color(0xFFD2ECF2),
+                                ),
+                                keyboardType: TextInputType.number,
+                              ),
+                            ),
+                          ],
                         ),
                         //validator: (value){
                           //if(value!.isEmpty){
@@ -107,7 +130,19 @@ class _LoginState extends State<Login> {
                             if(loading) return;
                             loading=true;
                             setState(() {});
-                            print(phoneController.text);
+                            if(phoneController.text=='' || passController.text==''){
+                              error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
+                            if(phoneController.text.length!=10){
+                              error_msg=(args['bangla']?'দশ সংখ্যার ফোন নম্বর লিখুন':'Please enter 10 digit phone no.');
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
+                            //print(phoneController.text);
                             await FirebaseFirestore.instance.collection('users').doc(phoneController.text).get().then((documentSnapshot) async {
                               if (documentSnapshot.exists){
                                 bool ok = false;
@@ -116,6 +151,7 @@ class _LoginState extends State<Login> {
                                 ok = BCrypt.checkpw(passController.text, hashedpass);
                                 print('here');
                                 if(ok) {
+                                  error_msg='';
                                   String old_uid = await documentSnapshot.get('uid');
                                   await FirebaseAuth.instance.verifyPhoneNumber(
                                     phoneNumber: phoneController.text,
@@ -138,11 +174,13 @@ class _LoginState extends State<Login> {
                                 }
                                 else {
                                   print(passController.text);
-                                  print('password not matched');
+                                  //print('password not matched');
+                                  error_msg=(args['bangla']?'ভুল পাসওয়ার্ড':'Incorrect password');
                                 }
                               }
                               else{
-                                print('Please register first');
+                                //print('Please register first');
+                                error_msg=(args['bangla']?'প্রথমে নিবন্ধন করুন':'Please register first');
                               }
                             }).catchError((error){
                               print('Error retrieving document: $error');
@@ -184,7 +222,18 @@ class _LoginState extends State<Login> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                      )
+                      ),
+                      SizedBox(height: 15),
+                      error_msg!=''?Text(
+                        error_msg,
+                        style: TextStyle(
+                          fontSize: 20.0,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.red,
+                        ),
+                        //textAlign: TextAlign.justify,
+                        softWrap: true,
+                      ):SizedBox.shrink(),
                     ],
                   ),
                 ),
