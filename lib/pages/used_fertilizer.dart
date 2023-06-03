@@ -104,6 +104,10 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                                 filled: true,
                                 fillColor: Color(0xFFD2ECF2),
                               ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                             ),
                           ),
                         ],

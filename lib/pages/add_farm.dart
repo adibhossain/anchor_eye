@@ -99,6 +99,10 @@ class _Add_farmState extends State<Add_farm> {
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                   ),
                 ),
                 Padding(
@@ -153,6 +157,10 @@ class _Add_farmState extends State<Add_farm> {
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                   ),
                 ),
                 Padding(
@@ -214,6 +222,10 @@ class _Add_farmState extends State<Add_farm> {
                                 filled: true,
                                 fillColor: Color(0xFFD2ECF2),
                               ),
+                              keyboardType: TextInputType.number,
+                              inputFormatters: <TextInputFormatter>[
+                                FilteringTextInputFormatter.digitsOnly
+                              ],
                             ),
                           ),
                         ],

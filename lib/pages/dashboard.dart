@@ -11,8 +11,9 @@ class Dashboard extends StatefulWidget {
 
 class _DashboardState extends State<Dashboard> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
-  bool loading = true,param_ase=true;
+  bool loading = true,param_ase=true, first_load_data_called=false;
   Map args = {};
+  double progress = 0.0;
   int i=0;
   bool seemore=false;
   List<List<String>> water = [];
@@ -39,10 +40,14 @@ class _DashboardState extends State<Dashboard> {
   };
 
   Future loadData() async {
-    if(!loading) return;
+    if(!loading || first_load_data_called) return;
+    first_load_data_called = true;
     var daily_info;
     await args['farm_data'].reference.collection('daily_info').get().then((docsnap){
       daily_info = docsnap.docs;
+    });
+    setState((){
+      progress += 0.25;
     });
     //print(daily_info);
     for(var snap in daily_info){
@@ -51,12 +56,18 @@ class _DashboardState extends State<Dashboard> {
       await args['farm_data'].reference.collection('daily_info').doc(snap.id).collection('used_fertilizers').get().then((innerdocsnap){
         used_fertilizers = innerdocsnap.docs;
       });
+      setState((){
+        progress += (0.25/daily_info.length);
+      });
       var i=0;
       for(var innersnap in used_fertilizers){
         var amount = await double.parse(innersnap.get(innersnap.id));
         fertilizers.add(_FertilizerData(innersnap.id,amount));
         i++;
       }
+      setState((){
+        progress += (0.15/daily_info.length);
+      });
       data.add(_UpdateData(snap.id,
           snap.get('no_of_caught_fishes'),
           snap.get('avg_w_of_caught_fishes'),
@@ -64,6 +75,7 @@ class _DashboardState extends State<Dashboard> {
           fertilizers
       ));
     }
+    //print(progress);
     await args['farm_data'].reference.collection('params').get().then((docsnap) async {
       if(docsnap.docs.length==0){
         print("no param found");
@@ -73,18 +85,39 @@ class _DashboardState extends State<Dashboard> {
       var fetch;
       fetch = await docsnap.docs.last.get('pH');
       double pH = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('nitrate');
       double nitrate = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('temperature');
       double temperature = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('DO');
       double DO = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('turbidity');
       double turbidity = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('fish_length');
       double fish_length = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       fetch = await docsnap.docs.last.get('fish_weight');
       double fish_weight = double.parse(fetch);
+      setState((){
+        progress += 0.05;
+      });
       val = [
         {(args['bangla']?'পিএইচ (pH)':'pH'):valcmp(pH,8),
           (args['bangla']?'নাইট্রেট':'Nitrate'):valcmp(nitrate,100),
@@ -95,6 +128,10 @@ class _DashboardState extends State<Dashboard> {
           (args['bangla']?'মাছের ওজন':'Fish Weight'):valcmp(fish_weight,3.5),}
       ];
     });
+    setState((){
+      progress=1;
+    });
+    first_load_data_called=false;
     loading=false;
     return data;
   }
@@ -140,7 +177,7 @@ class _DashboardState extends State<Dashboard> {
         child: FutureBuilder(
           future: loadData(),
           builder: (context, snapshot){
-            if(!loading || snapshot.connectionState == ConnectionState.done){
+            if(!loading){ //  || snapshot.connectionState == ConnectionState.done
               return SingleChildScrollView(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -593,11 +630,24 @@ class _DashboardState extends State<Dashboard> {
               );
             }
             else{
-              return Container(
-                child: SpinKitRing(
-                  color: Color(0xFF0A457C),
-                  size: 50.0,
-                ),
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    child: SpinKitRing(
+                      color: Color(0xFF0A457C),
+                      size: 70.0,
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(50.0,70.0,50.0,10),
+                    child: LinearProgressIndicator(
+                      value: progress,
+                      minHeight: 10,
+                    ),
+                  ),
+                  Text((progress*100).round().toString()+"%"),
+                ],
               );
             }
           },

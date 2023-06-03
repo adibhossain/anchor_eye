@@ -70,9 +70,10 @@ class _SpecificFarmState extends State<SpecificFarm> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () {
-                    Navigator.pushNamed(context, '/control_panel', arguments: {
+                    Navigator.pushNamed(context, '/connect_pi', arguments: {
                       'bangla': args['bangla'],
                       'farm_data': args['farm_data'],
+                      'failed': false,
                     });
                   },
                   child: Container(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'dart:convert' as convert;
 
 class ControlPanel extends StatefulWidget {
@@ -10,11 +11,12 @@ class ControlPanel extends StatefulWidget {
 
 class _ControlPanelState extends State<ControlPanel> {
   Map args = {};
-  bool hints=false;
-  final pi_ip = 'http://169.254.5.152';
+  bool hints=false, sampling=false;
+  var pi_ip;
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
+    pi_ip = args['pi_ip'];
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       body: SafeArea(
@@ -77,13 +79,18 @@ class _ControlPanelState extends State<ControlPanel> {
                         icon: Image.asset('assets/power-off.png'),
                         iconSize: 40,
                         onPressed: () async{
+                          sampling=true;
+                          setState(() {});
                           DateTime selectedDate = DateTime.now();
                           print('hello from flutter');
+
+                          // Send request to shutdown motors first then do the following
 
                           var url = Uri.parse(pi_ip+':5000/api/hello?p1=5');
 
                           try{
                             var response = await http.get(url);
+                            // if response.statuscode == 200 else
                             print('Response body: ${response.body}');
                             var jsonResponse = convert.jsonDecode(response.body);
                             await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
@@ -102,9 +109,14 @@ class _ControlPanelState extends State<ControlPanel> {
                             print(e);
                           }
                           //print('Response status: ${response.statusCode}');
+                          
+                          sampling=false;
+                          setState(() {});
 
-                          //print('The sum of ${jsonResponse['a']} and ${jsonResponse['b']} is ${jsonResponse['sum']}.');
-                          //Navigator.pop(context);
+                          // Navigator.pushNamed(context, '/specific_farm', arguments: {
+                          //   'bangla': args['bangla'],
+                          //   'farm_data': args['farm_data'],
+                          // });
                         },
                       ),
                       hints?Text(
@@ -137,18 +149,27 @@ class _ControlPanelState extends State<ControlPanel> {
                         icon: Image.asset('assets/sample.png'),
                         iconSize: 40,
                         onPressed: () async{
+                          sampling=true;
+                          setState(() {});
                           print('wanna sample u');
 
                           var url = Uri.parse(pi_ip+':5000/api/control?p1=s');
 
                           try{
-                            var response = await http.get(url);
+                            var response = await http.get(url).timeout(Duration(seconds: 10));
                             print('Response body: ${response.body}');
                             //var jsonResponse = convert.jsonDecode(response.body);
 
                           }catch(e){
-                            print(e);
+                            Navigator.pushNamed(context, '/connect_pi', arguments: {
+                              'bangla': args['bangla'],
+                              'farm_data': args['farm_data'],
+                              'failed': true,
+                            });
+                            //print(e);
                           }
+                          sampling=false;
+                          setState(() {});
                         },
                       ),
                       SizedBox(height: 5),
@@ -164,7 +185,14 @@ class _ControlPanelState extends State<ControlPanel> {
                 ],
               ),
               SizedBox(height: 25),
-              Row(
+              sampling?Container(
+                padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
+                child: SpinKitRing(
+                  color: Color(0xFF0A457C),
+                  size: 50.0,
+                ),
+              )
+              :Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Column(
@@ -178,12 +206,17 @@ class _ControlPanelState extends State<ControlPanel> {
                           var url = Uri.parse(pi_ip+':5000/api/control?p1=1');
 
                           try{
-                            var response = await http.get(url);
+                            var response = await http.get(url).timeout(Duration(seconds: 5)); // .timeout(Duration(seconds: 10))
                             print('Response body: ${response.body}');
                             //var jsonResponse = convert.jsonDecode(response.body);
 
                           }catch(e){
-                            print(e);
+                            Navigator.pushNamed(context, '/connect_pi', arguments: {
+                              'bangla': args['bangla'],
+                              'farm_data': args['farm_data'],
+                              'failed': true,
+                            });
+                            //print(e);
                           }
                         },
                       ),
@@ -199,12 +232,17 @@ class _ControlPanelState extends State<ControlPanel> {
                               var url = Uri.parse(pi_ip+':5000/api/control?p1=2');
 
                               try{
-                                var response = await http.get(url);
+                                var response = await http.get(url).timeout(Duration(seconds: 5));
                                 print('Response body: ${response.body}');
                                 //var jsonResponse = convert.jso  nDecode(response.body);
 
                               }catch(e){
-                                print(e);
+                                Navigator.pushNamed(context, '/connect_pi', arguments: {
+                                  'bangla': args['bangla'],
+                                  'farm_data': args['farm_data'],
+                                  'failed': true,
+                                });
+                                //print(e);
                               }
                             },
                           ),
@@ -217,12 +255,17 @@ class _ControlPanelState extends State<ControlPanel> {
                               var url = Uri.parse(pi_ip+':5000/api/control?p1=0');
 
                               try{
-                                var response = await http.get(url);
+                                var response = await http.get(url).timeout(Duration(seconds: 5));
                                 print('Response body: ${response.body}');
                                 //var jsonResponse = convert.jsonDecode(response.body);
 
                               }catch(e){
-                                print(e);
+                                Navigator.pushNamed(context, '/connect_pi', arguments: {
+                                  'bangla': args['bangla'],
+                                  'farm_data': args['farm_data'],
+                                  'failed': true,
+                                });
+                                //print(e);
                               }
                             },
                           ),
@@ -235,12 +278,17 @@ class _ControlPanelState extends State<ControlPanel> {
                               var url = Uri.parse(pi_ip+':5000/api/control?p1=3');
 
                               try{
-                                var response = await http.get(url);
+                                var response = await http.get(url).timeout(Duration(seconds: 5));
                                 print('Response body: ${response.body}');
                                 //var jsonResponse = convert.jsonDecode(response.body);
 
                               }catch(e){
-                                print(e);
+                                Navigator.pushNamed(context, '/connect_pi', arguments: {
+                                  'bangla': args['bangla'],
+                                  'farm_data': args['farm_data'],
+                                  'failed': true,
+                                });
+                                //print(e);
                               }
                             },
                           ),
@@ -255,12 +303,17 @@ class _ControlPanelState extends State<ControlPanel> {
                           var url = Uri.parse(pi_ip+':5000/api/control?p1=4');
 
                           try{
-                            var response = await http.get(url);
+                            var response = await http.get(url).timeout(Duration(seconds: 5));
                             print('Response body: ${response.body}');
                             //var jsonResponse = convert.jsonDecode(response.body);
 
                           }catch(e){
-                            print(e);
+                            Navigator.pushNamed(context, '/connect_pi', arguments: {
+                              'bangla': args['bangla'],
+                              'farm_data': args['farm_data'],
+                              'failed': true,
+                            });
+                            //print(e);
                           }
                         },
                       ),
