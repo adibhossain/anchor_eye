@@ -43,7 +43,7 @@ class _SuggestionState extends State<Suggestion> {
            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
           Text(
-            args['bangla']?'ড্যাশবোর্ড - পরামর্শ':'Dashboard - Suggestion',
+            args['bangla']?'ড্যাশবোর্ড - পরামর্শ':'Dashboard - Suggestions',
            style: TextStyle(
             fontSize: 30.0,
            color: Color(0xFF186B9A),

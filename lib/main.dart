@@ -18,7 +18,7 @@ import 'pages/dashboard_details.dart';
 import 'pages/dashboard.dart';
 import 'pages/update_farm.dart';
 import 'pages/suggestion.dart';
-import 'pages/prediction.dart';
+import 'pages/alert.dart';
 import 'pages/contact.dart';
 import 'pages/settings.dart';
 import 'pages/mobile_no.dart';
@@ -72,7 +72,7 @@ class MyApp extends StatelessWidget {
                             '/dashboard': (context) => Dashboard(),
                             '/update_farm': (context) => Update_farm(),
                             '/suggestion': (context) => Suggestion(),
-                            '/prediction': (context) => Prediction(),
+                            '/alert': (context) => Alert(),
                             '/contact': (context) => contact(),
                             '/settings': (context) => settings(),
                             '/mobile_no': (context) => Mobile_No(),

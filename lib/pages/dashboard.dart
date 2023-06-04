@@ -458,29 +458,29 @@ class _DashboardState extends State<Dashboard> {
                         ),
                         SizedBox(height: 0),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             ElevatedButton.icon(
                               icon: Image(
-                                image: AssetImage('assets/future.png'),
+                                image: AssetImage('assets/warning.png'),
                                 height: 30.0,
                                 width: 30.0,
                               ),
                               style: ElevatedButton.styleFrom(
                                 shape: StadiumBorder(),
                                 minimumSize: const Size(40,40),
-                                foregroundColor: Color(0xFFD2ECF2),
-                                backgroundColor: Color(0xFF186B9A),
+                                foregroundColor: Colors.black,
+                                backgroundColor: Colors.red,
                               ),
                               onPressed: () {
-                                Navigator.pushNamed(context, '/prediction', arguments: {
+                                Navigator.pushNamed(context, '/alert', arguments: {
                                   'bangla': args['bangla'],
                                   'i': i,
                                   'farm_data': args['farm_data'],
                                 });
                               },
                               label: Text(
-                                args['bangla']?'পূর্বাভাস':'Prediction',
+                                args['bangla']?'সতর্কতা':'Alerts',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,
@@ -508,7 +508,7 @@ class _DashboardState extends State<Dashboard> {
                                 });
                               },
                               label: Text(
-                                args['bangla']?'পরামর্শ':'Suggestion',
+                                args['bangla']?'পরামর্শ':'Suggestions',
                                 style: TextStyle(
                                   fontSize: 20.0,
                                   fontWeight: FontWeight.bold,

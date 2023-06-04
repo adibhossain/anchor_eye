@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'navbar.dart';
 
-class Prediction extends StatefulWidget {
+class Alert extends StatefulWidget {
   @override
-  _PredictionState createState() => _PredictionState();
+  _AlertState createState() => _AlertState();
 }
 
-class _PredictionState extends State<Prediction> {
+class _AlertState extends State<Alert> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>(); //this
   Map args = {};
   List<String> msg=[];
@@ -42,7 +42,7 @@ class _PredictionState extends State<Prediction> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Text(
-                args['bangla']?'ড্যাশবোর্ড - পূর্বাভাস':'Dashboard - Prediction',
+                args['bangla']?'ড্যাশবোর্ড - পূর্বাভাস':'Dashboard - Alerts',
                 style: TextStyle(
                   fontSize: 30.0,
                   color: Color(0xFF186B9A),
