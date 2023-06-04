@@ -133,6 +133,23 @@ class _VerificationState extends State<Verification> {
                     ),
                   ),
                 ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/mobile_no', arguments: {
+                      'bangla': args['bangla'],
+                      'goto': '/verification',
+                      'gototo': '/new_pass',
+                      'gotototo': '/login',
+                    });
+                  },
+                  child: Text(
+                    args['bangla']?'কোডটি পুনরায় পাঠান':'Resend Code',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
                 SizedBox(height: 15),
                 error_msg!=''?Text(
                   error_msg,

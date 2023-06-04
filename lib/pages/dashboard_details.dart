@@ -69,24 +69,24 @@ class _DashDetailState extends State<DashDetail> {
     <String>['','জানুয়ারী', 'ফেব্রুয়ারী', 'মার্চ', 'এপ্রিল', 'মে', 'জুন', 'জুলাই', 'আগস্ট', 'সেপ্টেম্বর', 'অক্টোবর', 'নভেম্বর', 'ডিসেম্বর']:
     <String>['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
     List<String> seasons = args['bangla']?
-    <String>['','শীত', 'গ্রীষ্ম', 'শরৎ']:
-    <String>['','Winter', 'Summer', 'Autumn'];
+    <String>['','শীত', 'গ্রীষ্ম', 'বর্ষা']:
+    <String>['','Winter', 'Summer', 'Rainy'];
     return Scaffold(
         backgroundColor: Color(0xFFB9E6FA),
-      appBar: AppBar( //this
-        backgroundColor: Color(0xFF186B9A),
-        centerTitle: true,
-        title: Text(
-          args['title'],
-          style: TextStyle(
-            fontSize: 30.0,
-            color: Color(0xFFD2ECF2),
-            fontWeight: FontWeight.bold,
+        appBar: AppBar( //this
+          backgroundColor: Color(0xFF186B9A),
+          centerTitle: true,
+          title: Text(
+            args['title'],
+            style: TextStyle(
+              fontSize: 30.0,
+              color: Color(0xFFD2ECF2),
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
-      ),
-      key: _scaffoldKey, //this
-      drawer: NavBar(bangla: args['bangla']),
+        key: _scaffoldKey, //this
+        drawer: NavBar(bangla: args['bangla']),
         body: FutureBuilder(
           future: loadData(),
           builder: (context, snapshot){

@@ -143,7 +143,8 @@ class _LoginState extends State<Login> {
                               return;
                             }
                             //print(phoneController.text);
-                            await FirebaseFirestore.instance.collection('users').doc(phoneController.text).get().then((documentSnapshot) async {
+                            var phoneno='+880'+phoneController.text;
+                            await FirebaseFirestore.instance.collection('users').doc(phoneno).get().then((documentSnapshot) async {
                               if (documentSnapshot.exists){
                                 bool ok = false;
                                 String hashedpass =  documentSnapshot.get('pass');
@@ -154,14 +155,14 @@ class _LoginState extends State<Login> {
                                   error_msg='';
                                   String old_uid = await documentSnapshot.get('uid');
                                   await FirebaseAuth.instance.verifyPhoneNumber(
-                                    phoneNumber: phoneController.text,
+                                    phoneNumber: phoneno,
                                     verificationCompleted: (_){},
                                     verificationFailed: (e){print(e);},
                                     codeSent: (String verificationId, int? token){
                                       Navigator.pushNamed(context, '/verification', arguments: {
                                         'bangla': args['bangla'],
                                         'verificationId': verificationId,
-                                        'phone': phoneController.text,
+                                        'phone': phoneno,
                                         'pass': passController.text,
                                         'old_uid': old_uid,
                                         'from': 'login',
