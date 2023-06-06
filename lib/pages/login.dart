@@ -148,9 +148,9 @@ class _LoginState extends State<Login> {
                               if (documentSnapshot.exists){
                                 bool ok = false;
                                 String hashedpass =  documentSnapshot.get('pass');
-                                print(hashedpass);
+                                //print(hashedpass);
                                 ok = BCrypt.checkpw(passController.text, hashedpass);
-                                print('here');
+                                //print('here');
                                 if(ok) {
                                   error_msg='';
                                   String old_uid = await documentSnapshot.get('uid');
@@ -174,7 +174,7 @@ class _LoginState extends State<Login> {
                                   ////done here, rest templates for later
                                 }
                                 else {
-                                  print(passController.text);
+                                  //print(passController.text);
                                   //print('password not matched');
                                   error_msg=(args['bangla']?'ভুল পাসওয়ার্ড':'Incorrect password');
                                 }

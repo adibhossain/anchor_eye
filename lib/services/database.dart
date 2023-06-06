@@ -21,6 +21,7 @@ class DatabaseService {
       'name': name,
       'pass': hashpass,
       'bangla': true,
+      'pi_ip': '',
     });
   }
 }

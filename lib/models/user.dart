@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class Farmer {
 
   final String uid;
-  String phone='',name='';
+  String phone='',name='', pi_ip='';
   bool bangla=true;
 
   Farmer({ required this.uid });
@@ -16,6 +16,7 @@ class Farmer {
     await userCollection.doc(phone).get().then((documentSnapshot) {
       name = documentSnapshot.get('name');
       bangla = documentSnapshot.get('bangla');
+      pi_ip = documentSnapshot.get('pi_ip');
     });
   }
 }

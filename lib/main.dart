@@ -1,3 +1,4 @@
+import 'package:anchor_eye/pages/configure_pi.dart';
 import 'package:anchor_eye/pages/connect_pi.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -89,6 +90,7 @@ class MyApp extends StatelessWidget {
                             '/credit2s': (context) => Credit_IDP2_soft(),
                             '/credit2h': (context) => Credit_IDP2_hard(),
                             '/connect_pi': (context) => Connect_Pi(),
+                            '/configure_pi': (context) => Configure_Pi(),
                       }
                   )
             );
