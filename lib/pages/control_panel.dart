@@ -86,8 +86,8 @@ class _ControlPanelState extends State<ControlPanel> {
                           var jsonResponse = convert.jsonDecode(response.body);
                           var month = int.parse("${selectedDate.toLocal()}".split(' ')[0].split('-')[1]);
                           await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
-                            'DO':'8.0',
-                            'nitrate':'180',
+                            'DO':jsonResponse['do'],
+                            'nitrate':jsonResponse['nit'],
                             'fish_length':'7.5',
                             'fish_weight':'2.1',
                             'month':month_name[month],
