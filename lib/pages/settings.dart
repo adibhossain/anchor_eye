@@ -141,10 +141,12 @@ class _settingsState extends State<settings> {
                       backgroundColor: Color(0xFFD2ECF2),
                     ),
                     onPressed: () {
-                      Navigator.pushNamed(context, '/pass_barrier', arguments: {
+                      Navigator.pushNamed(context, '/new_pass', arguments: {
                         'bangla': args['bangla'],
+                        'phone': widget.user?.phone,
                         'goto': '/new_pass',
                         'gototo': '/settings',
+                        'from': '/settings',
                       });
                     },
                     child: Container(

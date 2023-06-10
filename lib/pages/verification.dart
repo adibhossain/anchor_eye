@@ -16,9 +16,11 @@ class _VerificationState extends State<Verification> {
   Map args = {};
   final verifycodeController = TextEditingController();
   final auth = FirebaseAuth.instance;
+  var verid='';
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
+    if(verid=='') verid=args['verificationId'];
     return Scaffold(
       backgroundColor: Color(0xFF99CDE3),
       body: SafeArea(
@@ -80,7 +82,7 @@ class _VerificationState extends State<Verification> {
                         return;
                       }
                       final credential = PhoneAuthProvider.credential(
-                          verificationId: args['verificationId'],
+                          verificationId: verid,
                           smsCode: verifycodeController.text,
                       );
                       try{
@@ -134,13 +136,21 @@ class _VerificationState extends State<Verification> {
                   ),
                 ),
                 TextButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/mobile_no', arguments: {
-                      'bangla': args['bangla'],
-                      'goto': '/verification',
-                      'gototo': '/new_pass',
-                      'gotototo': '/login',
-                    });
+                  onPressed: () async {
+                    if(loading) return;
+                    loading = true;
+                    setState(() {});
+                    await FirebaseAuth.instance.verifyPhoneNumber(
+                      phoneNumber: args['phone'],
+                      verificationCompleted: (_){},
+                      verificationFailed: (e){print(e);},
+                      codeSent: (String verificationId, int? token){
+                        verid = verificationId;
+                      },
+                      codeAutoRetrievalTimeout: (e){print(e);},
+                    );
+                    loading=false;
+                    setState(() {});
                   },
                   child: Text(
                     args['bangla']?'কোডটি পুনরায় পাঠান':'Resend Code',
