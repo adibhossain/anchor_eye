@@ -18,6 +18,11 @@ class _ControlPanelState extends State<ControlPanel> {
   var pi_ip;
   final month_name = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   final season = ['','Winter', 'Winter', 'Summer', 'Summer', 'Summer', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Winter', 'Winter'];
+  final gap = 60.0;
+  final button_size=50.0;
+  var i=0;
+  double progress = 1.0;
+  double _currentSliderValue = 1100;
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -38,29 +43,104 @@ class _ControlPanelState extends State<ControlPanel> {
       ),
       key: _scaffoldKey, //this
       drawer: NavBar(bangla: args['bangla'], index: -1),
-      body: SafeArea(
+      body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            SizedBox(height: 80),
+            SizedBox(height: gap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      args['bangla']?'সুরোক্ষিত অবস্থা:':'Protected Mode:',
+                      style: TextStyle(
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          args['bangla']?'চালু':'On',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: i==1?FontWeight.bold:FontWeight.normal,
+                          ),
+                        ),
+                        IconButton(
+                          icon: Image.asset('assets/slide'+i.toString()+'.png'),
+                          iconSize: button_size,
+                          onPressed: () {
+                            i++;
+                            i%=2;
+                            setState(() {});
+                          },
+                        ),
+                        Text(
+                          args['bangla']?'বন্ধ':'Off',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: i==0?FontWeight.bold:FontWeight.normal,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+                SizedBox(width: 80),
+                IconButton(
+                  icon: Image.asset('assets/help.png'),
+                  iconSize: button_size,
+                  onPressed: () {
+                    hints=true;
+                    setState(() {});
+                    Future.delayed(Duration(seconds: 5), () {
+                      hints=false;
+                      setState(() {});
+                    });
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: gap),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: <Widget>[
-                Row(
+                Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Image(
-                      image: AssetImage('assets/battery-icon.png'),
-                      height: 50,
-                      width: 50,
+                    Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        Container(
+                          width: 80,
+                          child: LinearProgressIndicator(
+                            value: progress,
+                            minHeight: 35,
+                            color: (progress>0.3?Colors.green:(progress>0.2?Colors.yellow:(progress>0.1?Colors.orange:Colors.red))),
+                          ),
+                        ),
+                        Text(
+                          (progress*100).round().toString()+"%",
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
-                    Text(
-                      args['bangla']?'৯৫%':'95%',
+                    SizedBox(height: 10),
+                    hints?Text(
+                      args['bangla']?'ব্যাটারি':'Battery',
                       style: TextStyle(
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
                       ),
-                    ),
+                    ):SizedBox.shrink(),
                   ],
                 ),
                 Column(
@@ -68,7 +148,7 @@ class _ControlPanelState extends State<ControlPanel> {
                   children: [
                     IconButton(
                       icon: Image.asset('assets/power-off.png'),
-                      iconSize: 40,
+                      iconSize: button_size,
                       onPressed: () async{
                         sampling=true;
                         setState(() {});
@@ -120,29 +200,11 @@ class _ControlPanelState extends State<ControlPanel> {
                     ):SizedBox.shrink(),
                   ],
                 ),
-                IconButton(
-                  icon: Image.asset('assets/help.png'),
-                  iconSize: 20,
-                  onPressed: () {
-                    hints=true;
-                    setState(() {});
-                    Future.delayed(Duration(seconds: 5), () {
-                      hints=false;
-                      setState(() {});
-                    });
-                  },
-                ),
-              ],
-            ),
-            SizedBox(height: 80),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
                 Column(
                   children: [
                     IconButton(
                       icon: Image.asset('assets/sample.png'),
-                      iconSize: 40,
+                      iconSize: button_size,
                       onPressed: () async{
                         sampling=true;
                         setState(() {});
@@ -179,7 +241,35 @@ class _ControlPanelState extends State<ControlPanel> {
                 ),
               ],
             ),
-            SizedBox(height: 80),
+            SizedBox(height: gap),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  args['bangla']?'গতি:':'Speed:',
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Slider(
+                  value: _currentSliderValue,
+                  min: 1100,
+                  max: 2000,
+                  divisions: 18,
+                  label: _currentSliderValue.round().toString(),
+                  onChanged: (double value) {
+                    setState(() {
+                      _currentSliderValue = value;
+                    });
+                  },
+                  onChangeEnd: (double value){
+                    print(value);
+                  },
+                ),
+              ],
+            ),
+            SizedBox(height: gap),
             sampling?Container(
               padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
               child: SpinKitRing(
@@ -194,7 +284,7 @@ class _ControlPanelState extends State<ControlPanel> {
                   children: [
                     IconButton(
                       icon: Image.asset('assets/up.png'),
-                      iconSize: 40,
+                      iconSize: button_size,
                       onPressed: () async{
                         print('wanna control u');
 
@@ -220,7 +310,7 @@ class _ControlPanelState extends State<ControlPanel> {
                       children: <Widget>[
                         IconButton(
                           icon: Image.asset('assets/left.png'),
-                          iconSize: 40,
+                          iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
 
@@ -243,7 +333,7 @@ class _ControlPanelState extends State<ControlPanel> {
                         ),
                         IconButton(
                           icon: Image.asset('assets/stop.png'),
-                          iconSize: 40,
+                          iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
 
@@ -266,7 +356,7 @@ class _ControlPanelState extends State<ControlPanel> {
                         ),
                         IconButton(
                           icon: Image.asset('assets/right.png'),
-                          iconSize: 40,
+                          iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
 
@@ -291,7 +381,7 @@ class _ControlPanelState extends State<ControlPanel> {
                     ),
                     IconButton(
                       icon: Image.asset('assets/down.png'),
-                      iconSize: 40,
+                      iconSize: button_size,
                       onPressed: () async{
                         print('wanna control u');
 
@@ -315,16 +405,22 @@ class _ControlPanelState extends State<ControlPanel> {
                   ],
                 ),
                 SizedBox(width: 10),
-                hints?Text(
-                  args['bangla']?'রোবোটিক বডি মুভমেন্ট':'Robotic Body Movement',
-                  style: TextStyle(
-                    fontSize: 15.0,
-                    fontWeight: FontWeight.bold,
+                hints?Container(
+                  width: 120,
+                  padding: EdgeInsets.symmetric(horizontal: 10),
+                  child: Text(
+                    textAlign: TextAlign.center,
+                    args['bangla']?'রোবোটিক বডি মুভমেন্ট':'Robotic Body Movement',
+                    style: TextStyle(
+                      fontSize: 20.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    softWrap: true,
                   ),
                 ):SizedBox.shrink(),
               ],
             ),
-            SizedBox(height: 80),
+            SizedBox(height: gap),
           ],
         ),
       ),
