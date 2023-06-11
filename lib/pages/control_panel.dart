@@ -14,15 +14,17 @@ class ControlPanel extends StatefulWidget {
 class _ControlPanelState extends State<ControlPanel> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Map args = {};
-  bool hints=false, sampling=false;
+  bool hints=false, sampling=false, motor=false;
   var pi_ip;
   final month_name = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   final season = ['','Winter', 'Winter', 'Summer', 'Summer', 'Summer', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Winter', 'Winter'];
   final gap = 60.0;
   final button_size=50.0;
   var i=0;
+  var p1=0;
   double progress = 1.0;
-  double _currentSliderValue = 1100;
+  double _currentSliderValue = 1000;
+  double _lastSliderValue = 1000;
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -74,10 +76,26 @@ class _ControlPanelState extends State<ControlPanel> {
                         IconButton(
                           icon: Image.asset('assets/slide'+i.toString()+'.png'),
                           iconSize: button_size,
-                          onPressed: () {
+                          onPressed: () async{
                             i++;
                             i%=2;
-                            setState(() {});
+                            var url = Uri.parse(pi_ip+':5000/api/control?p1=7&p2='+i.toString());
+                            try{
+                              var response = await http.get(url).timeout(Duration(seconds: 5)); // .timeout(Duration(seconds: 10))
+                              print('Response body: ${response.body}');
+                              //var jsonResponse = convert.jsonDecode(response.body);
+                              setState(() {});
+                            }catch(e){
+                              i++;
+                              i%=2;
+                              setState(() {});
+                              Navigator.pushNamed(context, '/connect_pi', arguments: {
+                                'bangla': args['bangla'],
+                                'farm_data': args['farm_data'],
+                                'failed': true,
+                              });
+                              //print(e);
+                            }
                           },
                         ),
                         Text(
@@ -177,6 +195,8 @@ class _ControlPanelState extends State<ControlPanel> {
                             'turbidity':jsonResponse['turb'],
                             'n':jsonResponse['n'],
                           });
+                          progress=double.parse(jsonResponse['battery']);
+                          setState(() {});
                         }catch(e){
                           print(e);
                         }
@@ -254,17 +274,52 @@ class _ControlPanelState extends State<ControlPanel> {
                 ),
                 Slider(
                   value: _currentSliderValue,
-                  min: 1100,
+                  min: 1000,
                   max: 2000,
-                  divisions: 18,
+                  divisions: 20,
                   label: _currentSliderValue.round().toString(),
                   onChanged: (double value) {
                     setState(() {
                       _currentSliderValue = value;
                     });
                   },
-                  onChangeEnd: (double value){
-                    print(value);
+                  onChangeEnd: (double value) async {
+                    print(value);print(_currentSliderValue);print(_lastSliderValue);
+                    if(motor){
+                      if(value==1000){
+                        _currentSliderValue=_lastSliderValue;
+                        setState(() {});
+                        return;
+                      }
+                      _lastSliderValue=_currentSliderValue;
+                      setState(() {});
+                      //code to change motor speed
+                    }
+                    else{
+                      if(value>1000){
+                        _currentSliderValue=_lastSliderValue;
+                        setState(() {});
+                        return;
+                      }
+                      _lastSliderValue=_currentSliderValue;
+                      setState(() {});
+                    }
+                    var url = Uri.parse(pi_ip+':5000/api/control?p1='+p1.toString()+'&p2='+_lastSliderValue.toString());
+                    try{
+                      var response = await http.get(url).timeout(Duration(seconds: 5)); // .timeout(Duration(seconds: 10))
+                      print('Response body: ${response.body}');
+                      //var jsonResponse = convert.jsonDecode(response.body);
+                    }catch(e){
+                      motor=false;
+                      _lastSliderValue=_currentSliderValue=1000;
+                      setState(() {});
+                      Navigator.pushNamed(context, '/connect_pi', arguments: {
+                        'bangla': args['bangla'],
+                        'farm_data': args['farm_data'],
+                        'failed': true,
+                      });
+                      //print(e);
+                    }
                   },
                 ),
               ],
@@ -287,15 +342,21 @@ class _ControlPanelState extends State<ControlPanel> {
                       iconSize: button_size,
                       onPressed: () async{
                         print('wanna control u');
-
-                        var url = Uri.parse(pi_ip+':5000/api/control?p1=1');
-
+                        if(!motor){
+                          motor=true;
+                          _lastSliderValue=_currentSliderValue=1100;
+                          setState(() {});
+                        }
+                        var url = Uri.parse(pi_ip+':5000/api/control?p1=1&p2='+_lastSliderValue.toString());
                         try{
                           var response = await http.get(url).timeout(Duration(seconds: 5)); // .timeout(Duration(seconds: 10))
                           print('Response body: ${response.body}');
                           //var jsonResponse = convert.jsonDecode(response.body);
-
+                          p1=1;
                         }catch(e){
+                          motor=false;
+                          _lastSliderValue=_currentSliderValue=1000;
+                          setState(() {});
                           Navigator.pushNamed(context, '/connect_pi', arguments: {
                             'bangla': args['bangla'],
                             'farm_data': args['farm_data'],
@@ -313,15 +374,21 @@ class _ControlPanelState extends State<ControlPanel> {
                           iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
-
-                            var url = Uri.parse(pi_ip+':5000/api/control?p1=2');
-
+                            if(!motor){
+                              motor=true;
+                              _lastSliderValue=_currentSliderValue=1100;
+                              setState(() {});
+                            }
+                            var url = Uri.parse(pi_ip+':5000/api/control?p1=2&p2='+_lastSliderValue.toString());
                             try{
                               var response = await http.get(url).timeout(Duration(seconds: 5));
                               print('Response body: ${response.body}');
                               //var jsonResponse = convert.jso  nDecode(response.body);
-
+                              p1=2;
                             }catch(e){
+                              motor=false;
+                              _lastSliderValue=_currentSliderValue=1000;
+                              setState(() {});
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -336,15 +403,21 @@ class _ControlPanelState extends State<ControlPanel> {
                           iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
-
-                            var url = Uri.parse(pi_ip+':5000/api/control?p1=0');
-
+                            if(motor){
+                              motor=false;
+                              _lastSliderValue=_currentSliderValue=1000;
+                              setState(() {});
+                            }
+                            var url = Uri.parse(pi_ip+':5000/api/control?p1=0&p2='+_lastSliderValue.toString());
                             try{
                               var response = await http.get(url).timeout(Duration(seconds: 5));
                               print('Response body: ${response.body}');
                               //var jsonResponse = convert.jsonDecode(response.body);
-
+                              p1=0;
                             }catch(e){
+                              motor=false;
+                              _lastSliderValue=_currentSliderValue=1000;
+                              setState(() {});
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -359,15 +432,21 @@ class _ControlPanelState extends State<ControlPanel> {
                           iconSize: button_size,
                           onPressed: () async{
                             print('wanna control u');
-
-                            var url = Uri.parse(pi_ip+':5000/api/control?p1=3');
-
+                            if(!motor){
+                              motor=true;
+                              _lastSliderValue=_currentSliderValue=1100;
+                              setState(() {});
+                            }
+                            var url = Uri.parse(pi_ip+':5000/api/control?p1=3&p2='+_lastSliderValue.toString());
                             try{
                               var response = await http.get(url).timeout(Duration(seconds: 5));
                               print('Response body: ${response.body}');
                               //var jsonResponse = convert.jsonDecode(response.body);
-
+                              p1=3;
                             }catch(e){
+                              motor=false;
+                              _lastSliderValue=_currentSliderValue=1000;
+                              setState(() {});
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -384,15 +463,21 @@ class _ControlPanelState extends State<ControlPanel> {
                       iconSize: button_size,
                       onPressed: () async{
                         print('wanna control u');
-
-                        var url = Uri.parse(pi_ip+':5000/api/control?p1=4');
-
+                        if(motor){
+                          motor=false;
+                          _lastSliderValue=_currentSliderValue=1000;
+                          setState(() {});
+                        }
+                        var url = Uri.parse(pi_ip+':5000/api/control?p1=4&p2='+_lastSliderValue.toString());
                         try{
                           var response = await http.get(url).timeout(Duration(seconds: 5));
                           print('Response body: ${response.body}');
                           //var jsonResponse = convert.jsonDecode(response.body);
-
+                          p1=4;
                         }catch(e){
+                          motor=false;
+                          _lastSliderValue=_currentSliderValue=1000;
+                          setState(() {});
                           Navigator.pushNamed(context, '/connect_pi', arguments: {
                             'bangla': args['bangla'],
                             'farm_data': args['farm_data'],

@@ -75,6 +75,13 @@ class _Connect_PiState extends State<Connect_Pi> {
                     backgroundColor: Color(0xFFD2ECF2),
                   ),
                   onPressed: () async{
+                    /*Navigator.pushNamed(context, '/control_panel', arguments: {
+                      'bangla': args['bangla'],
+                      'farm_data': args['farm_data'],
+                      'pi_ip': 'http://'+pi_ip,
+                    });
+                    return;*/
+                    if(loading) return;
                     loading = true;
                     setState(() {});
                     var url = Uri.parse('http://'+pi_ip+':5000/api/connect');
