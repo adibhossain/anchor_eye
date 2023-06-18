@@ -551,7 +551,7 @@ class _ControlPanelState extends State<ControlPanel> {
         child: FloatingActionButton(
           mini: true,
           elevation: 0.0,
-          tooltip: 'Please wait...',
+          tooltip: args['bangla']?'অনুগ্রহ করে অপেক্ষা করুন...':'Please wait...',
           onPressed: () {},
           child: Container(
             padding: EdgeInsets.fromLTRB(0, 0, 0, 0),

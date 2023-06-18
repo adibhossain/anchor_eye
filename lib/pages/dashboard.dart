@@ -709,12 +709,187 @@ class _UpdateData {
   final List<_FertilizerData> used_fertilizers;
 }
 
+class MyData2 extends DataTableSource {
+  MyData2(dynamic this.data);
+  dynamic data;
+  @override
+  bool get isRowCountApproximate => false;
+  @override
+  int get rowCount => data.length;
+  @override
+  int get selectedRowCount => 0;
+  @override
+  DataRow getRow(int index) {
+    return DataRow(
+      cells: <DataCell>[
+        DataCell(
+            Center(
+              child: Text(
+                (index+1).toString(),
+                style: TextStyle(
+                  fontSize: 15.0,
+                  //color: Color(0xFFD2ECF2),
+                  //fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+        ),
+        DataCell(
+            Center(
+              child: Text(
+                data[index].name,
+                style: TextStyle(
+                  fontSize: 15.0,
+                  //color: Color(0xFFD2ECF2),
+                  //fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+        ),
+        DataCell(
+            Center(
+              child: Text(
+                data[index].amount.toString(),
+                style: TextStyle(
+                  fontSize: 15.0,
+                  //color: Color(0xFFD2ECF2),
+                  //fontWeight: FontWeight.bold,
+                ),
+              ),
+            )
+        ),
+      ],
+    );
+  }
+}
+
 class MyData extends DataTableSource {
   MyData(Map this.args, BuildContext this.context, List<_UpdateData> this.data);
 
   BuildContext context;
   Map args={};
   List<_UpdateData> data = [];
+
+  void _showFetchedData(BuildContext context,Map args) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+            builder: (context, setState) {
+              return Dialog(
+                insetPadding: EdgeInsets.symmetric(horizontal: 40,vertical: 100),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        args['bangla']?'ব্যবহৃত সার':'Used Fertilizers',
+                        style: TextStyle(
+                          fontSize: 30.0,
+                          color: Color(0xFF0A457C),
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Container(
+                        height: 430,
+                        width: 300,
+                        child: Theme(
+                          data: Theme.of(context).copyWith(
+                            cardColor: Color(0xFFF0E8EA),
+                            dividerColor: Color(0xFFB9E6FA),
+                          ),
+                          child: PaginatedDataTable(
+                            //sortColumnIndex: 1,
+                            header: Center(
+                              child: Text(
+                                (args['bangla']?'তারিখ: ':'Date: ')+args['date'],
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  color: Color(0xFF0A457C),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            columns: <DataColumn>[
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    args['bangla']?'ক্রমিক নং,':'Sl no.',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color(0xFF0A457C),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    args['bangla']?'সারের নাম':'Fertilizer Name',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color(0xFF0A457C),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Expanded(
+                                  child: Text(
+                                    args['bangla']?'সারের\nপরিমাণ(গ্রাম)':'Fertilizer\nAmount(gm)',
+                                    style: TextStyle(
+                                      fontSize: 15.0,
+                                      color: Color(0xFF0A457C),
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                            source: MyData2(args['data']),
+                            columnSpacing: 20,
+                            horizontalMargin: 10,
+                            rowsPerPage: 5,
+                            showCheckboxColumn: false,
+                          ),
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(),
+                          foregroundColor: Color(0xFFD2ECF2),
+                          backgroundColor: Color(0xFF186B9A),
+                        ),
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0,5,0,5),
+                          child: Text(
+                            args['bangla']?'ঠিক আছে':'Okay',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                backgroundColor: Color(0xFFB9E6FA),
+              );
+            }
+        );
+      },
+    );
+  }
 
   @override
   bool get isRowCountApproximate => false;
@@ -786,13 +961,17 @@ class MyData extends DataTableSource {
                       //fontWeight: FontWeight.bold,
                     ),
                   ),
-                  TextButton(
+                  (data[index].used_fertilizers.length!=0)?TextButton(
                     onPressed: () {
-                      Navigator.pushNamed(context, '/fertilizers', arguments: {
-                        'bangla': args['bangla'],
-                        'data': data[index].used_fertilizers,
-                        'date': data[index].date,
-                      });
+                      Map args2=args;
+                      args2['data']=data[index].used_fertilizers;
+                      args2['date']=data[index].date;
+                      _showFetchedData(context, args2);
+                      // Navigator.pushNamed(context, '/fertilizers', arguments: {
+                      //   'bangla': args['bangla'],
+                      //   'data': data[index].used_fertilizers,
+                      //   'date': data[index].date,
+                      // });
                     },
                     child: Text(
                       args['bangla']?'আরো':'More',
@@ -801,7 +980,7 @@ class MyData extends DataTableSource {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                  )
+                  ):SizedBox.shrink(),
                 ],
               ),
             )
