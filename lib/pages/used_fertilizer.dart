@@ -18,6 +18,7 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
   String error_msg='';
   Map args = {};
   var fertilizer_cnt=0;
+  final used_fert_cnt_controller = TextEditingController();
   List<TextEditingController> fertilizer_name = [];
   List<TextEditingController> fertilizer_amount = [];
   @override
@@ -48,7 +49,8 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
               children: <Widget>[
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 20, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: used_fert_cnt_controller,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'প্রয়োগকৃত সারের ধরণের সংখ্যা':'Used Number of Fertilizer Types',
@@ -59,8 +61,23 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    onSubmitted: (val){
-                      if(int.parse(val)>10) return;
+                    onChanged: (val){
+                      if(used_fert_cnt_controller.text==''){
+                        error_msg='';
+                        fertilizer_cnt = 0;
+                        fertilizer_name.clear();
+                        fertilizer_amount.clear();
+                        setState(() {});
+                        return;
+                      }
+                      if(int.parse(val)>10){
+                        error_msg = 'Please enter not more than 10 fertilizers';
+                        fertilizer_cnt = 0;
+                        fertilizer_name.clear();
+                        fertilizer_amount.clear();
+                        setState(() {});
+                        return;
+                      }
                       fertilizer_cnt = int.parse(val);
                       fertilizer_name.clear();
                       fertilizer_amount.clear();
@@ -68,6 +85,7 @@ class _Used_FertilizerState extends State<Used_Fertilizer> {
                         fertilizer_name.add(TextEditingController());
                         fertilizer_amount.add(TextEditingController());
                       }
+                      error_msg='';
                       setState(() {});
                       //debugPrint(int.parse(val).toString());
                     },

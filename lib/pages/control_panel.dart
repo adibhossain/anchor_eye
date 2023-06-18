@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,22 +15,554 @@ class ControlPanel extends StatefulWidget {
 class _ControlPanelState extends State<ControlPanel> {
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   Map args = {};
-  bool hints=false, sampling=false, motor=false;
+  bool hints=false, sampling=false, motor=false, battery_alert_showing=false;
+  var bat_context;
   var pi_ip;
   final month_name = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   final season = ['','Winter', 'Winter', 'Summer', 'Summer', 'Summer', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Winter', 'Winter'];
-  final gap = 60.0;
-  final button_size=50.0;
+  final gap = 40.0;
+  final button_size=60.0;
   var i=0;
   var p1=0;
-  double progress = 1.0;
+  double progress = -1.0;
   double _currentSliderValue = 1000;
   double _lastSliderValue = 1000;
+  int n=0;
+  String temp='N/A',ph='N/A',turb='N/A',DO='N/A',nit='N/A',fish_length='N/A',fish_weight='N/A';
+  late Timer _timer;
+
+  Future<void> stopmotor() async{
+    print('wanna control u');
+    if(motor){
+      motor=false;
+      _lastSliderValue=_currentSliderValue=1000;
+      setState(() {});
+    }
+    var url = Uri.parse(pi_ip+':5000/api/control?p1=0&p2='+_lastSliderValue.toString());
+    try{
+      var response = await http.get(url).timeout(Duration(seconds: 5));
+      print('Response body: ${response.body}');
+      //var jsonResponse = convert.jsonDecode(response.body);
+      p1=0;
+    }catch(e){
+      motor=false;
+      _lastSliderValue=_currentSliderValue=1000;
+      setState(() {});
+      stopDataUpdates();
+      Navigator.pushNamed(context, '/connect_pi', arguments: {
+        'bangla': args['bangla'],
+        'farm_data': args['farm_data'],
+        'failed': true,
+      });
+      //print(e);
+    }
+  }
+
+  Future<void> take_sample() async{
+    var url1 = Uri.parse(pi_ip+':5000/api/hello?p1=s');
+    try{
+      var response1 = await http.get(url1).timeout(Duration(seconds: 10));
+      // if response.statuscode == 200 else
+      print('Response body: ${response1.body}');
+      var jsonResponse = convert.jsonDecode(response1.body);
+      if(n==0){
+        temp=jsonResponse['temp'];
+        ph=jsonResponse['ph'];
+        turb=jsonResponse['turb'];
+        DO=jsonResponse['do'];
+        nit=jsonResponse['nit'];
+        fish_length='7.5';
+        fish_weight='2.1';
+      }
+      else{
+        double fetched=double.parse(jsonResponse['temp']),avg=double.parse(temp);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        temp = avg.toStringAsFixed(2);
+
+        fetched=double.parse(jsonResponse['ph']);avg=double.parse(ph);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        ph = avg.toStringAsFixed(2);
+
+        fetched=double.parse(jsonResponse['turb']);avg=double.parse(turb);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        turb = avg.toStringAsFixed(2);
+
+        fetched=double.parse(jsonResponse['do']);avg=double.parse(DO);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        DO = avg.toStringAsFixed(2);
+
+        fetched=double.parse(jsonResponse['nit']);avg=double.parse(nit);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        nit = avg.toStringAsFixed(2);
+
+        fetched=double.parse('7.5');avg=double.parse(fish_length);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        fish_length = avg.toStringAsFixed(2);
+
+        fetched=double.parse('2.1');avg=double.parse(fish_weight);
+        avg = (n/(n+1))*avg + (fetched/(n+1));
+        fish_weight = avg.toStringAsFixed(2);
+      }
+      n++;
+    }catch(e){
+      print(e);
+      stopDataUpdates();
+      Navigator.pushNamed(context, '/connect_pi', arguments: {
+        'bangla': args['bangla'],
+        'farm_data': args['farm_data'],
+        'failed': true,
+      });
+    }
+  }
+
+  Future<void> power_off() async{
+    await stopmotor();
+    DateTime selectedDate = DateTime.now();
+    print('hello from flutter');
+
+    // Send request to shutdown motors first then do the following
+    if(n==0) await take_sample();
+    print('hell');
+    try{
+      var month = int.parse("${selectedDate.toLocal()}".split(' ')[0].split('-')[1]);
+      await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
+        'DO':DO,
+        'nitrate':nit,
+        'fish_length':fish_length,
+        'fish_weight':fish_weight,
+        'month':month_name[month],
+        'season':season[month],
+        'pH':ph,
+        'temperature':temp,
+        'turbidity':turb,
+        'n':n.toString(),
+      });
+    }catch(e){
+      print(e);
+    }
+    //print('Response status: ${response.statusCode}');
+    stopDataUpdates();
+    Navigator.pushNamed(context, '/specific_farm', arguments: {
+      'bangla': args['bangla'],
+      'farm_data': args['farm_data'],
+    });
+  }
+
+  void _showBatteryAlert(BuildContext context) {
+    if(battery_alert_showing) return;
+    battery_alert_showing=true;
+    if(progress>0.3) return;
+    var title_exclamations,content;
+    var closebutton = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: StadiumBorder(),
+        foregroundColor: Color(0xFFD2ECF2),
+        backgroundColor: Color(0xFF186B9A),
+      ),
+      onPressed: () {
+        battery_alert_showing=false;
+        Navigator.of(context).pop();
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0,5,0,5),
+        child: Text(
+          args['bangla']?'ঠিক আছে':'Okay',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    ),
+    disconnect_button = ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: StadiumBorder(),
+        foregroundColor: Color(0xFFD2ECF2),
+        backgroundColor: Color(0xFF186B9A),
+      ),
+      onPressed: () async{
+        if(sampling) return;
+        battery_alert_showing=false;
+        Navigator.of(context).pop();
+        sampling=true;
+        setState(() {});
+        await power_off();
+        sampling=false;
+        setState(() {});
+      },
+      child: Container(
+        padding: EdgeInsets.fromLTRB(0,5,0,5),
+        child: Text(
+          args['bangla']?'সংযোগ বিচ্ছিন্ন':'Disconnect',
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 15.0,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ),
+    );
+    List<Widget> actions_list = [];
+    var dismissable;
+    if(progress>0.2){
+      title_exclamations=' !';
+      content=args['bangla']?'ব্যাটারি কম: ':'Battery is low: ';
+      actions_list.add(closebutton);
+      dismissable=true;
+    }
+    else if(progress>0.1){
+      title_exclamations=' !!';
+      content=args['bangla']?'ব্যাটারি খুব কম: ':'Battery is very low: ';
+      actions_list.add(closebutton);
+      actions_list.add(disconnect_button);
+      dismissable=true;
+    }
+    else{
+      title_exclamations=' !!!';
+      content=args['bangla']?'ব্যাটারি অত্যন্ত কম: ':'Battery is extremely low: ';
+      actions_list.add(disconnect_button);
+      dismissable=false;
+    }
+    showDialog(
+      barrierDismissible: dismissable,
+      context: context,
+      builder: (BuildContext context) {
+        bat_context=context;
+        return AlertDialog(
+          title: Text(
+            (args['bangla']?'সতর্কতা':'Warning')+title_exclamations,
+            style: TextStyle(
+              fontSize: 30.0,
+              color: Color(0xFF0A457C),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          content: Text(
+            content+(progress*100).round().toString()+"%",
+            style: TextStyle(
+              fontSize: 20.0,
+              color: Color(0xFF0A457C),
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          actions: actions_list,
+          backgroundColor: Color(0xFFB9E6FA),
+          actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+        );
+      },
+    );
+  }
+
+  void _showFetchedData(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              title: Center(
+                child: Text(
+                  (args['bangla']?'আনা ডেটা':'Fetched Data'),
+                  style: TextStyle(
+                    fontSize: 25.0,
+                    color: Color(0xFF0A457C),
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              content: Container(
+                height: 190,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (!args['bangla']?'পিএইচ (pH)':'pH')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          ph,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'নাইট্রেট':'Nitrate')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          nit,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'জলের তাপমাত্রা':'Temperature')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          temp,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'দ্রবীভূত অক্সিজেন':'Dissolved Oxygen')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          DO,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'জলের অস্বচ্ছতা':'Turbidity')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          turb,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          fish_length,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(width: 10),
+                        Text(
+                          (args['bangla']?'মাছের ওজন':'Fish Weight')+' = ',
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          fish_weight,
+                          style: TextStyle(
+                            fontSize: 15.0,
+                            color: Color(0xFF0A457C),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    foregroundColor: Color(0xFFD2ECF2),
+                    backgroundColor: Color(0xFF186B9A),
+                  ),
+                  onPressed: () {
+                    if(n==0) return;
+                    temp='N/A';ph='N/A';turb='N/A';DO='N/A';nit='N/A';fish_length='N/A';fish_weight='N/A';
+                    n=0;
+                    setState(() {});
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,5,0,5),
+                    child: Text(
+                      args['bangla']?'বাতিল করুন':'Discard Data',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    shape: StadiumBorder(),
+                    foregroundColor: Color(0xFFD2ECF2),
+                    backgroundColor: Color(0xFF186B9A),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    padding: EdgeInsets.fromLTRB(0,5,0,5),
+                    child: Text(
+                      args['bangla']?'ঠিক আছে':'Okay',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        fontSize: 15.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+              backgroundColor: Color(0xFFB9E6FA),
+              actionsPadding: EdgeInsets.symmetric(horizontal: 20,vertical: 15),
+            );
+          }
+        );
+      },
+    );
+  }
+
+  Future<void> fetch_battery() async{
+    if(battery_alert_showing){
+      battery_alert_showing=false;
+      Navigator.of(bat_context).pop();
+    }
+    var url = Uri.parse(pi_ip+':5000/api/bat');
+    try{
+      var response = await http.get(url).timeout(Duration(seconds: 5));
+      // if response.statuscode == 200 else
+      print('Response body: ${response.body}');
+      var jsonResponse = convert.jsonDecode(response.body);
+      progress=double.parse(jsonResponse['Battery']);
+      //progress=0.15;
+      setState(() {});
+      _showBatteryAlert(context);
+    }catch(e){
+      print(e);
+      stopDataUpdates();
+      Navigator.pushNamed(context, '/connect_pi', arguments: {
+        'bangla': args['bangla'],
+        'farm_data': args['farm_data'],
+        'failed': true,
+      });
+    }
+  }
+
+  void startDataUpdates() {
+    const interval = Duration(seconds: 300);
+    _timer = Timer.periodic(interval, (timer) async{
+      if(sampling) return;
+      sampling=true;
+      setState(() {});
+      await fetch_battery();
+      sampling=false;
+      setState(() {});
+    });
+  }
+
+  void stopDataUpdates() {
+    _timer.cancel();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(Duration(seconds: 1), () {
+      _showBatteryAlert(context);
+    });
+    startDataUpdates();
+  }
+  
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
     pi_ip = args['pi_ip'];
+    if(progress==-1.0) progress=args['bat'];
     return Scaffold(
+      floatingActionButton: Visibility(
+        visible: sampling,
+        child: FloatingActionButton(
+          mini: true,
+          elevation: 0.0,
+          tooltip: 'Please wait...',
+          onPressed: () {},
+          child: Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 0),
+            child: SpinKitRing(
+              color: Color(0xFF0A457C),
+              size: 40.0,
+            ),
+          ),
+          backgroundColor: Color(0xFFB9E6FA),
+        ),
+      ),
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar( //this
         backgroundColor: Color(0xFF186B9A),
@@ -77,6 +610,9 @@ class _ControlPanelState extends State<ControlPanel> {
                           icon: Image.asset('assets/slide'+i.toString()+'.png'),
                           iconSize: button_size,
                           onPressed: () async{
+                            if(sampling) return;
+                            sampling=true;
+                            setState(() {});
                             i++;
                             i%=2;
                             var url = Uri.parse(pi_ip+':5000/api/control?p1=7&p2='+i.toString());
@@ -89,6 +625,7 @@ class _ControlPanelState extends State<ControlPanel> {
                               i++;
                               i%=2;
                               setState(() {});
+                              stopDataUpdates();
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -96,6 +633,8 @@ class _ControlPanelState extends State<ControlPanel> {
                               });
                               //print(e);
                             }
+                            sampling=false;
+                            setState(() {});
                           },
                         ),
                         Text(
@@ -131,25 +670,35 @@ class _ControlPanelState extends State<ControlPanel> {
                 Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Container(
-                          width: 80,
-                          child: LinearProgressIndicator(
-                            value: progress,
-                            minHeight: 35,
-                            color: (progress>0.3?Colors.green:(progress>0.2?Colors.yellow:(progress>0.1?Colors.orange:Colors.red))),
+                    GestureDetector(
+                      onTap: () async{
+                        if(sampling) return;
+                        sampling=true;
+                        setState(() {});
+                        await fetch_battery();
+                        sampling=false;
+                        setState(() {});
+                      },
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          Container(
+                            width: 80,
+                            child: LinearProgressIndicator(
+                              value: progress,
+                              minHeight: 35,
+                              color: (progress>0.3?Colors.green:(progress>0.2?Colors.yellow:(progress>0.1?Colors.orange:Colors.red))),
+                            ),
                           ),
-                        ),
-                        Text(
-                          (progress*100).round().toString()+"%",
-                          style: TextStyle(
-                            fontSize: 15.0,
-                            fontWeight: FontWeight.bold,
+                          Text(
+                            (progress*100).round().toString()+"%",
+                            style: TextStyle(
+                              fontSize: 15.0,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                     SizedBox(height: 10),
                     hints?Text(
@@ -168,47 +717,12 @@ class _ControlPanelState extends State<ControlPanel> {
                       icon: Image.asset('assets/power-off.png'),
                       iconSize: button_size,
                       onPressed: () async{
+                        if(sampling) return;
                         sampling=true;
                         setState(() {});
-                        DateTime selectedDate = DateTime.now();
-                        print('hello from flutter');
-
-                        // Send request to shutdown motors first then do the following
-
-                        var url = Uri.parse(pi_ip+':5000/api/hello?p1=5');
-
-                        try{
-                          var response = await http.get(url);
-                          // if response.statuscode == 200 else
-                          print('Response body: ${response.body}');
-                          var jsonResponse = convert.jsonDecode(response.body);
-                          var month = int.parse("${selectedDate.toLocal()}".split(' ')[0].split('-')[1]);
-                          await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
-                            'DO':jsonResponse['do'],
-                            'nitrate':jsonResponse['nit'],
-                            'fish_length':'7.5',
-                            'fish_weight':'2.1',
-                            'month':month_name[month],
-                            'season':season[month],
-                            'pH':jsonResponse['ph'],
-                            'temperature':jsonResponse['temp'],
-                            'turbidity':jsonResponse['turb'],
-                            'n':jsonResponse['n'],
-                          });
-                          progress=double.parse(jsonResponse['battery']);
-                          setState(() {});
-                        }catch(e){
-                          print(e);
-                        }
-                        //print('Response status: ${response.statusCode}');
-
+                        await power_off();
                         sampling=false;
                         setState(() {});
-
-                        // Navigator.pushNamed(context, '/specific_farm', arguments: {
-                        //   'bangla': args['bangla'],
-                        //   'farm_data': args['farm_data'],
-                        // });
                       },
                     ),
                     hints?Text(
@@ -226,25 +740,10 @@ class _ControlPanelState extends State<ControlPanel> {
                       icon: Image.asset('assets/sample.png'),
                       iconSize: button_size,
                       onPressed: () async{
+                        if(sampling) return;
                         sampling=true;
                         setState(() {});
-                        print('wanna sample u');
-
-                        var url = Uri.parse(pi_ip+':5000/api/control?p1=s');
-
-                        try{
-                          var response = await http.get(url).timeout(Duration(seconds: 10));
-                          print('Response body: ${response.body}');
-                          //var jsonResponse = convert.jsonDecode(response.body);
-
-                        }catch(e){
-                          Navigator.pushNamed(context, '/connect_pi', arguments: {
-                            'bangla': args['bangla'],
-                            'farm_data': args['farm_data'],
-                            'failed': true,
-                          });
-                          //print(e);
-                        }
+                        await take_sample();
                         sampling=false;
                         setState(() {});
                       },
@@ -284,11 +783,19 @@ class _ControlPanelState extends State<ControlPanel> {
                     });
                   },
                   onChangeEnd: (double value) async {
+                    if(sampling){
+                      _currentSliderValue=_lastSliderValue;
+                      setState(() {});
+                      return;
+                    }
+                    sampling=true;
+                    setState(() {});
                     print(value);print(_currentSliderValue);print(_lastSliderValue);
                     if(motor){
                       if(value==1000){
                         _currentSliderValue=_lastSliderValue;
                         setState(() {});
+                        sampling=false;
                         return;
                       }
                       _lastSliderValue=_currentSliderValue;
@@ -298,6 +805,7 @@ class _ControlPanelState extends State<ControlPanel> {
                     else{
                       if(value>1000){
                         _currentSliderValue=_lastSliderValue;
+                        sampling=false;
                         setState(() {});
                         return;
                       }
@@ -313,6 +821,7 @@ class _ControlPanelState extends State<ControlPanel> {
                       motor=false;
                       _lastSliderValue=_currentSliderValue=1000;
                       setState(() {});
+                      stopDataUpdates();
                       Navigator.pushNamed(context, '/connect_pi', arguments: {
                         'bangla': args['bangla'],
                         'farm_data': args['farm_data'],
@@ -320,19 +829,14 @@ class _ControlPanelState extends State<ControlPanel> {
                       });
                       //print(e);
                     }
+                    sampling=false;
+                    setState(() {});
                   },
                 ),
               ],
             ),
             SizedBox(height: gap),
-            sampling?Container(
-              padding: EdgeInsets.fromLTRB(0, 60, 0, 0),
-              child: SpinKitRing(
-                color: Color(0xFF0A457C),
-                size: 50.0,
-              ),
-            )
-            :Row(
+            Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Column(
@@ -341,6 +845,9 @@ class _ControlPanelState extends State<ControlPanel> {
                       icon: Image.asset('assets/up.png'),
                       iconSize: button_size,
                       onPressed: () async{
+                        if(sampling) return;
+                        sampling=true;
+                        setState(() {});
                         print('wanna control u');
                         if(!motor){
                           motor=true;
@@ -357,6 +864,7 @@ class _ControlPanelState extends State<ControlPanel> {
                           motor=false;
                           _lastSliderValue=_currentSliderValue=1000;
                           setState(() {});
+                          stopDataUpdates();
                           Navigator.pushNamed(context, '/connect_pi', arguments: {
                             'bangla': args['bangla'],
                             'farm_data': args['farm_data'],
@@ -364,6 +872,8 @@ class _ControlPanelState extends State<ControlPanel> {
                           });
                           //print(e);
                         }
+                        sampling=false;
+                        setState(() {});
                       },
                     ),
                     Row(
@@ -373,6 +883,9 @@ class _ControlPanelState extends State<ControlPanel> {
                           icon: Image.asset('assets/left.png'),
                           iconSize: button_size,
                           onPressed: () async{
+                            if(sampling) return;
+                            sampling=true;
+                            setState(() {});
                             print('wanna control u');
                             if(!motor){
                               motor=true;
@@ -389,6 +902,7 @@ class _ControlPanelState extends State<ControlPanel> {
                               motor=false;
                               _lastSliderValue=_currentSliderValue=1000;
                               setState(() {});
+                              stopDataUpdates();
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -396,41 +910,29 @@ class _ControlPanelState extends State<ControlPanel> {
                               });
                               //print(e);
                             }
+                            sampling=false;
+                            setState(() {});
                           },
                         ),
                         IconButton(
                           icon: Image.asset('assets/stop.png'),
                           iconSize: button_size,
                           onPressed: () async{
-                            print('wanna control u');
-                            if(motor){
-                              motor=false;
-                              _lastSliderValue=_currentSliderValue=1000;
-                              setState(() {});
-                            }
-                            var url = Uri.parse(pi_ip+':5000/api/control?p1=0&p2='+_lastSliderValue.toString());
-                            try{
-                              var response = await http.get(url).timeout(Duration(seconds: 5));
-                              print('Response body: ${response.body}');
-                              //var jsonResponse = convert.jsonDecode(response.body);
-                              p1=0;
-                            }catch(e){
-                              motor=false;
-                              _lastSliderValue=_currentSliderValue=1000;
-                              setState(() {});
-                              Navigator.pushNamed(context, '/connect_pi', arguments: {
-                                'bangla': args['bangla'],
-                                'farm_data': args['farm_data'],
-                                'failed': true,
-                              });
-                              //print(e);
-                            }
+                            if(sampling) return;
+                            sampling=true;
+                            setState(() {});
+                            await stopmotor();
+                            sampling=false;
+                            setState(() {});
                           },
                         ),
                         IconButton(
                           icon: Image.asset('assets/right.png'),
                           iconSize: button_size,
                           onPressed: () async{
+                            if(sampling) return;
+                            sampling=true;
+                            setState(() {});
                             print('wanna control u');
                             if(!motor){
                               motor=true;
@@ -447,6 +949,7 @@ class _ControlPanelState extends State<ControlPanel> {
                               motor=false;
                               _lastSliderValue=_currentSliderValue=1000;
                               setState(() {});
+                              stopDataUpdates();
                               Navigator.pushNamed(context, '/connect_pi', arguments: {
                                 'bangla': args['bangla'],
                                 'farm_data': args['farm_data'],
@@ -454,6 +957,8 @@ class _ControlPanelState extends State<ControlPanel> {
                               });
                               //print(e);
                             }
+                            sampling=false;
+                            setState(() {});
                           },
                         ),
                       ],
@@ -462,29 +967,12 @@ class _ControlPanelState extends State<ControlPanel> {
                       icon: Image.asset('assets/down.png'),
                       iconSize: button_size,
                       onPressed: () async{
-                        print('wanna control u');
-                        if(motor){
-                          motor=false;
-                          _lastSliderValue=_currentSliderValue=1000;
-                          setState(() {});
-                        }
-                        var url = Uri.parse(pi_ip+':5000/api/control?p1=4&p2='+_lastSliderValue.toString());
-                        try{
-                          var response = await http.get(url).timeout(Duration(seconds: 5));
-                          print('Response body: ${response.body}');
-                          //var jsonResponse = convert.jsonDecode(response.body);
-                          p1=4;
-                        }catch(e){
-                          motor=false;
-                          _lastSliderValue=_currentSliderValue=1000;
-                          setState(() {});
-                          Navigator.pushNamed(context, '/connect_pi', arguments: {
-                            'bangla': args['bangla'],
-                            'farm_data': args['farm_data'],
-                            'failed': true,
-                          });
-                          //print(e);
-                        }
+                        if(sampling) return;
+                        sampling=true;
+                        setState(() {});
+                       await stopmotor();
+                        sampling=false;
+                        setState(() {});
                       },
                     ),
                   ],
@@ -506,6 +994,29 @@ class _ControlPanelState extends State<ControlPanel> {
               ],
             ),
             SizedBox(height: gap),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                shape: StadiumBorder(),
+                foregroundColor: Color(0xFFD2ECF2),
+                backgroundColor: Color(0xFF186B9A),
+              ),
+              onPressed: () {
+                if(sampling) return;
+                _showFetchedData(context);
+              },
+              child: Container(
+                padding: EdgeInsets.fromLTRB(0,5,0,5),
+                child: Text(
+                  args['bangla']?'আনা ডেটা দেখুন':'See Fetched Data',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
           ],
         ),
       ),

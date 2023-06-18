@@ -1,3 +1,4 @@
+import 'package:anchor_eye/pages/us.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class _Add_farmState extends State<Add_farm> {
   final initial_fish_population = TextEditingController();
   final fish_release_date = TextEditingController();
   final current_fish_feed = TextEditingController();
+  final used_fert_cnt_controller = TextEditingController();
 
   DateTime selectedDate = DateTime.now();
   Future<void> _selectDate(BuildContext context) async {
@@ -166,7 +168,8 @@ class _Add_farmState extends State<Add_farm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
-                  child: TextField(
+                  child: TextFormField(
+                    controller: used_fert_cnt_controller,
                     decoration: InputDecoration(
                       border: OutlineInputBorder(),
                       hintText: args['bangla']?'প্রয়োগকৃত সারের ধরণের সংখ্যা':'Used Number of Fertilizer Types',
@@ -177,8 +180,23 @@ class _Add_farmState extends State<Add_farm> {
                     inputFormatters: <TextInputFormatter>[
                       FilteringTextInputFormatter.digitsOnly
                     ],
-                    onSubmitted: (val){
-                      if(int.parse(val)>10) return;
+                    onChanged: (val){
+                      if(used_fert_cnt_controller.text==''){
+                        error_msg='';
+                        fertilizer_cnt = 0;
+                        fertilizer_name.clear();
+                        fertilizer_amount.clear();
+                        setState(() {});
+                        return;
+                      }
+                      if(int.parse(val)>10){
+                        error_msg = 'Please enter not more than 10 fertilizers';
+                        fertilizer_cnt = 0;
+                        fertilizer_name.clear();
+                        fertilizer_amount.clear();
+                        setState(() {});
+                        return;
+                      }
                       fertilizer_cnt = int.parse(val);
                       fertilizer_name.clear();
                       fertilizer_amount.clear();
@@ -186,6 +204,7 @@ class _Add_farmState extends State<Add_farm> {
                         fertilizer_name.add(TextEditingController());
                         fertilizer_amount.add(TextEditingController());
                       }
+                      error_msg='';
                       setState(() {});
                       //debugPrint(int.parse(val).toString());
                     },
@@ -249,7 +268,7 @@ class _Add_farmState extends State<Add_farm> {
                       loading=true;
                       setState(() {});
                       bool fillup=false;
-                      if(farm_name.text=='' || fish_type.text=='' || initial_fish_population.text=='' || current_fish_feed.text=='') fillup=true;
+                      if(farm_name.text=='' || fish_type.text=='' || initial_fish_population.text=='' || current_fish_feed.text=='' || used_fert_cnt_controller.text=='') fillup=true;
                       for(var i=0;i<fertilizer_cnt;i++) if(fertilizer_name[i].text=='' || fertilizer_amount[i].text=='') fillup=true;
                       if(fillup){
                         error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
@@ -313,6 +332,7 @@ class _Add_farmState extends State<Add_farm> {
                   //textAlign: TextAlign.justify,
                   softWrap: true,
                 ):SizedBox.shrink(),
+                SizedBox(height: 30),
               ],
             ),
           ),

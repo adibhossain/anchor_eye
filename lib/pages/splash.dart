@@ -54,7 +54,12 @@ class _SplashState extends State<Splash> {
                   ),
                 ),
               ),
-              Image.asset('assets/main_icon.png'),
+              SizedBox(height: 15),
+              Image(
+                image: AssetImage('assets/main_icon.png'),
+                height: 220.0,
+                width: 220.0,
+              ),
               SizedBox(height: 25),
               Container(
                 child: Text(

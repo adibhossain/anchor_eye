@@ -15,6 +15,7 @@ class _DashboardState extends State<Dashboard> {
   Map args = {};
   double progress = 0.0;
   int i=0;
+  var bad_cnt=[0,0];
   bool seemore=false;
   List<List<String>> water = [];
   List<Map<String,valcmp>> val = [];
@@ -127,12 +128,23 @@ class _DashboardState extends State<Dashboard> {
         {(args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length'):valcmp(fish_length,7.8),
           (args['bangla']?'মাছের ওজন':'Fish Weight'):valcmp(fish_weight,3.5),}
       ];
+      for(var ii=0;ii<2;ii++){
+        for(var index=0;index<water[ii].length;index++){
+          var tempval = (val[ii][water[ii][index]]?.data);
+          var tempparam = whois[water[ii][index]];
+          var low = lower[tempparam];
+          var up = upper[tempparam];
+          if(tempval!>up! || tempval<low!) bad_cnt[ii]++;
+        }
+      }
     });
     setState((){
       progress=1;
     });
+    await Future.delayed(Duration(seconds: 1));
     first_load_data_called=false;
     loading=false;
+    setState(() {});
     return data;
   }
 
@@ -530,7 +542,7 @@ class _DashboardState extends State<Dashboard> {
                               var low = lower[tempparam];
                               var up = upper[tempparam];
                               return Card(
-                                shape: (tempval!>up! || tempval<low!)?Border.all(
+                                shape: (tempval!>up!|| tempval<low!)?Border.all(
                                   color: Colors.red,
                                   width: 2,
                                 ):null,
@@ -610,6 +622,22 @@ class _DashboardState extends State<Dashboard> {
                               );
                             },
                           ),
+                        ),
+                        SizedBox(height: 40.0),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              i==1?(args['bangla']?'মাছ ধরার '+(bad_cnt[i]==0?'যোগ্য':'অযোগ্য'):'Fish is '+(bad_cnt[i]==0?'eligible':'inelligible')+' to catch')
+                                  :(args['bangla']?'জলের গুণমান হল '+(bad_cnt[i]==0?'আদর্শ':(bad_cnt[i]==1?'ভাল':(bad_cnt[i]==2?'মধ্যপন্থী':(bad_cnt[i]==3?'খারাপ':(bad_cnt[i]==4?'খুব খারাপ':'ভয়ঙ্কর')))))
+                                  :'Water quality is '+(bad_cnt[i]==0?'ideal':(bad_cnt[i]==1?'good':(bad_cnt[i]==2?'moderate':(bad_cnt[i]==3?'bad':(bad_cnt[i]==4?'very bad':'horrible')))))),
+                              style: TextStyle(
+                                fontSize: 25.0,
+                                color: Color(0xFF0A457C),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 40.0),
                       ],

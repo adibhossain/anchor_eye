@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:http/http.dart' as http;
 import 'package:provider/provider.dart';
+import 'dart:convert' as convert;
 
 import '../models/user.dart';
 import 'navbar.dart';
@@ -88,11 +89,24 @@ class _Connect_PiState extends State<Connect_Pi> {
                     try{
                       var response = await http.get(url).timeout(Duration(seconds: 5)); // .timeout(Duration(seconds: 10))
                       //print('Response body: ${response.body}');
-                      Navigator.pushNamed(context, '/control_panel', arguments: {
-                        'bangla': args['bangla'],
-                        'farm_data': args['farm_data'],
-                        'pi_ip': 'http://'+pi_ip,
-                      });
+                      var url1 = Uri.parse('http://'+pi_ip+':5000/api/bat');
+                      try{
+                        var response1 = await http.get(url1).timeout(Duration(seconds: 10));
+                        // if response.statuscode == 200 else
+                        print('Response body: ${response1.body}');
+                        var jsonResponse = convert.jsonDecode(response1.body);
+                        double progress=double.parse(jsonResponse['Battery']);
+                        Navigator.pushNamed(context, '/control_panel', arguments: {
+                          'bangla': args['bangla'],
+                          'farm_data': args['farm_data'],
+                          'pi_ip': 'http://'+pi_ip,
+                          'bat':progress,
+                        });
+                      }catch(e){
+                        args['failed']=true;
+                        setState(() {});
+                        print(e);
+                      }
                     }catch(e){
                       args['failed']=true;
                       setState(() {});

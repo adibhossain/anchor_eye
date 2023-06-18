@@ -128,7 +128,7 @@ class NavBar extends StatelessWidget {
         return SizedBox(
           height: 120,
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.fromLTRB(10,40,10,0),
             child: Image.asset('assets/main_icon.png'),
           ),
         );
