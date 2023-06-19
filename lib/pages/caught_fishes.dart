@@ -103,7 +103,28 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                           .doc(widget.user?.phone)
                           .collection('specific_farms')
                           .doc(args['id']);
+                      var farm_data;
+                      await farm.get().then((farmsnap){
+                        farm_data = farmsnap;
+                      });
                       var daily_info = await farm.collection('daily_info');
+                      int prev_caught_fish = 0;
+                      await daily_info.doc(args['entry_date']).get().then((prevsnap) async{
+                        if(!prevsnap.exists){
+                          return;
+                        }
+                        prev_caught_fish = await int.parse(prevsnap.get('no_of_caught_fishes'));
+                      });
+                      var est_f_popul_st = await farm_data.get('estimated_fish_population');
+                      int est_f_popul = int.parse(est_f_popul_st), caught_fish_cnt = int.parse(no_of_caught_fishes.text);
+                      est_f_popul=est_f_popul+prev_caught_fish;
+                      if(est_f_popul<caught_fish_cnt){
+                        error_msg=(args['bangla']?'পুকুরে পর্যাপ্ত মাছ নেই':'Not enough fish in the pond');
+                        loading=false;
+                        setState(() {});
+                        return;
+                      }
+                      est_f_popul=est_f_popul-caught_fish_cnt;
                       await daily_info.get().then((docsnap){
                         cur_feed = docsnap.docs.last.get('current_fish_feed');
                       });
@@ -112,7 +133,9 @@ class _Caught_FishesState extends State<Caught_Fishes> {
                         'no_of_caught_fishes': no_of_caught_fishes.text,
                         'avg_w_of_caught_fishes': avg_w_of_caught_fishes.text,
                       });
-                      var farm_data;
+                      await farm.update({
+                        'estimated_fish_population': est_f_popul.toString(),
+                      });
                       await farm.get().then((farmsnap){
                         farm_data = farmsnap;
                       });

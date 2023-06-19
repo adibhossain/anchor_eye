@@ -17,27 +17,28 @@ class _DashboardState extends State<Dashboard> {
   int i=0;
   var bad_cnt=[0,0];
   bool seemore=false;
+  final _scrollController = ScrollController();
   List<List<String>> water = [];
   List<Map<String,valcmp>> val = [];
-  Map<String,String> whois ={};
-  List<_UpdateData> data = [];
+  Map<String,String> whois ={}, units={};
+  List<UpdateData> data = [];
   Map<String,double> lower = {
-    'pH': 7.5,
-    'temperature':24,
+    'pH': 6.0,
+    'temperature':25,
     'DO':5.5,
-    'turbidity':100,
-    'nitrate':180,
+    'turbidity':30,
+    'nitrate':0.2,
     'fish_length':7.2,
-    'fish_weight':3,
+    'fish_weight':1, //kg
   };
   Map<String,double> upper = {
-    'pH': 8.5,
-    'temperature':26,
-    'DO':6.5,
-    'turbidity':110,
-    'nitrate':190,
+    'pH': 9.0,
+    'temperature':36,
+    'DO':7.5,
+    'turbidity':60,
+    'nitrate':20,
     'fish_length':7.5,
-    'fish_weight':3.5,
+    'fish_weight':45, //kg
   };
 
   Future loadData() async {
@@ -69,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
       setState((){
         progress += (0.15/daily_info.length);
       });
-      data.add(_UpdateData(snap.id,
+      data.add(UpdateData(snap.id,
           snap.get('no_of_caught_fishes'),
           snap.get('avg_w_of_caught_fishes'),
           snap.get('current_fish_feed'),
@@ -169,6 +170,15 @@ class _DashboardState extends State<Dashboard> {
       (args['bangla'] ? 'মাছের দৈর্ঘ্য' : 'Fish Length'):'fish_length',
       (args['bangla'] ? 'মাছের ওজন' : 'Fish Weight'):'fish_weight',
     };
+    units = {
+      (args['bangla'] ? 'পিএইচ (pH)' : 'pH'):'',
+      (args['bangla'] ? 'নাইট্রেট' : 'Nitrate'):'mg/L',
+      (args['bangla'] ? 'জলের তাপমাত্রা' : 'Temperature'):'C',
+      (args['bangla'] ? 'দ্রবীভূত অক্সিজেন' : 'Dissolved Oxygen'):'mg/L',
+      (args['bangla'] ? 'জলের অস্বচ্ছতা' : 'Turbidity'):'cm',
+      (args['bangla'] ? 'মাছের দৈর্ঘ্য' : 'Fish Length'):'cm',
+      (args['bangla'] ? 'মাছের ওজন' : 'Fish Weight'):'kg',
+    };
     return Scaffold(
       backgroundColor: Color(0xFFB9E6FA),
       appBar: AppBar( //this
@@ -215,7 +225,7 @@ class _DashboardState extends State<Dashboard> {
                             },
                             child: SizedBox(
                               width: 325,
-                              height: seemore?450:170,
+                              height: seemore?470:190,
                               child: Column(
                                 children: [
                                   SizedBox(height: 10),
@@ -277,6 +287,28 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                       Text(
                                         args['farm_data'].get('initial_fish_population'),
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Text(
+                                        args['bangla']?'মাছের আনুমানিক সংখ্যা: ':'Estimated number of fishes: ',
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        args['farm_data'].get('estimated_fish_population'),
                                         style: TextStyle(
                                           fontSize: 15.0,
                                           color: Color(0xFF0A457C),
@@ -474,34 +506,6 @@ class _DashboardState extends State<Dashboard> {
                           children: [
                             ElevatedButton.icon(
                               icon: Image(
-                                image: AssetImage('assets/warning.png'),
-                                height: 30.0,
-                                width: 30.0,
-                              ),
-                              style: ElevatedButton.styleFrom(
-                                shape: StadiumBorder(),
-                                minimumSize: const Size(40,40),
-                                foregroundColor: Colors.black,
-                                backgroundColor: Colors.red,
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(context, '/alert', arguments: {
-                                  'bangla': args['bangla'],
-                                  'i': i,
-                                  'farm_data': args['farm_data'],
-                                });
-                              },
-                              label: Text(
-                                args['bangla']?'সতর্কতা':'Alerts',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                            ),
-                            //SizedBox(width: 100),
-                            ElevatedButton.icon(
-                              icon: Image(
                                 image: AssetImage('assets/bulb.png'),
                                 height: 30.0,
                                 width: 30.0,
@@ -517,6 +521,13 @@ class _DashboardState extends State<Dashboard> {
                                   'bangla': args['bangla'],
                                   'i': i,
                                   'farm_data': args['farm_data'],
+                                  'data': data,
+                                  'water': water,
+                                  'whois': whois,
+                                  'units': units,
+                                  'val': val,
+                                  'lower': lower,
+                                  'upper': upper,
                                 });
                               },
                               label: Text(
@@ -533,94 +544,119 @@ class _DashboardState extends State<Dashboard> {
                         SizedBox(
                           height: 110,
                           width: 325,
-                          child: ListView.builder(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: water[i].length,
-                            itemBuilder: (BuildContext ctxt, int index) {
-                              var tempval = (val[i][water[i][index]]?.data);
-                              var tempparam = whois[water[i][index]];
-                              var low = lower[tempparam];
-                              var up = upper[tempparam];
-                              return Card(
-                                shape: (tempval!>up!|| tempval<low!)?Border.all(
-                                  color: Colors.red,
-                                  width: 2,
-                                ):null,
-                                color: Color(0xFFF0E8EA),
-                                child: InkWell(
-                                  splashColor: Colors.blue.withAlpha(30),
-                                  onTap: () {
-                                    Navigator.pushNamed(context, '/dashdetail', arguments: {
-                                      'bangla': args['bangla'],
-                                      'param': whois[water[i][index]],
-                                      'title': water[i][index],
-                                      'farm_data': args['farm_data'],
-                                      'upper': upper,
-                                      'lower': lower,
-                                    });
-                                  },
-                                  child: SizedBox(
-                                    width: 170,
-                                    height: 50,
-                                    child: Column(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        Text(
-                                          water[i][index],
-                                          style: TextStyle(
-                                            fontSize: 20.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        SizedBox(height: 10),
-                                        Row(
+                          child: Theme(
+                            data: Theme.of(context).copyWith(
+                              scrollbarTheme: ScrollbarTheme.of(context).copyWith(
+                                thumbColor: MaterialStateProperty.all<Color>(Color(0xFF186B9A)),
+                                crossAxisMargin: -10,
+                                mainAxisMargin: 3,
+                              ),
+                            ),
+                            child: Scrollbar(
+                              thickness: 8.0,
+                              radius: Radius.circular(20.0),
+                              thumbVisibility: true,
+                              controller: _scrollController,
+                              child: ListView.builder(
+                                controller: _scrollController,
+                                scrollDirection: Axis.horizontal,
+                                itemCount: water[i].length,
+                                itemBuilder: (BuildContext ctxt, int index) {
+                                  var tempval = (val[i][water[i][index]]?.data);
+                                  var tempparam = whois[water[i][index]];
+                                  var low = lower[tempparam];
+                                  var up = upper[tempparam];
+                                  return Card(
+                                    shape: (tempval!>up!|| tempval<low!)?Border.all(
+                                      color: Colors.red,
+                                      width: 2,
+                                    ):null,
+                                    color: Color(0xFFF0E8EA),
+                                    child: InkWell(
+                                      splashColor: Colors.blue.withAlpha(30),
+                                      onTap: () {
+                                        Navigator.pushNamed(context, '/dashdetail', arguments: {
+                                          'bangla': args['bangla'],
+                                          'param': whois[water[i][index]],
+                                          'title': water[i][index],
+                                          'farm_data': args['farm_data'],
+                                          'upper': upper,
+                                          'lower': lower,
+                                        });
+                                      },
+                                      child: SizedBox(
+                                        width: 180,
+                                        height: 80,
+                                        child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                                            Column(
-                                              children: [
-                                                Text(
-                                                  args['bangla']?'বর্তমান':'Current',
-                                                  style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                                Text(
-                                                  (val[i][water[i][index]]?.data).toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
-                                                ),
-                                              ],
+                                            Text(
+                                              water[i][index],
+                                              style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
                                             ),
-                                            SizedBox(width: 15),
-                                            Column(
+                                            units[water[i][index]]!=''?
+                                            Text(
+                                              "("+units[water[i][index]]!+")",
+                                              style: TextStyle(
+                                                fontSize: 15.0,
+                                                fontWeight: FontWeight.normal,
+                                              ),
+                                            )
+                                            :SizedBox.shrink(),
+                                            SizedBox(height: 10),
+                                            Row(
+                                              mainAxisAlignment: MainAxisAlignment.center,
                                               children: [
-                                                Text(
-                                                  args['bangla']?'আদর্শ':'Ideal',
-                                                  style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      args['bangla']?'বর্তমান':'Current',
+                                                      style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      (val[i][water[i][index]]?.data).toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
-                                                Text(
-                                                  ((low!+up)/2.0).toString(),
-                                                  style: TextStyle(
-                                                    fontSize: 15.0,
-                                                    fontWeight: FontWeight.bold,
-                                                  ),
+                                                SizedBox(width: 15),
+                                                Column(
+                                                  children: [
+                                                    Text(
+                                                      args['bangla']?'আদর্শ':'Ideal',
+                                                      style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      low.toString()+" to "+up.toString(),
+                                                      style: TextStyle(
+                                                        fontSize: 15.0,
+                                                        fontWeight: FontWeight.bold,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ],
                                             ),
                                           ],
                                         ),
-                                      ],
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              );
-                            },
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ),
                         SizedBox(height: 40.0),
@@ -700,8 +736,8 @@ class _FertilizerData {
   final double amount;
 }
 
-class _UpdateData {
-  _UpdateData(this.date, this.caught_fishes, this.avg_weight, this.cur_daily_feed, this.used_fertilizers);
+class UpdateData {
+  UpdateData(this.date, this.caught_fishes, this.avg_weight, this.cur_daily_feed, this.used_fertilizers);
   final String date;
   final String caught_fishes;
   final String avg_weight;
@@ -764,11 +800,11 @@ class MyData2 extends DataTableSource {
 }
 
 class MyData extends DataTableSource {
-  MyData(Map this.args, BuildContext this.context, List<_UpdateData> this.data);
+  MyData(Map this.args, BuildContext this.context, List<UpdateData> this.data);
 
   BuildContext context;
   Map args={};
-  List<_UpdateData> data = [];
+  List<UpdateData> data = [];
 
   void _showFetchedData(BuildContext context,Map args) {
     showDialog(

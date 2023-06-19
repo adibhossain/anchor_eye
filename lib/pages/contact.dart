@@ -34,85 +34,62 @@ class _contactState extends State<contact> {
             mainAxisAlignment: MainAxisAlignment.center,
             //crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              //SizedBox(height: 60),
-              SizedBox(height: 50),
-              // SizedBox(height: 1),
               SizedBox(
                 width: 300,
                 child: Text(
-                  args['bangla']?'ইমেইল: anchoreye_bdasia@gmail.com':'Email: anchoreye_bdasia@gmail.com',
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Hotline 1: +8801776474084',
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 23.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 40),
               SizedBox(
                 width: 300,
                 child: Text(
-                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Phone: 01703061533',
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Hotline 2: +8801969844062',
                   style: TextStyle(
-                    fontSize: 30.0,
+                    fontSize: 23.0,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-              SizedBox(height: 30),
-              // children:
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    //SizedBox(width: 3),
-                IconButton(
-                  icon: Image.asset('assets/fb.png'),
-                  iconSize: 100,
-                  onPressed: () {},
+              SizedBox(height: 40),
+              SizedBox(
+                width: 300,
+                child: Text(
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Hotline 3: +8801743097197',
+                  style: TextStyle(
+                    fontSize: 23.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
-                    SizedBox(width: 1),
-                IconButton(
-                  icon: Image.asset('assets/wa.png'),
-                  iconSize: 100,
-                  onPressed: () {},
-                ),
-                    SizedBox(width: 1),
-                IconButton(
-                  icon: Image.asset('assets/ig.png'),
-                  iconSize: 100,
-                  onPressed: () {},
-                ),
-
-                    //SizedBox(width: 1),
-
-                  ]
               ),
-              // GFIconButton(
-              //   onPressed: (){},
-              //   icon: Icon(Icons.facebook),
-              // ),
-              // height:150,
-              // width:100,
-              // SizedBox(height: 0),
-
-              // Container(
-              //   child: Text(
-              //     '',
-              //     style: TextStyle(
-              //       fontSize: 25.0,
-              //       color: Color(0xFF0A457C),
-              //       fontWeight: FontWeight.bold,
-              //     ),
-              //   ),
-              // ),
-              // Container(
-              //   // child: SpinKitRing(
-              //   //   color: Color(0xFF0A457C),
-              //   //   size: 50.0,
-              //   // ),
-              // ),
+              SizedBox(height: 40),
+              SizedBox(
+                width: 300,
+                child: Text(
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Hotline 4: +8801911092794',
+                  style: TextStyle(
+                    fontSize: 23.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+              SizedBox(height: 40),
+              SizedBox(
+                width: 300,
+                child: Text(
+                  args['bangla']?'ফোন: ০১৭০৩০৬১৫৩৩':'Hotline 5: +8801700808277',
+                  style: TextStyle(
+                    fontSize: 23.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
             ],
           ),
-
         ),
       ),
     );
