@@ -60,19 +60,22 @@ class _ControlPanelState extends State<ControlPanel> {
 
   Future<void> take_sample() async{
     var url1 = Uri.parse(pi_ip+':5000/api/hello?p1=s');
+    var url2 = Uri.parse(pi_ip+':5000/get_length');
     try{
       var response1 = await http.get(url1).timeout(Duration(seconds: 10));
+      var response2 = await http.get(url2).timeout(Duration(seconds: 10));
       // if response.statuscode == 200 else
       print('Response body: ${response1.body}');
       var jsonResponse = convert.jsonDecode(response1.body);
+      var jsonResponse2 = convert.jsonDecode(response2.body);
       if(n==0){
         temp=jsonResponse['temp'];
         ph=jsonResponse['ph'];
         turb=jsonResponse['turb'];
         DO=jsonResponse['do'];
         nit=jsonResponse['nit'];
-        fish_length='7.5';
-        fish_weight='2.1';
+        fish_length=jsonResponse2['avg_length'];
+        fish_weight=jsonResponse2['avg_weight'];
       }
       else{
         double fetched=double.parse(jsonResponse['temp']),avg=double.parse(temp);
@@ -95,11 +98,11 @@ class _ControlPanelState extends State<ControlPanel> {
         avg = (n/(n+1))*avg + (fetched/(n+1));
         nit = avg.toStringAsFixed(2);
 
-        fetched=double.parse('7.5');avg=double.parse(fish_length);
+        fetched=double.parse(jsonResponse2['avg_length']);avg=double.parse(fish_length);
         avg = (n/(n+1))*avg + (fetched/(n+1));
         fish_length = avg.toStringAsFixed(2);
 
-        fetched=double.parse('2.1');avg=double.parse(fish_weight);
+        fetched=double.parse(jsonResponse2['avg_weight']);avg=double.parse(fish_weight);
         avg = (n/(n+1))*avg + (fetched/(n+1));
         fish_weight = avg.toStringAsFixed(2);
       }
