@@ -64,6 +64,7 @@ class AuthService {
     try {
       return await _auth.signOut();
     } catch (error) {
+      print('error hoise sign out korte giye');
       print(error.toString());
       return null;
     }

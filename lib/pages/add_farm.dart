@@ -23,6 +23,7 @@ class _Add_farmState extends State<Add_farm> {
   List<TextEditingController> fertilizer_amount = [];
   final farm_name = TextEditingController();
   final fish_type = TextEditingController();
+  final initial_fish_length = TextEditingController();
   final initial_fish_population = TextEditingController();
   final fish_release_date = TextEditingController();
   final current_fish_feed = TextEditingController();
@@ -68,6 +69,7 @@ class _Add_farmState extends State<Add_farm> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
+                SizedBox(height: 20),
                 Padding(
                   padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
                   child: TextFormField(
@@ -90,6 +92,22 @@ class _Add_farmState extends State<Add_farm> {
                       filled: true,
                       fillColor: Color(0xFFD2ECF2),
                     ),
+                  ),
+                ),
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 65, vertical: 5),
+                  child: TextFormField(
+                    controller: initial_fish_length,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(),
+                      hintText: args['bangla']?'মাছের প্রাথমিক দৈর্ঘ্য':'Initial fish length',
+                      filled: true,
+                      fillColor: Color(0xFFD2ECF2),
+                    ),
+                    keyboardType: TextInputType.number,
+                    inputFormatters: <TextInputFormatter>[
+                      FilteringTextInputFormatter.digitsOnly
+                    ],
                   ),
                 ),
                 Padding(

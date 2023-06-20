@@ -1,28 +1,23 @@
-import 'package:bcrypt/bcrypt.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:firebase_admin/firebase_admin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import '../services/auth.dart';
+import 'package:flutter/services.dart';
 
-class Login extends StatefulWidget {
-  const Login({Key? key}) : super(key: key);
-
+class ForgotPass extends StatefulWidget {
   @override
-  _LoginState createState() => _LoginState();
+  _ForgotPassState createState() => _ForgotPassState();
 }
 
-class _LoginState extends State<Login> {
-  bool loading = false;
+class _ForgotPassState extends State<ForgotPass> {
+  bool loading = false, submitted=false;
   String error_msg='';
   Map args = {};
+  final auth = FirebaseAuth.instance;
   final _formKey = GlobalKey<FormState>();
-  final AuthService _auth = AuthService();
   final phoneController = TextEditingController();
-  final passController = TextEditingController();
-  //final _LoginKey = GlobalKey<LoginState>();
+  final nameController = TextEditingController();
+  final otherinfoController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     args = ModalRoute.of(context)?.settings.arguments as Map;
@@ -31,13 +26,10 @@ class _LoginState extends State<Login> {
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
-
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               //crossAxisAlignment: CrossAxisAlignment.center,
-
               children: <Widget>[
-                //key: _LoginKey,
                 Text(
                   args['bangla']?'অ্যাংকর আই':'Anchor Eye',
                   style: TextStyle(
@@ -52,11 +44,75 @@ class _LoginState extends State<Login> {
                   height: 150.0,
                   width: 150.0,
                 ),
-                SizedBox(height: 60),
+                SizedBox(height: 20),
+                submitted?
+                Column(
+                  children: [
+                    SizedBox(height: 40),
+                    Container(
+                      padding: EdgeInsets.symmetric(horizontal: 30,vertical: 3),
+                      child: Text(
+                        args['bangla']?'আপনার অনুরোধ রেকর্ড করা হয়েছে। আমরা শীঘ্রই আপনার কাছে প্রতিক্রিয়া জানাব।'
+                            :'Your request has been recorded. We will get back to you shortly',
+                        style: TextStyle(
+                          fontSize: 25.0,
+                          fontWeight: FontWeight.normal,
+                          color: Color(0xFF186B9A),
+                        ),
+                        textAlign: TextAlign.center,
+                        //textAlign: TextAlign.justify,
+                        softWrap: true,
+                      ),
+                    ),
+                    SizedBox(height: 40),
+                    Container(
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: StadiumBorder(),
+                          minimumSize: const Size(170, 30),
+                          maximumSize: const Size(210, 50),
+                          foregroundColor: Color(0xFFD2ECF2),
+                          backgroundColor: Color(0xFF186B9A),
+                        ),
+                        onPressed: () {
+                          Navigator.pushReplacementNamed(context, '/home', arguments: {
+                            'bangla': true,
+                          });
+                        },
+                        child: Container(
+                          padding: EdgeInsets.fromLTRB(0,10,0,5),
+                          child: loading?SpinKitRing(
+                            color: Color(0xFFD2ECF2),
+                            size: 30.0,
+                          )
+                              :Text(
+                            args['bangla']?'ঠিক আছে':'Okay',
+                            style: TextStyle(
+                              fontSize: 30.0,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ) :
                 Form(
                   key: _formKey,
                   child: Column(
                     children: [
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
+                        child: TextFormField(
+                          controller: nameController,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            hintText: args['bangla']?'নাম':'Name',
+                            filled: true,
+                            fillColor: Color(0xFFD2ECF2),
+                          ),
+                        ),
+                      ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: Row(
@@ -90,33 +146,21 @@ class _LoginState extends State<Login> {
                             ),
                           ],
                         ),
-                        //validator: (value){
-                          //if(value!.isEmpty){
-                            //return 'Enter Phone Number';
-                          //}
-                          //return null;
-                        //}
                       ),
                       Padding(
                         padding: EdgeInsets.symmetric(horizontal: 100, vertical: 8),
                         child: TextFormField(
-                          obscureText: true,
-                          controller: passController,
+                          maxLines: 3,
+                          controller: otherinfoController,
                           decoration: InputDecoration(
                             border: OutlineInputBorder(),
-                            hintText: args['bangla']?'পাসওয়ার্ড':'Password',
+                            hintText: args['bangla']?'আপনার অ্যাকাউন্ট সম্পর্কে আমাদের আরও বলুন (ঐচ্ছিক)':'Tell us more about your account (optional)',
                             filled: true,
                             fillColor: Color(0xFFD2ECF2),
                           ),
                         ),
-                        //validator: (value){
-                        //if(value!.isEmpty){
-                        //return 'Enter Password';
-                        //}
-                        //return null;
-                        //}
                       ),
-                      SizedBox(height: 40),
+                      SizedBox(height: 10),
                       Container(
                         child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -126,11 +170,11 @@ class _LoginState extends State<Login> {
                             foregroundColor: Color(0xFFD2ECF2),
                             backgroundColor: Color(0xFF186B9A),
                           ),
-                          onPressed: () async{
+                          onPressed: () async {
                             if(loading) return;
                             loading=true;
                             setState(() {});
-                            if(phoneController.text=='' || passController.text==''){
+                            if(nameController.text=='' || phoneController.text==''){
                               error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
                               loading=false;
                               setState(() {});
@@ -142,54 +186,41 @@ class _LoginState extends State<Login> {
                               setState(() {});
                               return;
                             }
-                            //print(phoneController.text);
                             var phoneno='+880'+phoneController.text;
+                            bool not_reg=false;
                             await FirebaseFirestore.instance.collection('users').doc(phoneno).get().then((documentSnapshot) async {
-                              if (documentSnapshot.exists){
-                                bool ok = false;
-                                String hashedpass =  documentSnapshot.get('pass');
-                                //print(hashedpass);
-                                ok = BCrypt.checkpw(passController.text, hashedpass);
-                                //print('here');
-                                if(ok) {
-                                  error_msg='';
-                                  String old_uid = await documentSnapshot.get('uid');
-                                  await FirebaseAuth.instance.verifyPhoneNumber(
-                                    phoneNumber: phoneno,
-                                    verificationCompleted: (_){},
-                                    verificationFailed: (e){print(e);},
-                                    codeSent: (String verificationId, int? token){
-                                      Navigator.pushNamed(context, '/verification', arguments: {
-                                        'bangla': args['bangla'],
-                                        'verificationId': verificationId,
-                                        'phone': phoneno,
-                                        'pass': passController.text,
-                                        'old_uid': old_uid,
-                                        'from': 'login',
-                                        'goto': '/main_menu',
-                                      });
-                                    },
-                                    codeAutoRetrievalTimeout: (e){print(e);},
-                                  );
-                                  ////done here, rest templates for later
-                                }
-                                else {
-                                  //print(passController.text);
-                                  //print('password not matched');
-                                  error_msg=(args['bangla']?'ভুল পাসওয়ার্ড':'Incorrect password');
-                                }
-                              }
-                              else{
+                              if (!documentSnapshot.exists){
                                 //print('Please register first');
-                                error_msg=(args['bangla']?'প্রথমে নিবন্ধন করুন':'Please register first');
+                                error_msg=(args['bangla']?'এই নম্বর নিবন্ধিত নয়':'This number is not registered');
+                                not_reg=true;
                               }
                             }).catchError((error){
                               print('Error retrieving document: $error');
                             });
+                            if(not_reg){
+                              loading=false;
+                              setState(() {});
+                              return;
+                            }
+                            var otherinfo=(otherinfoController.text.length==0?'':otherinfoController.text);
+                            int entry_cnt=0;
+                            await FirebaseFirestore.instance.collection('forgot_pass').doc('entry_cnt').get().then((docsnap2) async{
+                              entry_cnt = await docsnap2.get('cnt');
+                            });
+                            await FirebaseFirestore.instance.collection('forgot_pass').doc(entry_cnt.toString()).set({
+                              'name': nameController.text,
+                              'phone': phoneno,
+                              'otherinfo': otherinfo,
+                            });
+                            entry_cnt=entry_cnt+1;
+                            await FirebaseFirestore.instance.collection('forgot_pass').doc('entry_cnt').set({
+                              'cnt': entry_cnt,
+                            });
                             loading=false;
                             setState(() {});
+                            submitted=true;
+                            setState(() {});
                           },
-
                           child: Container(
                             padding: EdgeInsets.fromLTRB(0,10,0,5),
                             child: loading?SpinKitRing(
@@ -197,27 +228,12 @@ class _LoginState extends State<Login> {
                               size: 30.0,
                             )
                                 :Text(
-                              args['bangla']?'লগ ইন':'Log In',
+                              args['bangla']?'জমা দিন':'Submit',
                               style: TextStyle(
                                 fontSize: 30.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      TextButton(
-                        onPressed: () {
-                          Navigator.pushNamed(context, '/forgot_pass', arguments: {
-                            'bangla': args['bangla'],
-                          });
-                        },
-                        child: Text(
-                          args['bangla']?'পাসওয়ার্ড ভুলে গেছেন?':'Forgot Password?',
-                          style: TextStyle(
-                            fontSize: 20.0,
-                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),

@@ -52,7 +52,7 @@ class _usState extends State<us> {
                     fontWeight: FontWeight.bold,
                     color: Color(0xFF186B9A),
                   ),
-                  //textAlign: TextAlign.justify,
+                  textAlign: TextAlign.center,
                   softWrap: true,
                 ),
               ),

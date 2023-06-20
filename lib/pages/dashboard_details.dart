@@ -134,7 +134,7 @@ class _DashDetailState extends State<DashDetail> {
                               dataSource: Lower,
                               xValueMapper: (_SalesData sales, _) => sales.year,
                               yValueMapper: (_SalesData sales, _) => sales.sales,
-                              name: args['bangla']?'আদর্শ মান':'Lower Ideal Value',
+                              name: (args['bangla']?'নিম্ন আদর্শ মান':'Lower Ideal Value\n = ')+(args['lower'][args['param']]).toString(),
                               // Enable data label
                               dataLabelSettings: DataLabelSettings(isVisible: false)),
                           LineSeries<_SalesData, String>(
@@ -142,7 +142,7 @@ class _DashDetailState extends State<DashDetail> {
                               dataSource: Upper,
                               xValueMapper: (_SalesData sales, _) => sales.year,
                               yValueMapper: (_SalesData sales, _) => sales.sales,
-                              name: args['bangla']?'আদর্শ মান':'Upper Ideal Value',
+                              name: (args['bangla']?'উচ্চ আদর্শ মান':'Upper Ideal Value\n = ')+(args['upper'][args['param']]).toString(),
                               // Enable data label
                               dataLabelSettings: DataLabelSettings(isVisible: false)),
                         ]),
@@ -296,43 +296,35 @@ class _DashDetailState extends State<DashDetail> {
                                 columns: <DataColumn>[
                                   DataColumn(
                                     label: Expanded(
-                                      child: Text(
-                                        args['bangla']?'তারিখ':'Date',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Color(0xFF0A457C),
-                                          fontWeight: FontWeight.bold,
+                                      child: Center(
+                                        child: Text(
+                                          args['bangla']?'তারিখ':'Date',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Color(0xFF0A457C),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                   DataColumn(
                                     label: Expanded(
-                                      child: Text(
-                                        args['bangla']?'প্রাপ্ত':'Received',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Color(0xFF0A457C),
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataColumn(
-                                    label: Expanded(
-                                      child: Text(
-                                        args['bangla']?'আদর্শ':'Ideal',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          color: Color(0xFF0A457C),
-                                          fontWeight: FontWeight.bold,
+                                      child: Center(
+                                        child: Text(
+                                          args['bangla']?'প্রাপ্ত':'Received',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            color: Color(0xFF0A457C),
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
                                       ),
                                     ),
                                   ),
                                 ],
                                 source: MyData(Data2,Lower,Upper),
-                                columnSpacing: 20,
+                                columnSpacing: 30,
                                 horizontalMargin: 10,
                                 rowsPerPage: 3,
                                 showCheckboxColumn: false,
@@ -382,32 +374,26 @@ class MyData extends DataTableSource {
     return DataRow(
       cells: <DataCell>[
         DataCell(
-            Text(
-              data[index].year.toString(),
-              style: TextStyle(
-                fontSize: 20.0,
-                //color: Color(0xFFD2ECF2),
-                //fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                data[index].year.toString(),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  //color: Color(0xFFD2ECF2),
+                  //fontWeight: FontWeight.bold,
+                ),
               ),
             )
         ),
         DataCell(
-            Text(
-              data[index].sales.toString(),
-              style: TextStyle(
-                fontSize: 20.0,
-                //color: Color(0xFFD2ECF2),
-                //fontWeight: FontWeight.bold,
-              ),
-            )
-        ),
-        DataCell(
-            Text(
-              ((lower[index].sales+upper[index].sales)/2.0).toString(),
-              style: TextStyle(
-                fontSize: 20.0,
-                //color: Color(0xFFD2ECF2),
-                //fontWeight: FontWeight.bold,
+            Center(
+              child: Text(
+                data[index].sales.toString(),
+                style: TextStyle(
+                  fontSize: 20.0,
+                  //color: Color(0xFFD2ECF2),
+                  //fontWeight: FontWeight.bold,
+                ),
               ),
             )
         ),

@@ -20,7 +20,7 @@ class _ControlPanelState extends State<ControlPanel> {
   var pi_ip;
   final month_name = ['','January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
   final season = ['','Winter', 'Winter', 'Summer', 'Summer', 'Summer', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Rainy', 'Winter', 'Winter'];
-  final gap = 40.0;
+  final gap = 50.0;
   final button_size=60.0;
   var i=0;
   var p1=0;
@@ -28,7 +28,7 @@ class _ControlPanelState extends State<ControlPanel> {
   double _currentSliderValue = 1000;
   double _lastSliderValue = 1000;
   int n=0;
-  String temp='N/A',ph='N/A',turb='N/A',DO='N/A',nit='N/A',fish_length='N/A',fish_weight='N/A';
+  String temp='N/A',ph='N/A',turb='N/A',DO='N/A',nit='N/A',fish_growth='N/A',fish_length='N/A',fish_weight='N/A';
   late Timer _timer;
 
   Future<void> stopmotor() async{
@@ -124,10 +124,37 @@ class _ControlPanelState extends State<ControlPanel> {
     if(n==0) await take_sample();
     print('hell');
     try{
-      var month = int.parse("${selectedDate.toLocal()}".split(' ')[0].split('-')[1]);
+      var cur_time = "${selectedDate.toLocal()}".split(' ')[0].split('-');
+      var month = int.parse(cur_time[1]);
+      var tot_cur_time = (int.parse(cur_time[0])*365) + (int.parse(cur_time[1])*30) + (int.parse(cur_time[2]));
+      double prev_length = 0.0;
+      var tot_prev_time = tot_cur_time;
+      await args['farm_data'].reference.collection('params').get().then((docsnap) async {
+        if(docsnap.docs.length==0){
+          print("no param found");
+          var temp2 = await args['farm_data'].get('initial_fish_length');
+          var temp1 = await args['farm_data'].get('fish_release_date');
+          var prev_time = temp1.split('-');
+          tot_prev_time = (int.parse(prev_time[0])*365) + (int.parse(prev_time[1])*30) + (int.parse(prev_time[2]));
+          prev_length = double.parse(temp2);
+        }
+        else {
+          var fetch = await docsnap.docs.last.get('fish_length');
+          var temp3 = await docsnap.docs.last.id;
+          var prev_time = temp3.split('-');
+          tot_prev_time = (int.parse(prev_time[0])*365) + (int.parse(prev_time[1])*30) + (int.parse(prev_time[2]));
+          prev_length = double.parse(fetch);
+        }
+      });
+      double cur_length=double.parse(fish_length);
+      var tot_month_elapsed = (tot_cur_time-tot_prev_time)/30;
+      if(tot_month_elapsed==0) tot_month_elapsed=1; //this needs to be addressed later
+      double growth = (cur_length-prev_length)/tot_month_elapsed;
+      fish_growth = growth.toString();
       await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
         'DO':DO,
         'nitrate':nit,
+        'fish_growth': fish_growth,
         'fish_length':fish_length,
         'fish_weight':fish_weight,
         'month':month_name[month],
@@ -442,7 +469,7 @@ class _ControlPanelState extends State<ControlPanel> {
                   ),
                   onPressed: () {
                     if(n==0) return;
-                    temp='N/A';ph='N/A';turb='N/A';DO='N/A';nit='N/A';fish_length='N/A';fish_weight='N/A';
+                    temp='N/A';ph='N/A';turb='N/A';DO='N/A';nit='N/A';fish_growth='N/A';fish_length='N/A';fish_weight='N/A';
                     n=0;
                     setState(() {});
                   },
@@ -962,18 +989,6 @@ class _ControlPanelState extends State<ControlPanel> {
                           },
                         ),
                       ],
-                    ),
-                    IconButton(
-                      icon: Image.asset('assets/down.png'),
-                      iconSize: button_size,
-                      onPressed: () async{
-                        if(sampling) return;
-                        sampling=true;
-                        setState(() {});
-                       await stopmotor();
-                        sampling=false;
-                        setState(() {});
-                      },
                     ),
                   ],
                 ),

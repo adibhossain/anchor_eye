@@ -28,7 +28,8 @@ class _DashboardState extends State<Dashboard> {
     'DO':5.5,
     'turbidity':30,
     'nitrate':0.2,
-    'fish_length':7.2,
+    'fish_growth':1, //cm per month
+    'fish_length':15, //cm
     'fish_weight':1, //kg
   };
   Map<String,double> upper = {
@@ -37,7 +38,8 @@ class _DashboardState extends State<Dashboard> {
     'DO':7.5,
     'turbidity':60,
     'nitrate':20,
-    'fish_length':7.5,
+    'fish_growth':10, //cm per month
+    'fish_length':45, //cm
     'fish_weight':45, //kg
   };
 
@@ -68,7 +70,7 @@ class _DashboardState extends State<Dashboard> {
         i++;
       }
       setState((){
-        progress += (0.15/daily_info.length);
+        progress += (0.18/daily_info.length);
       });
       data.add(UpdateData(snap.id,
           snap.get('no_of_caught_fishes'),
@@ -88,37 +90,42 @@ class _DashboardState extends State<Dashboard> {
       fetch = await docsnap.docs.last.get('pH');
       double pH = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('nitrate');
       double nitrate = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('temperature');
       double temperature = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('DO');
       double DO = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('turbidity');
       double turbidity = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
+      });
+      fetch = await docsnap.docs.last.get('fish_growth');
+      double fish_growth = double.parse(fetch);
+      setState((){
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('fish_length');
       double fish_length = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       fetch = await docsnap.docs.last.get('fish_weight');
       double fish_weight = double.parse(fetch);
       setState((){
-        progress += 0.05;
+        progress += 0.04;
       });
       val = [
         {(args['bangla']?'পিএইচ (pH)':'pH'):valcmp(pH,8),
@@ -126,7 +133,8 @@ class _DashboardState extends State<Dashboard> {
           (args['bangla']?'জলের তাপমাত্রা':'Temperature'):valcmp(temperature,24),
           (args['bangla']?'দ্রবীভূত অক্সিজেন':'Dissolved Oxygen'):valcmp(DO,6.5),
           (args['bangla']?'জলের অস্বচ্ছতা':'Turbidity'):valcmp(turbidity,120)},
-        {(args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length'):valcmp(fish_length,7.8),
+        {(args['bangla']?'মাছের বৃদ্ধির হার':'Fish Growth Rate'):valcmp(fish_growth,3.5),
+          (args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length'):valcmp(fish_length,7.8),
           (args['bangla']?'মাছের ওজন':'Fish Weight'):valcmp(fish_weight,3.5),}
       ];
       for(var ii=0;ii<2;ii++){
@@ -158,8 +166,9 @@ class _DashboardState extends State<Dashboard> {
         args['bangla']?'জলের তাপমাত্রা':'Temperature',
         args['bangla']?'দ্রবীভূত অক্সিজেন':'Dissolved Oxygen',
         args['bangla']?'জলের অস্বচ্ছতা':'Turbidity'],
-      [args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length',
-        args['bangla']?'মাছের ওজন':'Fish Weight',]
+      [args['bangla']?'মাছের বৃদ্ধির হার':'Fish Growth Rate',
+        args['bangla']?'মাছের দৈর্ঘ্য':'Fish Length',
+        args['bangla']?'মাছের ওজন':'Fish Weight'],
     ];
     whois = {
       (args['bangla'] ? 'পিএইচ (pH)' : 'pH'):'pH',
@@ -167,6 +176,7 @@ class _DashboardState extends State<Dashboard> {
       (args['bangla'] ? 'জলের তাপমাত্রা' : 'Temperature'):'temperature',
       (args['bangla'] ? 'দ্রবীভূত অক্সিজেন' : 'Dissolved Oxygen'):'DO',
       (args['bangla'] ? 'জলের অস্বচ্ছতা' : 'Turbidity'):'turbidity',
+      (args['bangla']?'মাছের বৃদ্ধির হার':'Fish Growth Rate'):'fish_growth',
       (args['bangla'] ? 'মাছের দৈর্ঘ্য' : 'Fish Length'):'fish_length',
       (args['bangla'] ? 'মাছের ওজন' : 'Fish Weight'):'fish_weight',
     };
@@ -176,6 +186,7 @@ class _DashboardState extends State<Dashboard> {
       (args['bangla'] ? 'জলের তাপমাত্রা' : 'Temperature'):'C',
       (args['bangla'] ? 'দ্রবীভূত অক্সিজেন' : 'Dissolved Oxygen'):'mg/L',
       (args['bangla'] ? 'জলের অস্বচ্ছতা' : 'Turbidity'):'cm',
+      (args['bangla']?'মাছের বৃদ্ধির হার':'Fish Growth Rate'):'cm per month',
       (args['bangla'] ? 'মাছের দৈর্ঘ্য' : 'Fish Length'):'cm',
       (args['bangla'] ? 'মাছের ওজন' : 'Fish Weight'):'kg',
     };
@@ -225,7 +236,7 @@ class _DashboardState extends State<Dashboard> {
                             },
                             child: SizedBox(
                               width: 325,
-                              height: seemore?470:190,
+                              height: seemore?500:220,
                               child: Column(
                                 children: [
                                   SizedBox(height: 10),
@@ -265,6 +276,28 @@ class _DashboardState extends State<Dashboard> {
                                       ),
                                       Text(
                                         args['farm_data'].get('fish_type'),
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(height: 10),
+                                  Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    children: [
+                                      SizedBox(width: 10),
+                                      Text(
+                                        args['bangla']?'মাছের প্রাথমিক গড় দৈর্ঘ্য: ':'Initial average length of fishes: ',
+                                        style: TextStyle(
+                                          fontSize: 15.0,
+                                          color: Color(0xFF0A457C),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      Text(
+                                        args['farm_data'].get('initial_fish_length'),
                                         style: TextStyle(
                                           fontSize: 15.0,
                                           color: Color(0xFF0A457C),
