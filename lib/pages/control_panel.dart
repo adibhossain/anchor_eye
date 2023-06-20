@@ -128,6 +128,7 @@ class _ControlPanelState extends State<ControlPanel> {
       var month = int.parse(cur_time[1]);
       var tot_cur_time = (int.parse(cur_time[0])*365) + (int.parse(cur_time[1])*30) + (int.parse(cur_time[2]));
       double prev_length = 0.0;
+      double cur_length=double.parse(fish_length);
       var tot_prev_time = tot_cur_time;
       await args['farm_data'].reference.collection('params').get().then((docsnap) async {
         if(docsnap.docs.length==0){
@@ -136,21 +137,36 @@ class _ControlPanelState extends State<ControlPanel> {
           var temp1 = await args['farm_data'].get('fish_release_date');
           var prev_time = temp1.split('-');
           tot_prev_time = (int.parse(prev_time[0])*365) + (int.parse(prev_time[1])*30) + (int.parse(prev_time[2]));
-          prev_length = double.parse(temp2);
+          if(tot_prev_time==tot_cur_time){
+            prev_length = cur_length;
+          }
+          else prev_length = double.parse(temp2);
         }
         else {
           var fetch = await docsnap.docs.last.get('fish_length');
           var temp3 = await docsnap.docs.last.id;
           var prev_time = temp3.split('-');
           tot_prev_time = (int.parse(prev_time[0])*365) + (int.parse(prev_time[1])*30) + (int.parse(prev_time[2]));
-          prev_length = double.parse(fetch);
+          if(tot_prev_time==tot_cur_time){
+            int indexi = await docsnap.docs.length;
+            if(indexi>1){
+              fetch = await docsnap.docs[indexi-2].get('fish_length');
+              temp3 = await docsnap.docs[indexi-2].id;
+              prev_time = temp3.split('-');
+              tot_prev_time = (int.parse(prev_time[0])*365) + (int.parse(prev_time[1])*30) + (int.parse(prev_time[2]));
+              prev_length = double.parse(fetch);
+            }
+            else{
+              prev_length = cur_length;
+            }
+          }
+          else prev_length = double.parse(fetch);
         }
       });
-      double cur_length=double.parse(fish_length);
       var tot_month_elapsed = (tot_cur_time-tot_prev_time)/30;
       if(tot_month_elapsed==0) tot_month_elapsed=1; //this needs to be addressed later
       double growth = (cur_length-prev_length)/tot_month_elapsed;
-      fish_growth = growth.toString();
+      fish_growth = growth.toStringAsFixed(2);
       await args['farm_data'].reference.collection('params').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
         'DO':DO,
         'nitrate':nit,

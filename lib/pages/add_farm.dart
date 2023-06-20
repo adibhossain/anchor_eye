@@ -286,7 +286,7 @@ class _Add_farmState extends State<Add_farm> {
                       loading=true;
                       setState(() {});
                       bool fillup=false;
-                      if(farm_name.text=='' || fish_type.text=='' || initial_fish_population.text=='' || current_fish_feed.text=='' || used_fert_cnt_controller.text=='') fillup=true;
+                      if(farm_name.text=='' || fish_type.text=='' || initial_fish_population.text=='' || current_fish_feed.text=='' || used_fert_cnt_controller.text=='' || initial_fish_length.text=='') fillup=true;
                       for(var i=0;i<fertilizer_cnt;i++) if(fertilizer_name[i].text=='' || fertilizer_amount[i].text=='') fillup=true;
                       if(fillup){
                         error_msg=(args['bangla']?'ফর্ম পূরণ করুন':'Please fill up the form');
@@ -303,6 +303,8 @@ class _Add_farmState extends State<Add_farm> {
                         'fish_type': fish_type.text,
                         'initial_fish_population': initial_fish_population.text,
                         'fish_release_date': ("${selectedDate.toLocal()}".split(' ')[0]),
+                        'estimated_fish_population': initial_fish_population.text,
+                        'initial_fish_length': initial_fish_length.text,
                       });
                       await farm_ref.collection('daily_info').doc("${selectedDate.toLocal()}".split(' ')[0]).set({
                         'current_fish_feed': current_fish_feed.text,
