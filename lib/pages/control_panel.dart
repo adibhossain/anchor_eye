@@ -196,8 +196,8 @@ class _ControlPanelState extends State<ControlPanel> {
 
   void _showBatteryAlert(BuildContext context) {
     if(battery_alert_showing) return;
-    battery_alert_showing=true;
     if(progress>0.3) return;
+    battery_alert_showing=true;
     var title_exclamations,content;
     var closebutton = ElevatedButton(
       style: ElevatedButton.styleFrom(
